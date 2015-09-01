@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CommCode">
+
+	<resultMap type="CommCodeVO" id="dataList">
+		<result column="LCL_CD" property="lclCd"/> 
+		<result column="COM_CD" property="comCd"/>
+		<result column="CD_NM" property="cdNm"/>
+		<result column="USE_YN" property="useYn"/>
+		<result column="CD_RMK" property="cdRmk"/>
+		<result column="SORT_SEQ" property="sortSeq"/>
+		<result column="OPER_DTM" property="operDtm"/>
+		<result column="SIDO" property="sido"/>
+		<result column="SIGUNGU" property="sigungu"/>
+		<result column="ADM_DONG" property="admDong"/>
+		<result column="ADM_DONG_CD" property="admDongCd"/>
+		<result column="SVC_UNION_NM" property="svcUnionNm"/>
+	</resultMap>
+	
+	<!--콤보박스 조회 -->
+	<select id="selectComCdList" parameterType="map" resultMap="dataList">
+	 	SELECT /* selectComCdList */  lcl_cd, com_cd, cd_nm
+    	FROM   INTGT_COM_CD
+   		WHERE   lcl_cd = #{lclCd} AND use_yn = 'Y'
+		ORDER BY   sort_seq ASC;
+	</select>	
+	
+	<!--콤보 카테고리 대분류 -->
+	<select id="selectCategoryL" resultMap="dataList">
+    SELECT /* selectCategoryL */
+           NULL LCL_CD
+         , '-' COM_CD
+         , '전체' CD_NM
+         , 0 SORT_SEQ
+      FROM DUAL
+     UNION ALL
+    SELECT 
+           LCL_CD
+         , COM_CD
+         , CD_NM
+         , SORT_SEQ
+      FROM INTGT_COM_CD
+     WHERE LCL_CD = 'POC_008'
+       AND USE_YN = 'Y'
+       AND COM_CD != 'GRPTT'
+     ORDER BY SORT_SEQ
+	</select>	
+	
+	<!--콤보 카테고리 중분류 -->
+	<select id="selectCategoryM" parameterType="map" resultMap="dataList">
+    SELECT /* selectCategoryM */
+           NULL LCL_CD
+         , NULL COM_CD
+         , '전체' CD_NM
+         , 0 SORT_SEQ
+      FROM DUAL
+     UNION ALL
+    SELECT 
+           LCL_CD
+         , COM_CD
+         , CD_NM
+         , SORT_SEQ
+      FROM INTGT_COM_CD
+     WHERE 1 = 1
+       AND #{comCd} IS NOT NULL
+       AND LCL_CD = 'POC_009'
+       AND COM_CD LIKE #{comCd} || '%'
+       AND USE_YN = 'Y'
+       AND COM_CD != 'GRPTTTT'
+     ORDER BY SORT_SEQ
+	</select>	
+	
+	<!--콤보 카테고리 소분류 -->
+	<select id="selectCategoryS" parameterType="map" resultMap="dataList">
+    SELECT /* selectCategoryS */
+           NULL LCL_CD
+         , NULL COM_CD
+         , '전체' CD_NM
+         , 0 SORT_SEQ
+      FROM DUAL
+     UNION ALL
+    SELECT 
+           LCL_CD
+         , COM_CD
+         , CD_NM
+         , SORT_SEQ
+      FROM INTGT_COM_CD
+     WHERE 1 = 1
+       AND #{comCd} IS NOT NULL
+       AND LCL_CD = 'POC_010'
+       AND COM_CD LIKE #{comCd} || '%'
+       AND USE_YN = 'Y'
+       AND COM_CD != 'GRPTTTTTT'
+     ORDER BY SORT_SEQ
+	</select>	
+	
+	<!--콤보 시군구 대분류 -->
+	<select id="selectAdmL" parameterType="map" resultMap="dataList">
+    SELECT /* selectAdmL */
+           '전체' SIDO
+         , NULL SIGUNGU
+         , NULL ADM_DONG
+         , '00' ADM_DONG_CD
+      FROM DUAL
+     UNION ALL
+    SELECT 
+           SIDO
+         , SIGUNGU
+         , ADM_DONG
+         , ADM_DONG_CD
+      FROM INTGT_ADM_DONG_META
+     WHERE 1 = 1
+       AND LENGTH(ADM_DONG_CD) = 2
+     ORDER BY ADM_DONG_CD
+	</select>	
+	
+	<!--콤보 시군구 중분류 -->
+	<select id="selectAdmM" parameterType="map" resultMap="dataList">
+    SELECT /* selectAdmM */
+           NULL SIDO
+         , ' 전체' SIGUNGU
+         , NULL ADM_DONG
+         , '00000' ADM_DONG_CD
+      FROM DUAL
+     UNION ALL
+    SELECT 
+           SIDO
+         , CASE WHEN #{admDongCd} = '36' THEN SIDO END || SIGUNGU
+         , ADM_DONG
+         , ADM_DONG_CD
+      FROM INTGT_ADM_DONG_META
+     WHERE 1 = 1
+       AND #{admDongCd} IS NOT NULL
+       AND LENGTH(ADM_DONG_CD) = CASE WHEN #{admDongCd} = '36' THEN 2 ELSE 5 END
+       AND ADM_DONG_CD LIKE #{admDongCd} || '%'
+     ORDER BY SIGUNGU
+	</select>	
+	
+	<!--콤보 시군구 소분류 -->
+	<select id="selectAdmS" parameterType="map" resultMap="dataList">
+    SELECT /* selectAdmS */
+           NULL SIDO
+         , NULL SIGUNGU
+         , ' 전체' ADM_DONG
+         , '00000000' ADM_DONG_CD
+      FROM DUAL
+     UNION ALL
+    SELECT 
+           SIDO
+         , SIGUNGU
+         , ADM_DONG
+         , ADM_DONG_CD
+      FROM INTGT_ADM_DONG_META
+     WHERE 1 = 1
+       AND #{admDongCd} IS NOT NULL
+       AND LENGTH(ADM_DONG_CD) > 5
+       AND ADM_DONG_CD LIKE #{admDongCd} || '%'
+     ORDER BY ADM_DONG
+	</select>
+	
+	<!-- 서비스 검색 조건 표시 -->
+	<select id="selectSearchOption" parameterType="map" resultMap="dataList">
+	SELECT /* selectSearchOption */
+	       REPLACE(TRIM(
+	       CASE WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,1) = 'SYR' THEN 'Syrup '
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,1) = 'OCB' THEN 'OCB '
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,1) = 'TMA' THEN 'T map '
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,1) = 'EVS' THEN '11번가 '
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,1) = 'TST' THEN 'T store '
+	       END ||
+	       CASE WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,2) = 'SYR' THEN ', Syrup '
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,2) = 'OCB' THEN ', OCB '
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,2) = 'TMA' THEN ', T map '
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,2) = 'EVS' THEN ', 11번가 '
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,2) = 'TST' THEN ', T store '
+	       END ||
+	       CASE WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,3) = 'SYR' THEN ', Syrup '
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,3) = 'OCB' THEN ', OCB '
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,3) = 'TMA' THEN ', T map '
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,3) = 'EVS' THEN ', 11번가 '
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,3) = 'TST' THEN ', T store '
+	       END ||
+	       CASE WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,4) = 'SYR' THEN ', Syrup '
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,4) = 'OCB' THEN ', OCB '
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,4) = 'TMA' THEN ', T map '
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,4) = 'EVS' THEN ', 11번가 '
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,4) = 'TST' THEN ', T store '
+	       END ||
+	       CASE WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,5) = 'SYR' THEN ', Syrup'
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,5) = 'OCB' THEN ', OCB'
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,5) = 'TMA' THEN ', T map'
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,5) = 'EVS' THEN ', 11번가'
+	            WHEN REGEXP_SUBSTR(CD_NM, '[^+]+', 1,5) = 'TST' THEN ', T store'
+	       END), '  ', ' ')      AS SVC_UNION_NM
+	  FROM INTGT_COM_CD
+	 WHERE 1 = 1
+	   AND LCL_CD = 'POC_013'
+	   AND COM_CD = #{svcUnionCd}
+	</select>
+</mapper>

@@ -1,0 +1,294 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>POC System</title>
+	<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="../js/parsley.min.js"></script>
+	
+	<!-- jQuery UI 1.11.1 -->
+	<link rel="stylesheet" href="../jquery-ui-themes-1.11.1/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+	<script src="../jquery-ui-1.11.1/jquery-ui.js"></script>
+
+	<!-- Bootstrap -->
+
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+	<script src="../bootstrap/js/holder.js"></script>
+	<script src="../js/main.js"></script>
+    
+    <link href="../css/dot.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	
+	<script type="text/javascript" src=" ../js/adm.common.js "></script>
+     <script type="text/javascript" src="../js/common.js "></script>
+
+	<script>
+	$(document).ready(function () {
+		var session_user_no = "admin";
+		
+		$('#loginoutBtn').click(function() {
+			if (session_user_no.length) logout();
+			else $('#login-popup').modal('show');
+		});
+		$('#searchBtn').click(function() {
+			if (session_user_no.length) goSearch();
+			else $('#login-popup').modal('show');
+		});	
+		$('#sub_home').click(function() {
+			alert("홈 화면은 준비중 입니다.");
+			/* if (session_user_no.length) location.href="/index.do";
+			else $('#login-popup').modal('show'); */
+		});
+		$('#sub_mosu').click(function() {
+			if (session_user_no.length) location.href="/agreement_mosu.do";
+			else $('#login-popup').modal('show');
+		});
+		$('#sub_category').click(function() {
+			if (session_user_no.length)  location.href="/category.do";
+			else $('#login-popup').modal('show');
+		});
+		$('#sub_area').click(function() {
+			if (session_user_no.length)  location.href="/main_activity_area.do";
+			else $('#login-popup').modal('show');
+		});	
+	    $('#pop-login-btn').click(function() {
+	    	login($('#popup-login-username'), $('#popup-login-password'));
+	    });	
+	});
+	/* ********************************************************
+	 * 검색어 조회함수
+	 ******************************************************** */
+	function goSearch(){
+		var prodName = $('#searchProdName').val().replace(/ /g, '').replace(/[^(가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9)]/gi,"");
+		if (prodName == '') {
+			alert('검색어를 입력해 주세요');
+			$('#searchProdName').focus();
+			return false;
+		} else {
+			$('#searchProdName').val(prodName);
+		    $('#detail-form').submit();
+		}
+	}
+	</script>
+    
+</head>
+<body class="lfBg">
+<div id="wrapper">
+
+	<!--Header Area-->
+	<header>
+    	<h1><img src="../images/dotLogo.png"  alt="DOT"/></h1>
+    	<p id="loginoutBtn" class="logout"><button class="log btn_log">Logout</button></p>
+        <!--GNB-->
+        <div class="gnb">
+        	<ul>
+            	<li class="home"><img src="../images/icon_nav1.png" alt="Home"/>Home</li>
+            	<li id="sub_mosu" class="agreeM "><img src="../images/icon_nav2.png" alt="동의"/><a href="#">동의</a></li>
+            	<li  id="sub_category" class="category" style="background:#2f99cd;"><img src="../images/icon_nav3.png" alt="업종"/>업종
+                	<!--2Depth-->
+                	 <ul>
+                    	<li><a href="#">업종별 현황</a></li>
+                        <li ><a href="#">서비스별 모수 현황</a></li>
+                        <li class="active"><a href="#">서비스별 데모 현황</a></li>
+                    </ul>
+                    <!--//2Depth-->
+                </li>
+                <li id="sub_area" class="activityA "><img src="../images/icon_nav4.png" alt="주활동지역"/><a href="#">주활동지역</a></li>
+            </ul>
+        </div>
+         <!--//GNB-->
+    </header>
+    <!--//Header Area-->
+    
+	<!--Main Area-->
+    <div class="conts">
+   		<!--Contents-->
+    	<main>
+        	<p class="category3" title="업종 상단 이미지"></p>
+            <div class="wrap">
+            	<h2>서비스별 데모 현황<span class="floatR">데이터 기준일 : 2015.06.30</span></h2>
+                <!-- search-->
+                <div class="searchLy">
+                	<table >
+                    	<colgroup>
+                        	<col width="80px">
+                            <col width="200px">
+                            <col width="80px">
+                            <col width="*">
+                        </colgroup>
+    					<tbody>
+        					<tr>
+            					<th>서비스</th>
+            					<td colspan="3" >
+                                	<form style="display:inline-block; white-space:nowrap;">
+      									<label for="chk_all" class="checkB pr40"  >
+        									<input type="checkbox" name="chk_svc" id="chk_all" value="1"> TOTAL
+      									</label>
+      									<label for="chk_syrup" class="checkB pr40">
+        									<input type="checkbox" name="chk_svc" id="chk_syrup" value="1"> Syrup
+      									</label>
+      									<label for="chk_ocb" class="checkB pr40">
+        									<input type="checkbox" name="chk_svc" id="chk_ocb" value="1"> OCB
+      									</label>
+                                        <label for="chk_tmap" class="checkB pr40">
+        									<input type="checkbox" name="chk_svc" id="chk_tmap" value="1"> T map
+      									</label>
+                                        <label for="chk_evs" class="checkB pr40">
+        									<input type="checkbox" name="chk_svc" id="chk_evs" value="1"> 11번가
+      									</label>
+                                        <label for="chk_tstore" class="checkB pr40">
+        									<input type="checkbox" name="chk_svc" id="chk_tstore" value="1"> T store
+      									</label>
+    								</form>
+                                
+                                </td>
+                            </tr>
+        					<tr>
+        					    <th>기간</th>
+        					    <td>
+                                	<select class="formSelect" name="sel_period" id="sel_period" style="width:150px">
+                        				<option value="1M">1개월</option>
+							    		<option value="3M" selected="">3개월</option>    	
+							    		<option value="6M">6개월</option>
+							    	 </select>
+                                </td>
+        					    <th>분류</th>
+        					    <td >
+                                	<select class="formSelect" name="sel_cate_large" id="sel_cate_large" style="width:30%">
+                                 		<option value="">대분류</option>
+							    	</select>
+                                    <select class="formSelect" name="sel_cate_mid" id="sel_cate_mid" disabled="disabled"  style="width:30%">
+                                 		<option value="">중분류</option>
+							    	</select>
+                                    <select class="formSelect" name="sel_cate_small" id="sel_cate_small" disabled="disabled"  style="width:30%">
+                                 		<option value="">소분류</option>
+							    	</select>
+                                </td>
+    					    </tr>
+       					</tbody>
+					</table>
+                    <!--검색 버튼-->
+					<p class="bt_search"><button name="btnSearch" id="btnSearch" type="button">Search</button></p>
+                    <!--//검색 버튼-->
+                </div>
+                <!-- //search-->
+                
+                <!--검색 조건-->
+                <div class="viewSrc">
+                	<ul>
+                    	<li class="title ">검색 조건</li>
+                        <li>서비스 : <span>Syrup, OCB, T map</span></li>
+                        <li>기간 : <span>3개월</span></li>
+                        <li>분류 : <span>먹 거리 > 음식점 > 패스트푸드</span></li>
+                      
+                    </ul>
+                </div>
+                <!--//검색 조건-->
+                
+                <div class="chartLy mt50">
+                	<!--챠트 2개 보일 경우-->
+                	<ul class="chartLy_2p ">
+                		<li>
+                    		<p class="chartTitle">연령대 구성</p>
+                        	<div class="chartArea">챠트 영역</div>
+                    	</li>
+                    	<li>
+                    		<p class="chartTitle">성별 구성 </p>
+                        	<div class="chartArea">챠트 영역</div>
+                    	</li>
+                	</ul>
+                    <!--//챠트 2개 보일 경우-->
+                    <!--챠트 2개 보일 경우-->
+                	<ul class="chartLy_2p mt20">
+                		<li>
+                    		<p class="chartTitle">연령대 구성</p>
+                        	<div class="chartArea">챠트 영역</div>
+                    	</li>
+                    	<li>
+                    		<p class="chartTitle">성별 구성 </p>
+                        	<div class="chartArea">챠트 영역</div>
+                    	</li>
+                	</ul>
+                    <!--//챠트 2개 보일 경우-->
+                </div>
+
+                <!--주활동지역 현황-->
+                <h3 class="mt50">주 활동지역 현황</h3>
+                <table class="listTable  tHover"> 
+                	<colgroup>
+                    	<col width="100px">
+                        <col width="*">
+                        <col width="100px">
+                        <col width="*">
+                    </colgroup>
+    				<thead>
+        				<tr>
+            				<th>순위</th>
+            				<th>주 활동 지역(구단위)</th>
+            				<th>순위</th>
+            				<th>주 활동 지역(구단위)</th>
+        				</tr>
+                    </thead>
+                    <tbody>
+        				<tr>
+            				<td class="depth2 txtC">1</td>
+            				<td class="txtL">서울 강남구 </td>
+            				<td class="depth2 txtC">2</td>
+            				<td class="txtL">서울 서초구</td>
+        				</tr>
+        				<tr>
+        				    <td class="depth2 txtC">3</td>
+        				    <td class="txtL">&nbsp;</td>
+        				    <td class="depth2 txtC">4</td>
+        				    <td class="txtL">&nbsp;</td>
+    				    </tr>
+        				<tr>
+        				    <td class="depth2 txtC">5</td>
+        				    <td class="txtL">&nbsp;</td>
+        				    <td class="depth2 txtC">6</td>
+        				    <td class="txtL">&nbsp;</td>
+    				    </tr>
+        				<tr>
+        				    <td class="depth2 txtC">7</td>
+        				    <td class="txtL">&nbsp;</td>
+        				    <td class="depth2 txtC">8</td>
+        				    <td class="txtL">&nbsp;</td>
+    				    </tr>
+        				<tr>
+        				    <td class="depth2 txtC">9</td>
+        				    <td class="txtL">&nbsp;</td>
+        				    <td class="depth2 txtC">10</td>
+        				    <td class="txtL">&nbsp;</td>
+    				    </tr>
+                        <!--데이터가 없을 경우
+        				<tr>
+        				    <td colspan="4" class="txtC">데이터가 없습니다.</td>
+       				    </tr>
+                        -->
+       				</tbody>
+				</table>
+				<!--//주활동지역 현황-->
+                
+			</div>
+        </main>
+        <!--//Contents-->
+        
+        <!--Footer Area-->
+        <footer>
+        	<p class="copyright">
+            	(463-400) 경기도 성남시 분당구 판교로 264(삼평동) The Planet SK플래닛 주식회사 대표이사 서진우<br>
+				Copyright © 2015 SK Planet.  ALL RIGHTS RESERVED</p>
+        </footer>
+        <!--//Footer Area-->
+	</div>
+	<!--//Main Area-->
+</div>
+
+
+</body>
+</html>

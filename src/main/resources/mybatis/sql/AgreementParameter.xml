@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AgreementParameter">
+
+	<!-- 서비스 별 필수/교차 동의 모수 성별/연령별 통계 조회 -->
+	<select id="selectEachServiceMbrSumBySexAge" parameterType="map" resultType="AgreementParameterVO">
+	<![CDATA[
+	SELECT /* selectEachServiceMbrSumBySexAge */
+		   LV
+	     , BASE_DT
+	     , FUNC_AGR_CL_CD
+	     , SEX_CD
+	     , AGE_RNG_CD
+	     , TOT
+	     , SYR
+	     , OCB
+	     , OCT
+	     , TMA
+	     , EVS
+	     , TST
+	  FROM (
+	        SELECT BASE_DT
+	             , FUNC_AGR_CL_CD
+	             , SEX_CD
+	             , AGE_RNG_CD
+	             , 0   AS LV
+	             , SUM(CASE WHEN SVC_CD = 'TOT' THEN SCB_MBR_CNT END) AS TOT
+	             , SUM(CASE WHEN SVC_CD = 'SYR' THEN SCB_MBR_CNT END) AS SYR
+	             , SUM(CASE WHEN SVC_CD = 'OCB' THEN SCB_MBR_CNT END) AS OCB
+	             , SUM(CASE WHEN SVC_CD = 'OCT' THEN SCB_MBR_CNT END) AS OCT
+	             , SUM(CASE WHEN SVC_CD = 'TMA' THEN SCB_MBR_CNT END) AS TMA
+	             , SUM(CASE WHEN SVC_CD = 'EVS' THEN SCB_MBR_CNT END) AS EVS
+	             , SUM(CASE WHEN SVC_CD = 'TST' THEN SCB_MBR_CNT END) AS TST
+	          FROM Z_JSD_INTGT_POC_SVC_MBR_SA_CNT
+	         WHERE BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+	           AND INT_KEY_CL_CD = '03'
+	           AND CMPLS_CROSS_AGR_CL_CD = #{agreementClassCode}
+	         GROUP BY BASE_DT
+	                , FUNC_AGR_CL_CD
+	                , SEX_CD
+	                , AGE_RNG_CD
+	        UNION ALL
+	        SELECT BASE_DT
+	             , FUNC_AGR_CL_CD
+	             , SEX_CD
+	             , AGE_RNG_CD
+	             , LV
+	             , MAX(CASE WHEN LV = 1 THEN TOT
+	                        WHEN LV = 2 THEN ACVT_TOT
+	                        WHEN LV = 3 THEN MAU_TOT END) AS TOT
+	             , MAX(CASE WHEN LV = 1 THEN SYR
+	                        WHEN LV = 2 THEN ACVT_SYR
+	                        WHEN LV = 3 THEN MAU_SYR END) AS SYR
+	             , MAX(CASE WHEN LV = 1 THEN OCB
+	                        WHEN LV = 2 THEN ACVT_OCB
+	                        WHEN LV = 3 THEN MAU_OCB END) AS OCB
+	             , MAX(CASE WHEN LV = 1 THEN OCT
+	                        WHEN LV = 2 THEN ACVT_OCT
+	                        WHEN LV = 3 THEN MAU_OCT END) AS OCT
+	             , MAX(CASE WHEN LV = 1 THEN TMA
+	                        WHEN LV = 2 THEN ACVT_TMA
+	                        WHEN LV = 3 THEN MAU_TMA END) AS TMA
+	             , MAX(CASE WHEN LV = 1 THEN EVS
+	                        WHEN LV = 2 THEN ACVT_EVS
+	                        WHEN LV = 3 THEN MAU_EVS END) AS EVS
+	             , MAX(CASE WHEN LV = 1 THEN TST
+	                        WHEN LV = 2 THEN ACVT_TST
+	                        WHEN LV = 3 THEN MAU_TST END) AS TST
+	          FROM (
+	                SELECT BASE_DT
+	                     , FUNC_AGR_CL_CD
+	                     , SEX_CD
+	                     , AGE_RNG_CD
+	                     , LV
+	                     , SUM(CASE WHEN SVC_CD = 'TOT' THEN SCB_MBR_CNT END) AS TOT
+	                     , SUM(CASE WHEN SVC_CD = 'SYR' THEN SCB_MBR_CNT END) AS SYR
+	                     , SUM(CASE WHEN SVC_CD = 'OCB' THEN SCB_MBR_CNT END) AS OCB
+	                     , SUM(CASE WHEN SVC_CD = 'OCT' THEN SCB_MBR_CNT END) AS OCT
+	                     , SUM(CASE WHEN SVC_CD = 'TMA' THEN SCB_MBR_CNT END) AS TMA
+	                     , SUM(CASE WHEN SVC_CD = 'EVS' THEN SCB_MBR_CNT END) AS EVS
+	                     , SUM(CASE WHEN SVC_CD = 'TST' THEN SCB_MBR_CNT END) AS TST
+	                     , SUM(CASE WHEN SVC_CD = 'TOT' THEN ACTV_MBR_CNT END) AS ACVT_TOT
+	                     , SUM(CASE WHEN SVC_CD = 'SYR' THEN ACTV_MBR_CNT END) AS ACVT_SYR
+	                     , SUM(CASE WHEN SVC_CD = 'OCB' THEN ACTV_MBR_CNT END) AS ACVT_OCB
+	                     , SUM(CASE WHEN SVC_CD = 'OCT' THEN ACTV_MBR_CNT END) AS ACVT_OCT
+	                     , SUM(CASE WHEN SVC_CD = 'TMA' THEN ACTV_MBR_CNT END) AS ACVT_TMA
+	                     , SUM(CASE WHEN SVC_CD = 'EVS' THEN ACTV_MBR_CNT END) AS ACVT_EVS
+	                     , SUM(CASE WHEN SVC_CD = 'TST' THEN ACTV_MBR_CNT END) AS ACVT_TST
+	                     , SUM(CASE WHEN SVC_CD = 'TOT' THEN MAU_CNT END) AS MAU_TOT
+	                     , SUM(CASE WHEN SVC_CD = 'SYR' THEN MAU_CNT END) AS MAU_SYR
+	                     , SUM(CASE WHEN SVC_CD = 'OCB' THEN MAU_CNT END) AS MAU_OCB
+	                     , SUM(CASE WHEN SVC_CD = 'OCT' THEN MAU_CNT END) AS MAU_OCT
+	                     , SUM(CASE WHEN SVC_CD = 'TMA' THEN MAU_CNT END) AS MAU_TMA
+	                     , SUM(CASE WHEN SVC_CD = 'EVS' THEN MAU_CNT END) AS MAU_EVS
+	                     , SUM(CASE WHEN SVC_CD = 'TST' THEN MAU_CNT END) AS MAU_TST
+	                  FROM Z_JSD_INTGT_POC_SVC_MBR_SA_CNT
+	                     , (SELECT LEVEL AS LV FROM DUAL CONNECT BY LEVEL <= 3)
+	                 WHERE BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+	                   AND INT_KEY_CL_CD = '01'
+	                   AND CMPLS_CROSS_AGR_CL_CD = #{agreementClassCode}
+	                 GROUP BY BASE_DT
+	                        , FUNC_AGR_CL_CD
+	                        , SEX_CD
+	                        , AGE_RNG_CD
+	                        , LV
+	               )
+	         GROUP BY BASE_DT
+	                , FUNC_AGR_CL_CD
+	                , SEX_CD
+	                , AGE_RNG_CD
+	                , LV
+	       )
+	 ORDER BY LV
+	        , FUNC_AGR_CL_CD DESC
+	        , SEX_CD
+	        , AGE_RNG_CD
+    ]]>
+	</select>
+	
+	<!--교차활용동의 (Chart) 조회 -->
+	<!-- 
+	<select id="selectCrossMosuChart" parameterType="map" resultMap="AgreementParameterVO-RM">
+    SELECT
+           /* selectCrossMosuChart */
+
+          BASE_DT
+        , LV
+        , INT_KEY_CL_CD
+        , CMPLS_CROSS_AGR_CL_CD
+        , SVC_CD
+        , FUNC_AGR_CL_CD
+        , SCB_MBR_CNT
+        , ACTV_MBR_CNT
+        , MAU_CNT
+        , OPER_DTM
+        
+        , CASE LV
+          WHEN 1 THEN '통합고객수'
+          WHEN 2 THEN 'Active 고객수'
+          WHEN 3 THEN 'MAU 고객수'
+          ELSE '가입고객수' END AS LV_NM
+          
+          
+        , CASE FUNC_AGR_CL_CD
+          WHEN '01' THEN 'BLE동의'
+          WHEN '02' THEN '위치동의'
+          WHEN '03' THEN 'PUSH동의'
+          ELSE '전체' END AS FUNC_AGR_CL_NM
+     FROM INTGT_POC_SVC_MBR_CNT
+        , (SELECT LEVEL - 1 LV FROM DUAL CONNECT BY LEVEL <= 4)
+    WHERE 1 = 1
+      AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+      AND INT_KEY_CL_CD IN ('01', '03')    /* 01:통합회원 02:통합MDN */
+      AND CMPLS_CROSS_AGR_CL_CD = '02'     /* 01:필수동의 02:교차동의 */
+	</select>
+	-->
+	
+	<!-- 서비스 조합별 동의 모수 통계 조회 -->
+	<select id="selectMixedServiceMbrSum" parameterType="map" resultType="AgreementParameterVO">
+	<![CDATA[
+    SELECT
+           /* selectMixedServiceMbrSum */
+           CROSS_SVC_UNION_CD
+         , SUM(SCB_MBR_CNT_TOT) AS SCB_MBR_CNT_TOT
+         , SUM(SCB_MBR_CNT_PUSH) AS SCB_MBR_CNT_PUSH
+         , SUM(SCB_MBR_CNT_GEO) AS SCB_MBR_CNT_GEO
+         , SUM(SCB_MBR_CNT_BLE) AS SCB_MBR_CNT_BLE
+         , SUM(ACTV_MBR_CNT_TOT) AS ACTV_MBR_CNT_TOT
+         , SUM(ACTV_MBR_CNT_PUSH) AS ACTV_MBR_CNT_PUSH
+         , SUM(ACTV_MBR_CNT_GEO) AS ACTV_MBR_CNT_GEO
+         , SUM(ACTV_MBR_CNT_BLE) AS ACTV_MBR_CNT_BLE
+         , SUM(MAU_CNT_TOT) AS MAU_CNT_TOT
+         , SUM(MAU_CNT_PUSH) AS MAU_CNT_PUSH
+         , SUM(MAU_CNT_GEO) AS MAU_CNT_GEO
+         , SUM(MAU_CNT_BLE) AS MAU_CNT_BLE
+      FROM (
+            SELECT 
+                   CROSS_SVC_UNION_CD
+                 , CASE WHEN FUNC_AGR_CL_CD = '99' THEN SCB_MBR_CNT END SCB_MBR_CNT_TOT
+                 , CASE WHEN FUNC_AGR_CL_CD = '03' THEN SCB_MBR_CNT END SCB_MBR_CNT_PUSH
+                 , CASE WHEN FUNC_AGR_CL_CD = '02' THEN SCB_MBR_CNT END SCB_MBR_CNT_GEO
+                 , CASE WHEN FUNC_AGR_CL_CD = '01' THEN SCB_MBR_CNT END SCB_MBR_CNT_BLE
+                 , CASE WHEN FUNC_AGR_CL_CD = '99' THEN ACTV_MBR_CNT END ACTV_MBR_CNT_TOT
+                 , CASE WHEN FUNC_AGR_CL_CD = '03' THEN ACTV_MBR_CNT END ACTV_MBR_CNT_PUSH
+                 , CASE WHEN FUNC_AGR_CL_CD = '02' THEN ACTV_MBR_CNT END ACTV_MBR_CNT_GEO
+                 , CASE WHEN FUNC_AGR_CL_CD = '01' THEN ACTV_MBR_CNT END ACTV_MBR_CNT_BLE
+                 , CASE WHEN FUNC_AGR_CL_CD = '99' THEN MAU_CNT END MAU_CNT_TOT
+                 , CASE WHEN FUNC_AGR_CL_CD = '03' THEN MAU_CNT END MAU_CNT_PUSH
+                 , CASE WHEN FUNC_AGR_CL_CD = '02' THEN MAU_CNT END MAU_CNT_GEO
+                 , CASE WHEN FUNC_AGR_CL_CD = '01' THEN MAU_CNT END MAU_CNT_BLE
+              FROM (
+                    SELECT
+                           BASE_DT
+                         , INT_KEY_CL_CD
+                         , CMPLS_CROSS_AGR_CL_CD
+                         , SET_CL_CD
+                         , CROSS_SVC_UNION_CD
+                         , FUNC_AGR_CL_CD
+                         , SCB_MBR_CNT
+                         , ACTV_MBR_CNT
+                         , MAU_CNT
+                         , OPER_DTM
+                      FROM INTGT_POC_SVC_CROSS_CNT
+                     WHERE 1 = 1
+                       AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+                       AND INT_KEY_CL_CD = '01'
+                       AND CMPLS_CROSS_AGR_CL_CD = '01'
+                       AND SET_CL_CD = #{setTypeCode}
+                   )
+           )
+    GROUP BY CROSS_SVC_UNION_CD
+    ORDER BY CROSS_SVC_UNION_CD
+    ]]>
+	</select>
+	
+</mapper>

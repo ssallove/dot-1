@@ -1,0 +1,45 @@
+* html { height: 1px; }
+
+html, body
+{height: 100%; padding:0; font-family:Dotum,Arial,Verdana,sans-serif; font-size:12px; margin:0px auto auto auto; color:#000;}
+
+
+*html #content-box { height: 100%; } 
+#content-box { min-height: 100%; margin: 0 0 -27px 0; } 
+#content { padding: 0 0 27px 0; } 
+#footer { height: 21px; font-size:11px; color:#989b9f; background: #ddd; padding:6px 0 0 0; text-align:center; background:url(../images/footer_bg.gif) repeat-x;position: absolute;bottom: 0px;width: 100%;} 
+
+
+#LoginBox {width:715px; height: 370px; margin:0 auto; position: absolute; top: 50%; left: 50%; margin: -200px 0 0 -360px;}
+.Login_logo { float:left; width:715px; height: 75px; padding:0 0 0 0px;} 
+.Login_CBox { float:left; width:715px; height:292px; background: url("../images/line_top.gif") no-repeat top; border-bottom:3px solid #595959;} 
+.Login_img { float:left; width:370px; height:290px; padding-top:4px;}
+.Login_Ipd { float:left; width:345px; padding:125px 0 0 0; }
+
+.Login_IBox { width:295px; height:75px; padding:0px; }
+.Login_L {width:200px; height:60px; float:left;}
+.logintbt {width:87px; padding:0 0 0 0 ; float:right;}
+.membt {width:175px; height:27px; padding:2px 3px 0 0; float:left;  text-align:center;}
+label.left {float:left; width:70px; padding-top:2px;}
+.form_row {float:left; width:200px; padding:2px 0 2px 0;}
+.login_input {Border:1px SOLID #bfbebe; background-color:#eeeff2; margin:0px; width:125px; height:19px; line-height:19px; float:left;}
+ 
+ 
+ .pop_pd dl {float:left; width:100%;}
+.pop_pd dd.bx1 {float:left; padding:1px 0 1px 0;}
+.pop_pd dd.bx1 p {float:left; padding:5px 0 0 0; color:#6b6b6b;}
+
+.pop_inbx {float:left; width:100%;}
+
+
+.pop_icobx {float:left; width:100%; padding:20px 0 20px 0;}
+.pop_ico_img {float:left; padding:0 20px 0 16px;}
+.pop_ico_tx {float:left; padding:20px 0 0 0; font-weight:bold; color:#545454; line-height:17px;}
+.pop_ico_tx span {color:#ff3d09;}
+
+.pop_tx {float:left; font-weight:bold; color:#5b5b5b; width:75px; height:23px; padding:6px 0 0 12px; background:url("../images/popup_arrow.gif") no-repeat 1px 7px;}
+.pop_tx3 {float:left; font-weight:bold; color:#5b5b5b; width:95px; height:23px; padding:6px 0 0 12px; background:url("../images/popup_arrow.gif") no-repeat 1px 7px;}
+.pop_tx2 {float:left; color:#202020; padding:5px 0 0 0; height:23px;}
+.pop_pd {padding:10px 5px 10px 5px;}
+.pop_input{float:left; Color:#544943; Border:1px SOLID #cbcbcb; background:#ffffff; padding:1px 0 1px 2px; line-height:17px; height:17px;}
+ 

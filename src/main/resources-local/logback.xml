@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+	<!-- Appenders -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<!-- <pattern>%d %5p [%c] %m%n</pattern> -->
+			<!-- <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern> -->
+			<!-- <pattern>[%d] [%-5level] %-30([%thread]) %logger{100} \(%file:%line\) - %msg%n</pattern>  -->
+			<pattern>[%d] [%-5level] %-30([%thread]) %logger{50} \(%file:%line\) - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- Query Loggers -->
+	<logger name="jdbc.sqlonly" level="info" />
+
+	<logger name="jdbc.connection" level="warn"  />
+
+	<logger name="jdbc.audit" level="warn"  />
+
+	<logger name="jdbc.sqlonly" level="warn"  />
+
+	<logger name="jdbc.sqltiming" level="info"  />
+
+	<logger name="jdbc.resultset" level="info"  />
+
+	<logger name="jdbc.resultsettable" level="info"  />
+
+	<!-- Root Logger -->
+	<root level="debug">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+</configuration>

@@ -1,0 +1,643 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>POC System</title>
+	<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="../js/parsley.min.js"></script>
+	
+	<!-- jQuery UI 1.11.1 -->
+	<link rel="stylesheet" href="../jquery-ui-themes-1.11.1/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+	<script src="../jquery-ui-1.11.1/jquery-ui.js"></script>
+
+	<!-- Bootstrap -->
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+	<script src="../bootstrap/js/holder.js"></script>
+	<script src="../js/main.js"></script>
+    
+    <link href="../css/dot.css" rel="stylesheet">
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	
+	<script type="text/javascript" src=" ../js/adm.common.js "></script>
+     <script type="text/javascript" src="../js/common.js "></script>
+
+	<script>
+	$(document).ready(function () {
+		var session_user_no = "admin";
+		
+		$('#loginoutBtn').click(function() {
+			if (session_user_no.length) logout();
+			else $('#login-popup').modal('show');
+		});
+		$('#searchBtn').click(function() {
+			if (session_user_no.length) goSearch();
+			else $('#login-popup').modal('show');
+		});	
+		$('#sub_home').click(function() {
+			alert("홈 화면은 준비중 입니다.");
+			/* if (session_user_no.length) location.href="/index.do";
+			else $('#login-popup').modal('show'); */
+		});
+		$('#sub_mosu').click(function() {
+			if (session_user_no.length) location.href="/agreement_mosu.do";
+			else $('#login-popup').modal('show');
+		});
+		$('#sub_category').click(function() {
+			if (session_user_no.length)  location.href="/category.do";
+			else $('#login-popup').modal('show');
+		});
+		$('#sub_area').click(function() {
+			if (session_user_no.length)  location.href="/main_activity_area.do";
+			else $('#login-popup').modal('show');
+		});	
+	    $('#pop-login-btn').click(function() {
+	    	login($('#popup-login-username'), $('#popup-login-password'));
+	    });	
+	});
+	/* ********************************************************
+	 * 검색어 조회함수
+	 ******************************************************** */
+	function goSearch(){
+		var prodName = $('#searchProdName').val().replace(/ /g, '').replace(/[^(가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9)]/gi,"");
+		if (prodName == '') {
+			alert('검색어를 입력해 주세요');
+			$('#searchProdName').focus();
+			return false;
+		} else {
+			$('#searchProdName').val(prodName);
+		    $('#detail-form').submit();
+		}
+	}
+	</script>
+    
+</head>
+<body class="lfBg">
+<div id="wrapper">
+
+	<!--Header Area-->
+	<header>
+    	<h1><img src="../images/dotLogo.png"  alt="DOT"/></h1>
+    	<p id="loginoutBtn" class="logout"><button class="log btn_log">Logout</button></p>
+        <!--GNB-->
+        <div class="gnb">
+        	<ul>
+            	<li class="home"><img src="../images/icon_nav.png" alt="Home"/>Home</li>
+            	<li id="sub_mosu" class="agreeM active"><img src="../images/icon_nav.png" alt="동의"/><a href="#">동의</a></li>
+            	<li  id="sub_category" class="category"><img src="../images/icon_nav.png" alt="업종"/><a href="#">업종</a></li>
+            	<li id="sub_area" class="activityA"><img src="../images/icon_nav.png" alt="주활동지역"/><a href="#">주활동지역</a></li>
+            </ul>
+        </div>
+         <!--//GNB-->
+    </header>
+    <!--//Header Area-->
+    
+	<!--Main Area-->
+    <div class="conts">
+   		<!--Contents-->
+    	<main>
+        	<p class="agreement" title="동의 상단 이미지"></p>
+            <div class="wrap">
+            	<h2>동의</h2>
+                <h3>서비스별 고객 현황</h3>
+                <!--Tab-->
+				<ul class="nav tabLine">
+      				<li class="active"><a href="#tab1"  data-toggle="tab">필수 동의</a></li>
+      				<li ><a href="#tab2"  data-toggle="tab">교차활용 동의</a></li>
+      			</ul>
+    			<div class="tab_content">
+                    <!--Tab 필수 동의-->
+      				<div  class="tab_pane active" id="tab1" >
+                        <!--그래프 영역-->
+                        <h4>가입 고객수</h4>
+                        <div class="graph txtC mb30">필수 동의 그래프 영역</div>
+                        <!--//그래프 영역-->
+                            
+                        <!--필수 동의 Table-->
+                        <p class="expTb">※ Active 고객수 -> 앱활동성 3개월, MAU -> 앱활동성 1개월, Active 고객은 OCB, Syrup, T map </p>
+                        <table class="listTable tStriped tHover">
+                            <colgroup>
+                                <col width="*">
+                         		<col width="10%">
+                                <col width="13%">
+                                <col width="13%">
+                                <col width="13%">
+                                <col width="13%">
+                                <col width="13%">
+                                <col width="13%">
+                            </colgroup>
+    						<thead>
+        						<tr>
+           							<th>&nbsp;</th>
+            						<th>&nbsp;</th>
+            						<th>TOTAL</th>
+            						<th>Syrup</th>
+            						<th>OCB</th>
+            						<th>T map</th>
+            						<th>11번가</th>
+            						<th>T store</th>
+            					</tr>
+    						</thead>
+                            <tbody>
+        						<tr>
+        							<td rowspan="4" class="depth1 txtC">가입고객수</td>
+        							<td class="depth2 txtL">전체</td>
+        							<td class="total">48,891,344  </td>
+        							<td>36,413,294 </td>
+        							<td>13,626,015</td>
+        							<td>19,184,122</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td class="depth2 txtL">PUSH동의</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td class="depth2 txtL">위치동의</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+								</tr>
+        						<tr>
+        							<td class="depth2 txtL">BLE동의</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td rowspan="4" class="depth1 txtC">Active 고객수</td>
+        							<td class="depth2 txtL">전체</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td class="depth2 txtL">PUSH동의</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td class="depth2 txtL">위치동의</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td class="depth2 txtL">BLE동의</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td rowspan="4" class="depth1 txtC">MAU 고객수</td>
+        							<td class="depth2 txtL">전체</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        						    <td>&nbsp;</td>
+        						    <td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td class="depth2 txtL">PUSH동의</td>
+        						    <td class="total">&nbsp;</td>
+        						    <td>&nbsp;</td>
+        						    <td>&nbsp;</td>
+        						    <td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td class="depth2 txtL">위치동의</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        						</tr>
+        						<tr>
+        							<td class="depth2 txtL">BLE동의</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        						</tr>
+                            </tbody>
+						</table>
+                        <!--//필수 동의 Table-->
+
+      				</div>
+                    <!--//Tab 필수 동의-->
+                        
+                    <!--Tab 교차활용 동의-->
+      				<div  class="tab_pane fade" id="tab2">
+        				<!--그래프 영역-->
+                        <h4>가입 고객수</h4>
+                        <div class="graph txtC mb30">교차활용 동의 그래프 영역</div>
+                        <!--//그래프 영역-->
+                            
+                        <!--교차활용 동의 Table-->
+                        <p class="expTb">※ Active 고객수 -> 앱활동성 3개월, MAU -> 앱활동성 1개월, Active 고객은 OCB, Syrup, T map </p>
+                        <table class="listTable tStriped tHover">
+                            <colgroup>
+                                <col width="*">
+                         		<col width="10%">
+                                <col width="13%">
+                                <col width="13%">
+                                <col width="13%">
+                                <col width="13%">
+                                <col width="13%">
+                                <col width="13%">
+                            </colgroup>
+    						<thead>
+        						<tr>
+           							<th>&nbsp;</th>
+            						<th>&nbsp;</th>
+            						<th>TOTAL</th>
+            						<th>Syrup</th>
+            						<th>OCB</th>
+            						<th>T map</th>
+            						<th>11번가</th>
+            						<th>T store</th>
+            					</tr>
+    						</thead>
+                            <tbody>
+        						<tr>
+        							<td rowspan="4" class="depth1 txtC">가입고객수</td>
+        							<td class="depth2 txtL">전체</td>
+        							<td class="total">48,891,344  </td>
+        							<td>36,413,294 </td>
+        							<td>13,626,015</td>
+        							<td>19,184,122</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td class="depth2 txtL">PUSH동의</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td class="depth2 txtL">위치동의</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+								</tr>
+        						<tr>
+        							<td class="depth2 txtL">BLE동의</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td rowspan="4" class="depth1 txtC">Active 고객수</td>
+        							<td class="depth2 txtL">전체</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td class="depth2 txtL">PUSH동의</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td class="depth2 txtL">위치동의</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td class="depth2 txtL">BLE동의</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td rowspan="4" class="depth1 txtC">MAU 고객수</td>
+        							<td class="depth2 txtL">전체</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        						    <td>&nbsp;</td>
+        						    <td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td class="depth2 txtL">PUSH동의</td>
+        						    <td class="total">&nbsp;</td>
+        						    <td>&nbsp;</td>
+        						    <td>&nbsp;</td>
+        						    <td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+    							</tr>
+        						<tr>
+        							<td class="depth2 txtL">위치동의</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        						</tr>
+        						<tr>
+        							<td class="depth2 txtL">BLE동의</td>
+        							<td class="total">&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        							<td>&nbsp;</td>
+        						</tr>
+                            </tbody>
+						</table>
+                        <!--//교차활용 동의 Table-->
+      				</div>
+                    <!--//Tab 교차활용 동의-->
+    			</div>
+				<!--//Tab-->
+                
+                <h3 class="mt50">서비스 조합별 교차 고객 현황</h3>
+                	<h4>합집합 현황 <span  class="floatR expTb">※ T map, 11번가는 현재기준 동의가 없음.</span></h4>
+                    <!--합집합 현황-->
+					<table class="listTable tStriped tHover mb30">
+                    	<colgroup>
+                        	<col width="*">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                        </colgroup>
+    					<thead>
+        					<tr>
+            					<th rowspan="2">서비스조합</th>
+            					<th colspan="4">가입 고객수</th>
+            					<th colspan="4">Active 고객수</th>
+            					<th colspan="4">MAU</th>
+           					</tr>
+        					<tr>
+        					    <th class="depth1">전체</th>
+        					    <th class="depth1"> PUSH동의 </th>
+        					    <th class="depth1">위치동의</th>
+        					    <th class="depth1">BLE동의</th>
+        					   	<th class="depth1">전체</th>
+        					    <th class="depth1">PUSH동의 </th>
+        					    <th class="depth1">위치동의</th>
+        					    <th class="depth1">BLE동의</th>
+        					    <th class="depth1">전체</th>
+        					    <th class="depth1"> PUSH동의 </th>
+        					    <th class="depth1">위치동의</th>
+        					    <th class="depth1">BLE동의</th>
+    					    </tr>
+        				<tbody>
+        					<tr>
+            					<td class="depth2 txtC">Syrup U OCB</td>
+            					<td class="total">100.000.000</td>
+            					<td>&nbsp;</td>
+            					<td>&nbsp;</td>
+            					<td>&nbsp;</td>
+            					<td class="total">&nbsp;</td>
+            					<td>&nbsp;</td>
+            					<td>&nbsp;</td>
+            					<td>&nbsp;</td>
+            					<td class="total">&nbsp;</td>
+            					<td>&nbsp;</td>
+            					<td>&nbsp;</td>
+            					<td>&nbsp;</td>
+        					</tr>
+        					<tr>
+        					    <td class="depth2 txtC">Syrup U OCB U T map</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+    					    </tr>
+        					<tr>
+        					    <td class="depth2 txtC">Syrup U OCB U 11번가</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+    					    </tr>
+        					<tr>
+        					    <td class="depth2 txtC">Syrup U OCB U T map U 11번가</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+    					    </tr>
+       					</tbody>
+					</table>
+					<!--//합집합 현황-->
+                     
+					<h4>교집합 현황 <span  class="floatR expTb">※ T map, 11번가는 현재기준 동의가 없음.</span></h4>
+                    <!--교집합 현황-->
+					<table class="listTable tStriped tHover">
+                    	<colgroup>
+                        	<col width="*">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                        </colgroup>
+    					<thead>
+        					<tr>
+            					<th rowspan="2">서비스조합</th>
+            					<th colspan="4">가입 고객수</th>
+            					<th colspan="4">Active 고객수</th>
+            					<th colspan="4">MAU</th>
+           					</tr>
+        					<tr>
+        					    <th class="depth1">전체</th>
+        					    <th class="depth1"> PUSH동의 </th>
+        					    <th class="depth1">위치동의</th>
+        					    <th class="depth1">BLE동의</th>
+        					   	<th class="depth1">전체</th>
+        					    <th class="depth1">PUSH동의 </th>
+        					    <th class="depth1">위치동의</th>
+        					    <th class="depth1">BLE동의</th>
+        					    <th class="depth1">전체</th>
+        					    <th class="depth1"> PUSH동의 </th>
+        					    <th class="depth1">위치동의</th>
+        					    <th class="depth1">BLE동의</th>
+    					    </tr>
+        				<tbody>
+        					<tr>
+            					<td class="depth2 txtC">Syrup ∩ OCB</td>
+            					<td class="total">100.000.000</td>
+            					<td>&nbsp;</td>
+            					<td>&nbsp;</td>
+            					<td>&nbsp;</td>
+            					<td class="total">&nbsp;</td>
+            					<td>&nbsp;</td>
+            					<td>&nbsp;</td>
+            					<td>&nbsp;</td>
+            					<td class="total">&nbsp;</td>
+            					<td>&nbsp;</td>
+            					<td>&nbsp;</td>
+            					<td>&nbsp;</td>
+        					</tr>
+        					<tr>
+        					    <td class="depth2 txtC">Syrup ∩ OCB U T map</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+    					    </tr>
+        					<tr>
+        					    <td class="depth2 txtC">Syrup ∩ OCB ∩ 11번가</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+    					    </tr>
+        					<tr>
+        					    <td class="depth2 txtC">Syrup ∩ OCB ∩ T map ∩ 11번가</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td class="total">&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+        					    <td>&nbsp;</td>
+    					    </tr>
+       					</tbody>
+					</table>
+					 <!--//교집합 현황-->
+
+                
+            </div>
+        </main>
+        <!--//Contents-->
+        
+        <!--Footer Area-->
+        <footer>
+        	<p class="copyright">
+            	(463-400) 경기도 성남시 분당구 판교로 264(삼평동) The Planet SK플래닛 주식회사 대표이사 서진우<br>
+				Copyright © 2015 SK Planet.  ALL RIGHTS RESERVED</p>
+        </footer>
+        <!--//Footer Area-->
+	</div>
+	<!--//Main Area-->
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Area">
+
+	<resultMap type="AreaVO" id="dataList">
+		
+	</resultMap>
+  
+    <!--주활동지역_AR_POC조회쿼리 -->
+    <select id="selectAreaArPocList" parameterType="map" resultMap="dataList">
+    <![CDATA[
+        SELECT /* selectAreaArPocList */ 
+           A.MAIN_ADM_DONG_CD
+           , B.SIDO              AS MAIN_SIDO
+           , B.SIGUNGU           AS MAIN_SIGUNGU
+           , B.ADM_DONG          AS MAIN_ADM_DONG
+           , A.CROSS_ADM_DONG_CD
+           , C.SIDO              AS CROSS_SIDO
+           , C.SIGUNGU           AS CROSS_SIGUNGU
+           , C.ADM_DONG          AS CROSS_ADM_DONG
+           , A.MAIN_MBR_CNT
+           , A.MAIN_MBR_CNT_OF_CORSS
+           , A.CONFIDENCE
+           , A.RN
+        FROM (
+               SELECT /*+ INDEX(A IX1_INTGT_ACVT_AREA_AR) */
+                      MAIN_ADM_DONG_CD
+                    , CROSS_ADM_DONG_CD
+                    , MAIN_MBR_CNT
+                    , CROSS_MBR_CNT AS MAIN_MBR_CNT_OF_CORSS
+                    , CONFIDENCE
+                    , ROW_NUMBER() OVER (PARTITION BY MAIN_ADM_DONG_CD ORDER BY CONFIDENCE DESC) AS RN
+                 FROM INTGT_POC_AR_ACVT_AREA A
+                WHERE MAIN_ADM_DONG_CD LIKE #{mainAcvtAdmDongCd} || '%'
+             ) A
+             LEFT OUTER JOIN INTGT_ADM_DONG_META B
+                  ON A.MAIN_ADM_DONG_CD  = B.ADM_DONG_CD
+             LEFT OUTER JOIN INTGT_ADM_DONG_META C
+                  ON A.CROSS_ADM_DONG_CD = C.ADM_DONG_CD
+       WHERE RN < 16
+       ORDER BY A.MAIN_ADM_DONG_CD, A.CONFIDENCE DESC
+    ]]>
+    </select>
+	
+	<!--지역별 모수 현황 -->
+	<select id="selectAreaMosuList" parameterType="map" resultMap="dataList">
+	<![CDATA[
+    SELECT /* selectAreaMosuList */
+    	SEQ
+    	, BASE_DT
+    	, INT_KEY_CL_CD
+        , CMPLS_CROSS_AGR_CL_CD
+        , PERIOD_CL_CD
+        , MAIN_ACVT_ADM_DONG_CD
+        , MAIN_ACVT_DONG_NM
+        , MOSU
+        , PUSH
+    	FROM (SELECT
+	           SEQ
+	         , TO_CHAR(TO_DATE(BASE_DT), 'YYYY.MM.DD') BASE_DT
+	         , INT_KEY_CL_CD
+	         , CMPLS_CROSS_AGR_CL_CD
+	         , PERIOD_CL_CD
+	         , MAIN_ACVT_ADM_DONG_CD
+	         , CASE WHEN MAIN_ACVT_ADM_DONG_CD = '00' THEN '전국'
+	                ELSE (
+	                        SELECT CASE WHEN LENGTH(ADM_DONG_CD) = 2 THEN SIDO
+	                                    WHEN LENGTH(ADM_DONG_CD) = 5 THEN SIGUNGU
+	                                    ELSE ADM_DONG  
+	                               END
+	                          FROM INTGT_ADM_DONG_META
+	                         WHERE ADM_DONG_CD = MAIN_ACVT_ADM_DONG_CD
+	                     )
+	           END    AS MAIN_ACVT_DONG_NM
+	         , SUM(MOSU)	AS MOSU
+	         , SUM(PUSH)	AS PUSH
+	      FROM (
+	            SELECT 
+	                   SEQ
+	                 , BASE_DT
+	                 , INT_KEY_CL_CD
+	                 , CMPLS_CROSS_AGR_CL_CD
+	                 , FUNC_AGR_CL_CD
+	                 , PERIOD_CL_CD
+	                 , MAIN_ACVT_ADM_DONG_CD
+	                 , CASE WHEN FUNC_AGR_CL_CD = '99' THEN MBR_CNT END     AS MOSU
+	                 , CASE WHEN FUNC_AGR_CL_CD = '03' THEN MBR_CNT END     AS PUSH
+	              FROM (
+	                    SELECT 
+	                           1 SEQ
+	                         , BASE_DT
+	                         , INT_KEY_CL_CD
+	                         , CMPLS_CROSS_AGR_CL_CD
+	                         , FUNC_AGR_CL_CD
+	                         , PERIOD_CL_CD
+	                         , MAIN_ACVT_ADM_DONG_CD
+	                         , MBR_CNT
+	                      FROM INTGT_POC_MAIN_ACVT_MBR_CNT
+	                     WHERE 1 = 1
+	                       AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+	                       AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN */
+	                       AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+	                       AND FUNC_AGR_CL_CD IN ('03', '99')   /* 01:PUSH동의 02:위치동의 03:BLE동의 99:전체 */
+	                       AND PERIOD_CL_CD = '3M'              /* 1M:1개월 3M:3개월 6M:6개월 */
+	                       AND MAIN_ACVT_ADM_DONG_CD = CASE WHEN #{mainAcvtAdmDongCd} != '00' THEN #{mainAcvtAdmDongCd} END
+	                     UNION ALL
+	                    SELECT 
+	                           2 SEQ
+	                         , BASE_DT
+	                         , INT_KEY_CL_CD
+	                         , CMPLS_CROSS_AGR_CL_CD
+	                         , FUNC_AGR_CL_CD
+	                         , PERIOD_CL_CD
+	                         , MAIN_ACVT_ADM_DONG_CD
+	                         , MBR_CNT
+	                      FROM INTGT_POC_MAIN_ACVT_MBR_CNT
+	                     WHERE 1 = 1
+	                       AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+	                       AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN */
+	                       AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+	                       AND FUNC_AGR_CL_CD IN ('03', '99')   /* 01:PUSH동의 02:위치동의 03:BLE동의 99:전체 */
+	                       AND PERIOD_CL_CD = '3M'              /* 1M:1개월 3M:3개월 6M:6개월 */
+	                       AND (MAIN_ACVT_ADM_DONG_CD LIKE #{mainAcvtAdmDongCd} || '___' || CASE WHEN #{mainAcvtAdmDongCd} = '36' THEN '___' END OR LENGTH(MAIN_ACVT_ADM_DONG_CD) = CASE WHEN #{mainAcvtAdmDongCd} = '00' THEN 2 ELSE 100 END)
+	                   )
+	           )
+	     GROUP BY
+	           SEQ
+	         , BASE_DT
+	         , INT_KEY_CL_CD
+	         , CMPLS_CROSS_AGR_CL_CD
+	         , PERIOD_CL_CD
+	         , MAIN_ACVT_ADM_DONG_CD
+	         
+	     )
+	ORDER BY SEQ, MOSU DESC, PUSH DESC
+    ]]>
+	</select>
+	
+	<!--지역별 모수 현황 가로 바차트-->
+	<select id="selectAreaMosuBarChartList" parameterType="map" resultMap="dataList">
+	<![CDATA[
+    SELECT /* selectAreaMosuBarChartList */
+           SEQ
+         , TO_CHAR(TO_DATE(BASE_DT), 'YYYY.MM.DD') BASE_DT
+         , INT_KEY_CL_CD
+         , CMPLS_CROSS_AGR_CL_CD
+         , PERIOD_CL_CD
+         , CASE WHEN MAIN_ACVT_ADM_DONG_CD = '00' THEN '전국'
+                ELSE (
+                        SELECT CASE WHEN LENGTH(ADM_DONG_CD) = 2 THEN SIDO
+                                    WHEN LENGTH(ADM_DONG_CD) = 5 THEN SIGUNGU
+                                    ELSE ADM_DONG
+                               END
+                          FROM INTGT_ADM_DONG_META
+                         WHERE ADM_DONG_CD = MAIN_ACVT_ADM_DONG_CD
+                     )
+           END    AS MAIN_ACVT_DONG_NM
+         , SUM(MOSU) - SUM(PUSH)    AS H_BAR_LEFT
+         , SUM(PUSH)                AS H_BAR_RIGHT
+         , SUM(MOSU)                AS H_BAR_TOTAL
+         , CASE WHEN SUM(MOSU) > 0 THEN TO_CHAR(SUM(MOSU) - SUM(PUSH), '999,999,999,999') ELSE '-' END  AS LEFT_TOOLTIP
+         , CASE WHEN SUM(PUSH) > 0 THEN TO_CHAR(SUM(PUSH), '999,999,999,999') ELSE '-' END              AS RIGHT_TOOLTIP
+         , CASE WHEN SUM(MOSU) > 0 THEN TO_CHAR(SUM(MOSU), '999,999,999,999') ELSE '-' END              AS TOTAL_TOOLTIP
+         , MAIN_ACVT_ADM_DONG_CD
+      FROM (
+            SELECT 
+                   SEQ
+                 , BASE_DT
+                 , INT_KEY_CL_CD
+                 , CMPLS_CROSS_AGR_CL_CD
+                 , FUNC_AGR_CL_CD
+                 , PERIOD_CL_CD
+                 , MAIN_ACVT_ADM_DONG_CD
+                 , CASE WHEN FUNC_AGR_CL_CD = '99' THEN MBR_CNT END     AS MOSU
+                 , CASE WHEN FUNC_AGR_CL_CD = '03' THEN MBR_CNT END     AS PUSH
+              FROM (
+                    SELECT 
+                           1 SEQ
+                         , BASE_DT
+                         , INT_KEY_CL_CD
+                         , CMPLS_CROSS_AGR_CL_CD
+                         , FUNC_AGR_CL_CD
+                         , PERIOD_CL_CD
+                         , MAIN_ACVT_ADM_DONG_CD
+                         , MBR_CNT
+                      FROM INTGT_POC_MAIN_ACVT_MBR_CNT
+                     WHERE 1 = 1
+                       AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+                       AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN */
+                       AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+                       AND FUNC_AGR_CL_CD IN ('03', '99')   /* 01:PUSH동의 02:위치동의 03:BLE동의 99:전체 */
+                       AND PERIOD_CL_CD = '3M'              /* 1M:1개월 3M:3개월 6M:6개월 */
+                       AND MAIN_ACVT_ADM_DONG_CD = CASE WHEN #{mainAcvtAdmDongCd} != '00' THEN #{mainAcvtAdmDongCd} END
+                     UNION ALL
+                    SELECT 
+                           2 SEQ
+                         , BASE_DT
+                         , INT_KEY_CL_CD
+                         , CMPLS_CROSS_AGR_CL_CD
+                         , FUNC_AGR_CL_CD
+                         , PERIOD_CL_CD
+                         , MAIN_ACVT_ADM_DONG_CD
+                         , MBR_CNT
+                      FROM INTGT_POC_MAIN_ACVT_MBR_CNT
+                     WHERE 1 = 1
+                       AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+                       AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN */
+                       AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+                       AND FUNC_AGR_CL_CD IN ('03', '99')   /* 01:PUSH동의 02:위치동의 03:BLE동의 99:전체 */
+                       AND PERIOD_CL_CD = '3M'              /* 1M:1개월 3M:3개월 6M:6개월 */
+                       AND (MAIN_ACVT_ADM_DONG_CD LIKE #{mainAcvtAdmDongCd} || '___' || CASE WHEN #{mainAcvtAdmDongCd} = '36' THEN '___' END OR LENGTH(MAIN_ACVT_ADM_DONG_CD) = CASE WHEN #{mainAcvtAdmDongCd} = '00' THEN 2 ELSE 100 END)
+                   )
+           )
+     GROUP BY
+           SEQ
+         , BASE_DT
+         , INT_KEY_CL_CD
+         , CMPLS_CROSS_AGR_CL_CD
+         , PERIOD_CL_CD
+         , MAIN_ACVT_ADM_DONG_CD
+     ORDER BY SEQ, H_BAR_TOTAL DESC, H_BAR_LEFT DESC
+    ]]>
+	</select>
+	
+	<!--성연령대별 현황 1-->
+	<select id="selectAreaSexAgeList1" parameterType="map" resultMap="dataList">
+	<![CDATA[
+    SELECT 
+           /* selectAreaSexAgeList1 */
+           SEQ
+         , MAIN_ACVT_ADM_DONG_CD
+         , CASE WHEN LENGTH(MAIN_ACVT_ADM_DONG_CD) = 2 THEN CASE WHEN MAIN_ACVT_ADM_DONG_CD = '00' THEN '전국' ELSE (SELECT SIDO FROM INTGT_ADM_DONG_META WHERE ADM_DONG_CD = #{mainAcvtAdmDongCd}) END
+                WHEN LENGTH(MAIN_ACVT_ADM_DONG_CD) = 5 THEN (SELECT SIGUNGU FROM INTGT_ADM_DONG_META WHERE ADM_DONG_CD = #{mainAcvtAdmDongCd})
+                ELSE (SELECT ADM_DONG FROM INTGT_ADM_DONG_META WHERE ADM_DONG_CD = #{mainAcvtAdmDongCd})
+           END      AS ADM_DONG_NM
+         , SEX_CD
+         , MBR_CNT
+         , ROUND(MBR_CNT/SUM(MBR_CNT) OVER(PARTITION BY SEQ, MAIN_ACVT_ADM_DONG_CD), 3) * 100    AS TOT_MBR_CNT
+      FROM (
+            SELECT 
+                   SEQ
+                 , MAIN_ACVT_ADM_DONG_CD
+                 , SEX_CD
+                 , SUM(MBR_CNT)     AS MBR_CNT
+              FROM (
+                    SELECT 
+                           1 SEQ
+                         , CASE WHEN LENGTH(#{mainAcvtAdmDongCd}) = 2 THEN '00' ELSE MAIN_ACVT_ADM_DONG_CD END     AS MAIN_ACVT_ADM_DONG_CD
+                         , AGE_RNG_CD
+                         , SEX_CD
+                         , MBR_CNT
+                      FROM INTGT_POC_MAIN_ACVT_SA_MBR_CNT
+                     WHERE 1 = 1
+                       AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+                       AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN */
+                       AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+                       AND FUNC_AGR_CL_CD = '99'            /* 01:PUSH동의 02:위치동의 03:BLE동의 99:전체 */
+                       AND PERIOD_CL_CD = '3M'              /* 1M:1개월 3M:3개월 6M:6개월 */
+                       AND SEX_CD IN ('F','M')
+                       AND MAIN_ACVT_ADM_DONG_CD = CASE WHEN LENGTH(#{mainAcvtAdmDongCd}) = 2 THEN '00'
+                                                        ELSE SUBSTR(#{mainAcvtAdmDongCd}, 1, CASE WHEN LENGTH(#{mainAcvtAdmDongCd}) = 8 THEN 5 ELSE 2 END)
+                                                   END
+                     UNION ALL
+                    SELECT 
+                           2 SEQ
+                         , MAIN_ACVT_ADM_DONG_CD
+                         , AGE_RNG_CD
+                         , SEX_CD
+                         , MBR_CNT
+                      FROM INTGT_POC_MAIN_ACVT_SA_MBR_CNT
+                     WHERE 1 = 1
+                       AND #{mainAcvtAdmDongCd} != '00'
+                       AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+                       AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN */
+                       AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+                       AND FUNC_AGR_CL_CD = '99'            /* 01:PUSH동의 02:위치동의 03:BLE동의 99:전체 */
+                       AND PERIOD_CL_CD = '3M'              /* 1M:1개월 3M:3개월 6M:6개월 */
+                       AND SEX_CD IN ('F','M')
+                       AND MAIN_ACVT_ADM_DONG_CD = #{mainAcvtAdmDongCd}
+                   )
+             GROUP BY
+                   SEQ
+                 , MAIN_ACVT_ADM_DONG_CD
+                 , SEX_CD
+           )
+     ORDER BY
+           SEX_CD DESC
+         , SEQ
+         , MAIN_ACVT_ADM_DONG_CD
+    ]]>
+	</select>
+	
+	<!--성연령대별 현황 2-->
+	<select id="selectAreaSexAgeList2" parameterType="map" resultMap="dataList">
+	<![CDATA[
+    SELECT 
+           /* selectAreaSexAgeList2 */
+           SEQ
+         , MAIN_ACVT_ADM_DONG_CD
+         , CASE WHEN LENGTH(MAIN_ACVT_ADM_DONG_CD) = 2 THEN CASE WHEN MAIN_ACVT_ADM_DONG_CD = '00' THEN '전국' ELSE (SELECT SIDO FROM INTGT_ADM_DONG_META WHERE ADM_DONG_CD = #{mainAcvtAdmDongCd}) END
+                WHEN LENGTH(MAIN_ACVT_ADM_DONG_CD) = 5 THEN (SELECT SIGUNGU FROM INTGT_ADM_DONG_META WHERE ADM_DONG_CD = #{mainAcvtAdmDongCd})
+                ELSE (SELECT ADM_DONG FROM INTGT_ADM_DONG_META WHERE ADM_DONG_CD = #{mainAcvtAdmDongCd})
+           END      AS ADM_DONG_NM
+         , AGE_RNG_CD
+         , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_012' AND COM_CD = AGE_RNG_CD AND ROWNUM <= 1) AGE_RNG_NM
+         , SUM(MBR_CNT) OVER(PARTITION BY SEQ, MAIN_ACVT_ADM_DONG_CD)    AS MBR_CNT
+         , ROUND(MBR_CNT/SUM(MBR_CNT) OVER(PARTITION BY SEQ, MAIN_ACVT_ADM_DONG_CD), 3) * 100    AS TOT_MBR_CNT
+      FROM (
+            SELECT 
+                   SEQ
+                 , MAIN_ACVT_ADM_DONG_CD
+                 , AGE_RNG_CD
+                 , SUM(MBR_CNT)     AS MBR_CNT
+              FROM (
+                    SELECT 
+                           1 SEQ
+                         , CASE WHEN LENGTH(#{mainAcvtAdmDongCd}) = 2 THEN '00' ELSE MAIN_ACVT_ADM_DONG_CD END     AS MAIN_ACVT_ADM_DONG_CD
+                         , AGE_RNG_CD
+                         , SEX_CD
+                         , MBR_CNT
+                      FROM INTGT_POC_MAIN_ACVT_SA_MBR_CNT
+                     WHERE 1 = 1
+                       AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+                       AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN */
+                       AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+                       AND FUNC_AGR_CL_CD = '99'            /* 01:PUSH동의 02:위치동의 03:BLE동의 99:전체 */
+                       AND PERIOD_CL_CD = '3M'              /* 1M:1개월 3M:3개월 6M:6개월 */
+                       AND SEX_CD IN ('F','M')
+                       AND MAIN_ACVT_ADM_DONG_CD = CASE WHEN LENGTH(#{mainAcvtAdmDongCd}) = 2 THEN '00'
+                                                        ELSE SUBSTR(#{mainAcvtAdmDongCd}, 1, CASE WHEN LENGTH(#{mainAcvtAdmDongCd}) = 8  and substr(#{mainAcvtAdmDongCd}, 1, 2) != '36'  THEN 5 ELSE 2 END)
+                                                   END
+                     UNION ALL
+                    SELECT 
+                           2 SEQ
+                         , MAIN_ACVT_ADM_DONG_CD
+                         , AGE_RNG_CD
+                         , SEX_CD
+                         , MBR_CNT
+                      FROM INTGT_POC_MAIN_ACVT_SA_MBR_CNT
+                     WHERE 1 = 1
+                       AND #{mainAcvtAdmDongCd} != '00'
+                       AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+                       AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN */
+                       AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+                       AND FUNC_AGR_CL_CD = '99'            /* 01:PUSH동의 02:위치동의 03:BLE동의 99:전체 */
+                       AND PERIOD_CL_CD = '3M'              /* 1M:1개월 3M:3개월 6M:6개월 */
+                       AND SEX_CD IN ('F','M')
+                       AND MAIN_ACVT_ADM_DONG_CD = #{mainAcvtAdmDongCd}
+                   )
+             GROUP BY
+                   SEQ
+                 , MAIN_ACVT_ADM_DONG_CD
+                 , AGE_RNG_CD
+          )
+     ORDER BY
+           AGE_RNG_CD
+         , SEQ
+         , MAIN_ACVT_ADM_DONG_CD
+    ]]>
+	</select>
+	
+	<!--성연령대별 현황 3-->
+	<select id="selectAreaSexAgeList3" parameterType="map" resultMap="dataList">
+	<![CDATA[
+    SELECT 
+           /* selectAreaSexAgeList3 */
+           SEQ
+         , MAIN_ACVT_ADM_DONG_CD
+         , CASE WHEN LENGTH(MAIN_ACVT_ADM_DONG_CD) = 2 THEN CASE WHEN MAIN_ACVT_ADM_DONG_CD = '00' THEN '전국' ELSE (SELECT SIDO FROM INTGT_ADM_DONG_META WHERE ADM_DONG_CD = #{mainAcvtAdmDongCd}) END
+                WHEN LENGTH(MAIN_ACVT_ADM_DONG_CD) = 5 THEN (SELECT SIGUNGU FROM INTGT_ADM_DONG_META WHERE ADM_DONG_CD = #{mainAcvtAdmDongCd})
+                ELSE (SELECT ADM_DONG FROM INTGT_ADM_DONG_META WHERE ADM_DONG_CD = #{mainAcvtAdmDongCd})
+           END      AS ADM_DONG_NM
+         , AGE_RNG_CD
+         , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_012' AND COM_CD = AGE_RNG_CD AND ROWNUM <= 1) AGE_RNG_NM
+         , SEX_CD
+         , SUM(MBR_CNT) OVER(PARTITION BY SEQ, MAIN_ACVT_ADM_DONG_CD)    AS MBR_CNT
+         , ROUND(MBR_CNT/SUM(MBR_CNT) OVER(PARTITION BY SEQ, MAIN_ACVT_ADM_DONG_CD), 3) * 100    AS TOT_MBR_CNT
+      FROM (
+            SELECT 
+                   SEQ
+                 , MAIN_ACVT_ADM_DONG_CD
+                 , AGE_RNG_CD
+                 , SEX_CD
+                 , SUM(MBR_CNT)     AS MBR_CNT
+              FROM (
+                    SELECT 
+                           1 SEQ
+                         , CASE WHEN LENGTH(#{mainAcvtAdmDongCd}) = 2 THEN '00' ELSE MAIN_ACVT_ADM_DONG_CD END     AS MAIN_ACVT_ADM_DONG_CD
+                         , AGE_RNG_CD
+                         , SEX_CD
+                         , MBR_CNT
+                      FROM INTGT_POC_MAIN_ACVT_SA_MBR_CNT
+                     WHERE 1 = 1
+                       AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+                       AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN */
+                       AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+                       AND FUNC_AGR_CL_CD = '99'            /* 01:PUSH동의 02:위치동의 03:BLE동의 99:전체 */
+                       AND PERIOD_CL_CD = '3M'              /* 1M:1개월 3M:3개월 6M:6개월 */
+                       AND SEX_CD IN ('F','M')
+                       AND MAIN_ACVT_ADM_DONG_CD = CASE WHEN LENGTH(#{mainAcvtAdmDongCd}) = 2 THEN '00'
+                                                        ELSE SUBSTR(#{mainAcvtAdmDongCd}, 1, CASE WHEN LENGTH(#{mainAcvtAdmDongCd}) = 8 THEN 5 ELSE 2 END)
+                                                   END
+                     UNION ALL
+                    SELECT 
+                           2 SEQ
+                         , MAIN_ACVT_ADM_DONG_CD
+                         , AGE_RNG_CD
+                         , SEX_CD
+                         , MBR_CNT
+                      FROM INTGT_POC_MAIN_ACVT_SA_MBR_CNT
+                     WHERE 1 = 1
+                       AND #{mainAcvtAdmDongCd} != '00'
+                       AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+                       AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN */
+                       AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+                       AND FUNC_AGR_CL_CD = '99'            /* 01:PUSH동의 02:위치동의 03:BLE동의 99:전체 */
+                       AND PERIOD_CL_CD = '3M'              /* 1M:1개월 3M:3개월 6M:6개월 */
+                       AND SEX_CD IN ('F','M')
+                       AND MAIN_ACVT_ADM_DONG_CD = #{mainAcvtAdmDongCd}
+                   )
+             GROUP BY
+                   SEQ
+                 , MAIN_ACVT_ADM_DONG_CD
+                 , AGE_RNG_CD
+                 , SEX_CD
+           )
+     ORDER BY
+           AGE_RNG_CD
+         , SEX_CD DESC
+         , SEQ
+         , MAIN_ACVT_ADM_DONG_CD
+    ]]>
+	</select>
+	
+	<!--업종순위 -->
+	<select id="selectAreaBusiRankList" parameterType="map" resultMap="dataList">
+	<![CDATA[
+    SELECT 
+           /* selectAreaBusiRankList */
+           ROWNUM SEQ
+         , BASE_DT
+         , INT_KEY_CL_CD
+         , CMPLS_CROSS_AGR_CL_CD
+         , FUNC_AGR_CL_CD
+         , PERIOD_CL_CD
+         , MAIN_ACVT_ADM_DONG_CD
+         , CNCT_CTG_CD
+         , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_010' AND COM_CD = CNCT_CTG_CD) CTG_NM
+         , MBR_CNT
+      FROM (
+            SELECT 
+                   BASE_DT
+                 , INT_KEY_CL_CD
+                 , CMPLS_CROSS_AGR_CL_CD
+                 , FUNC_AGR_CL_CD
+                 , PERIOD_CL_CD
+                 , MAIN_ACVT_ADM_DONG_CD
+                 , CNCT_CTG_CD
+                 , MBR_CNT
+              FROM INTGT_POC_MAIN_ACVT_CT_MBR_CNT
+             WHERE 1 = 1
+               AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+               AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN */
+               AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+               AND FUNC_AGR_CL_CD = '99'            /* 01:PUSH동의 02:위치동의 03:BLE동의 99:전체 */
+               AND PERIOD_CL_CD = '3M'              /* 1M:1개월 3M:3개월 6M:6개월 */
+               AND MAIN_ACVT_ADM_DONG_CD = #{mainAcvtAdmDongCd}
+             ORDER BY MBR_CNT DESC
+           )
+     WHERE 1 = 1
+       AND ROWNUM <= 10
+    ]]>
+	</select>
+	
+	<!--함께방문하는지역 -->
+	<select id="selectAreaTogatherVisitAreaList" parameterType="map" resultMap="dataList">
+	<![CDATA[
+    SELECT /* selectAreaTogatherVisitAreaList */
+           ROWNUM SEQ
+         , BASE_DT
+         , INT_KEY_CL_CD
+         , CMPLS_CROSS_AGR_CL_CD
+         , FUNC_AGR_CL_CD
+         , PERIOD_CL_CD
+         , MAIN_ACVT_ADM_DONG_CD
+         , JOIN_AREA_ADM_DONG_CD
+         , (SELECT SIDO || ' ' || SIGUNGU || ' ' || ADM_DONG FROM INTGT_ADM_DONG_META WHERE ADM_DONG_CD = JOIN_AREA_ADM_DONG_CD) ADM_DONG
+         , MBR_CNT
+      FROM (
+            SELECT 
+                   BASE_DT
+                 , INT_KEY_CL_CD
+                 , CMPLS_CROSS_AGR_CL_CD
+                 , FUNC_AGR_CL_CD
+                 , PERIOD_CL_CD
+                 , MAIN_ACVT_ADM_DONG_CD
+                 , JOIN_AREA_ADM_DONG_CD
+                 , MBR_CNT
+              FROM INTGT_POC_MAIN_ACVT_JOIN_AREA
+             WHERE 1 = 1
+               AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+               AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN */
+               AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+               AND FUNC_AGR_CL_CD = '99'            /* 01:PUSH동의 02:위치동의 03:BLE동의 99:전체 */
+               AND PERIOD_CL_CD = '3M'              /* 1M:1개월 3M:3개월 6M:6개월 */
+               AND MAIN_ACVT_ADM_DONG_CD = #{mainAcvtAdmDongCd}
+             ORDER BY MBR_CNT DESC
+           )
+     WHERE 1 = 1
+       AND ROWNUM <= 10
+    ]]>
+	</select>
+	
+	
+</mapper>

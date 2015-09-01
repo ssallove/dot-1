@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Category">
+
+	<resultMap type="CateVO" id="dataList">
+		
+		<result column="BASE_DT" property="baseDt"/>
+		<result column="INT_KEY_CL_CD" property="intKeyClCd"/>
+		<result column="CMPLS_CROSS_AGR_CL_CD" property="cmplsCrossAgrClCd"/>
+		<result column="SVC_UNION_CD" property="svcUnionCd"/>
+		<result column="FUNC_AGR_CL_CD" property="funcAgrClCd"/>
+		<result column="PERIOD_CL_CD" property="periodClCd"/>
+		<result column="CNCT_CTG_CD" property="cnctCtgCd"/>
+		<result column="CTG_NM" property="ctgNm"/>
+		<result column="MAIN_ACVT_ADM_DONG_CD" property="mainAcvtAdmDongCd"/>
+		<result column="MBR_CNT" property="mbrCnt"/>
+		<result column="LV" property="lv"/>
+		<result column="TOT" property="tot"/>
+		<result column="OCB" property="ocb"/>
+		<result column="OCT" property="oct"/>
+		<result column="SYR" property="syr"/>
+		<result column="TMA" property="tma"/>
+		<result column="TST" property="tst"/>
+		<result column="EVS" property="evs"/>
+		<result column="AGE_RNG_CD" property="ageRngCd"/>
+		<result column="SEX_CD" property="sexCd"/>
+		<result column="MBR_CNT" property="mbrCnt"/>
+		<result column="SEQ" property="seq"/>
+		<result column="MAIN_AREA" property="mainArea"/>
+		<result column="TOT_MBR_CNT" property="totMbrCnt"/>
+		<result column="AGE_RNG_NM" property="ageRngNm"/>
+		<result column="SYR_GRP" property="syrGrp"/>
+		<result column="OCB_GRP" property="ocbGrp"/>
+		<result column="OCT_GRP" property="octGrp"/>
+		<result column="TMA_GRP" property="tmaGrp"/>
+		<result column="EVS_GRP" property="evsGrp"/>
+		<result column="TST_GRP" property="tstGrp"/>
+		
+		<result column="BLE_MBR_CNT" property="bleMbrCnt"/>
+		<result column="LOC_MBR_CNT" property="locMbrCnt"/>
+		<result column="PUSH_MBR_CNT" property="pushMbrCnt"/>
+		
+	</resultMap>
+	
+	<!--  E-Chart 버블차트  X축 VIEW -->
+	<select id="selectBusyBubbleXLineView" resultType="String">
+	   <choose>
+       <when test = "cnctCtgCd == null or cnctCtgCd == '' or cnctCtgCd.equals('-')">
+	   <![CDATA[
+		SELECT /* selectBusyBubbleXLineView */
+			CD_NM 
+		FROM INTGT_COM_CD WHERE LCL_CD = 'POC_008'
+	 	]]>	 
+       </when>
+       <otherwise>
+       <![CDATA[
+ 	   SELECT /* selectBusyBubbleXLineView */
+ 	   	M_CODE.CD_NM AS CD_NM
+       FROM INTGT_COM_CD M_CODE, INTGT_COM_CD L_CODE
+       WHERE  L_CODE.LCL_CD = DECODE(LENGTH(#{cnctCtgCd}) , 5 , 'POC_008', 'POC_009')
+            AND L_CODE.COM_CD = SUBSTR (M_CODE.COM_CD, 1, LENGTH(#{cnctCtgCd}))
+            AND M_CODE.LCL_CD = DECODE(LENGTH(#{cnctCtgCd}) , 5 , 'POC_009', 'POC_010')
+            AND L_CODE.COM_CD = #{cnctCtgCd}
+       ]]>
+       </otherwise>
+	   </choose> 
+	
+	       
+	</select>
+	
+	
+	<!--  E-Chart 버블차트  X축 -->
+	<select id="selectBusyBubbleXLine" parameterType="map" resultMap="dataList">
+	   
+		SELECT /* selectBusyBubbleXLine */
+		    L_CD_NM
+		    , CD_NM 
+		FROM 
+
+		<choose>
+       	<when test = "cnctCtgCd == null or cnctCtgCd == '' or cnctCtgCd.equals('-')">
+		(SELECT  
+		  2 AS LV,  L_CODE.CD_NM AS L_CD_NM, M_CODE.CD_NM AS CD_NM , L_CODE.SORT_SEQ  AS L_SORT_SEQ, M_CODE.SORT_SEQ  AS SORT_SEQ
+		FROM INTGT_COM_CD M_CODE, INTGT_COM_CD L_CODE
+		WHERE  L_CODE.LCL_CD = 'POC_008' 
+		    AND L_CODE.COM_CD = SUBSTR (M_CODE.COM_CD, 1, 5)
+		    AND M_CODE.LCL_CD ='POC_009' )
+		</when>
+       <otherwise>
+       (SELECT                                             /* selectBusyBubbleXLine */
+	       2 AS LV,  L_CODE.CD_NM AS L_CD_NM, M_CODE.CD_NM AS CD_NM , L_CODE.SORT_SEQ AS L_SORT_SEQ, M_CODE.SORT_SEQ  AS SORT_SEQ
+	    FROM   INTGT_COM_CD M_CODE, INTGT_COM_CD L_CODE
+	    WHERE   L_CODE.LCL_CD = 'POC_009'
+	         AND #{cnctCtgCd} = DECODE(LENGTH(#{cnctCtgCd}) , 5 , SUBSTR(L_CODE.COM_CD, 1, 5) , L_CODE.COM_CD)
+	         AND L_CODE.COM_CD = SUBSTR (M_CODE.COM_CD, 1, 7)
+	         AND M_CODE.LCL_CD = 'POC_010')
+       </otherwise>
+	   </choose> 
+		ORDER BY L_SORT_SEQ, SORT_SEQ   , LV          
+       
+       <![CDATA[
+        
+       ]]>
+       
+	
+	       
+	</select>
+	
+	<!-- E-Chart 버블차트  X축 (Root 카테고리 포함) -->
+	<select id="_selectBusyBubbleXLine" parameterType="map" resultMap="dataList">
+	   
+		SELECT /* selectBusyBubbleXLine */
+		    L_CD_NM
+		    , CD_NM 
+		FROM 
+
+		<choose>
+       	<when test = "cnctCtgCd == null or cnctCtgCd == '' or cnctCtgCd.equals('-')">
+		(SELECT 
+		    1 AS LV, CD_NM as L_CD_NM, CD_NM , SORT_SEQ AS L_SORT_SEQ, SORT_SEQ AS SORT_SEQ
+		FROM INTGT_COM_CD WHERE LCL_CD = 'POC_008' 
+		UNION
+		SELECT  
+		  2 AS LV,  L_CODE.CD_NM AS L_CD_NM, M_CODE.CD_NM AS CD_NM , L_CODE.SORT_SEQ  AS L_SORT_SEQ, M_CODE.SORT_SEQ  AS SORT_SEQ
+		FROM INTGT_COM_CD M_CODE, INTGT_COM_CD L_CODE
+		WHERE  L_CODE.LCL_CD = 'POC_008' 
+		    AND L_CODE.COM_CD = SUBSTR (M_CODE.COM_CD, 1, 5)
+		    AND M_CODE.LCL_CD ='POC_009'       
+		)
+		</when>
+       <otherwise>
+       (SELECT 
+		    1 AS LV, CD_NM as L_CD_NM, CD_NM , SORT_SEQ AS L_SORT_SEQ, SORT_SEQ AS SORT_SEQ
+		FROM INTGT_COM_CD 
+		WHERE LCL_CD = DECODE(LENGTH(#{cnctCtgCd}) , 5 , 'POC_009' , 'POC_010')
+			AND #{cnctCtgCd} = DECODE(LENGTH(#{cnctCtgCd}) , 5 , SUBSTR(COM_CD, 1, 5) , SUBSTR(COM_CD, 1, 7))
+		UNION
+        SELECT                                             /* selectBusyBubbleXLine */
+	       2 AS LV,  L_CODE.CD_NM AS L_CD_NM, M_CODE.CD_NM AS CD_NM , L_CODE.SORT_SEQ AS L_SORT_SEQ, M_CODE.SORT_SEQ  AS SORT_SEQ
+	    FROM   INTGT_COM_CD M_CODE, INTGT_COM_CD L_CODE
+	    WHERE   L_CODE.LCL_CD = 'POC_009'
+	         AND #{cnctCtgCd} = DECODE(LENGTH(#{cnctCtgCd}) , 5 , SUBSTR(L_CODE.COM_CD, 1, 5) , L_CODE.COM_CD)
+	         AND L_CODE.COM_CD = SUBSTR (M_CODE.COM_CD, 1, 7)
+	         AND M_CODE.LCL_CD = 'POC_010'
+	   )
+       </otherwise>
+	   </choose> 
+		ORDER BY L_SORT_SEQ, SORT_SEQ   , LV          
+       
+       <![CDATA[
+        
+       ]]>
+       
+	
+	       
+	</select>
+	<!-- 
+	   SELECT /* selectEChartBubbleXLine */
+	   		M_CODE.CD_NM
+	   FROM INTGT_COM_CD M_CODE, INTGT_COM_CD L_CODE
+	   WHERE 1 =1
+	   		AND L_CODE.LCL_CD = 'POC_008' 
+	   		AND L_CODE.COM_CD < 'GRP80'
+	        AND L_CODE.COM_CD = SUBSTR (M_CODE.COM_CD, 1, 5)
+	        AND M_CODE.LCL_CD IN ('POC_009', 'POC_008') 
+	   ORDER BY M_CODE.COM_CD
+	    -->	
+	<!--버블차트 X축 -->
+	<select id="selectBubbleXLine" parameterType="map" resultMap="dataList">
+	<![CDATA[
+    SELECT /* selectBubbleXLine */
+           COM_CD
+         , CD_NM
+      FROM INTGT_COM_CD
+     WHERE 1 = 1
+       AND LCL_CD = 'POC_008'
+       AND EXISTS (
+                    SELECT 'X'
+                      FROM INTGT_POC_SVC_CTG_MBR_CNT
+                     WHERE BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+                       AND INT_KEY_CL_CD = '01'
+                       AND CMPLS_CROSS_AGR_CL_CD = '01'
+                       AND SVC_CD = #{svcCd}			/* TOT, SYR, OCB, TMA, EVS, TST */
+                       AND PERIOD_CL_CD = #{periodClCd}
+                       AND FUNC_AGR_CL_CD = '99'
+                       AND SUBSTR(CNCT_CTG_CD,1,5) = COM_CD
+                  )
+     ORDER BY COM_CD
+    ]]>
+	</select>
+
+	<!--버블차트 데이터 -->
+	<select id="selectBusyBubbleChartData" parameterType="map" resultMap="dataList">
+	<![CDATA[
+    SELECT /* selectBusyBubbleChartData */
+           TO_CHAR(TO_DATE(SC.BASE_DT), 'YYYY.MM.DD') BASE_DT
+         , SC.INT_KEY_CL_CD
+         , SC.CMPLS_CROSS_AGR_CL_CD
+         , SC.SVC_CD
+         , SC.FUNC_AGR_CL_CD
+         , SC.PERIOD_CL_CD
+         , SUBSTR(SC.CNCT_CTG_CD,1,5)  AS L_CTG_CD
+         , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_008' AND COM_CD = SUBSTR(SC.CNCT_CTG_CD,1,5))   AS L_CTG_NM
+         , SC.CNCT_CTG_CD
+         , CC.CD_NM                 AS CNCT_CTG_NM
+         , SC.MBR_CNT
+         , ROW_NUMBER() OVER(PARTITION BY SUBSTR(SC.CNCT_CTG_CD,1,5) ORDER BY SC.MBR_CNT DESC)    AS SVC_RANK
+                      
+         , BLE.MBR_CNT AS BLE_MBR_CNT
+         , LOC.MBR_CNT AS LOC_MBR_CNT
+         , PUSH.MBR_CNT AS PUSH_MBR_CNT
+         
+      FROM INTGT_POC_SVC_CTG_MBR_CNT    SC
+         , INTGT_COM_CD                 CC
+         
+         , INTGT_POC_SVC_CTG_MBR_CNT    BLE
+         , INTGT_POC_SVC_CTG_MBR_CNT    LOC
+         , INTGT_POC_SVC_CTG_MBR_CNT    PUSH
+            
+     WHERE 1 = 1
+       AND CC.COM_CD = SC.CNCT_CTG_CD
+       AND SC.BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+       AND SC.INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN : 바꿔야 함*/ 
+       AND SC.CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+       AND SC.PERIOD_CL_CD = #{periodClCd}
+       AND SC.FUNC_AGR_CL_CD = '99'
+    ]]>
+       <if test="svcCd != null and svcCd != '' and svcCd != 'TOT'">
+	   AND SC.SVC_CD = #{svcCd}
+	   </if>
+       <choose>
+       <when test = "cnctCtgCd == null or cnctCtgCd == '' or cnctCtgCd.equals('-')">
+	   AND CC.LCL_CD = 'POC_009'
+       </when>
+       <otherwise>
+       <![CDATA[
+ 	   AND CC.LCL_CD = 'POC_010'
+       AND DECODE(LENGTH(#{cnctCtgCd}) , 7 , SUBSTR (CC.COM_CD, 1, 7), SUBSTR (CC.COM_CD, 1, 5)) = #{cnctCtgCd} 
+       ]]>
+       </otherwise>
+	   </choose> 
+	   
+	   AND BLE.FUNC_AGR_CL_CD = '01'
+       AND SC.CNCT_CTG_CD = BLE.CNCT_CTG_CD
+       AND SC.BASE_DT = BLE.BASE_DT
+       AND SC.INT_KEY_CL_CD = BLE.INT_KEY_CL_CD
+       AND SC.CMPLS_CROSS_AGR_CL_CD = BLE.CMPLS_CROSS_AGR_CL_CD
+       AND SC.PERIOD_CL_CD = BLE.PERIOD_CL_CD
+       AND SC.SVC_CD = BLE.SVC_CD
+       
+       AND LOC.FUNC_AGR_CL_CD = '02'
+       AND SC.CNCT_CTG_CD = LOC.CNCT_CTG_CD
+       AND SC.BASE_DT = LOC.BASE_DT
+       AND SC.INT_KEY_CL_CD = LOC.INT_KEY_CL_CD
+       AND SC.CMPLS_CROSS_AGR_CL_CD = LOC.CMPLS_CROSS_AGR_CL_CD
+       AND SC.PERIOD_CL_CD = LOC.PERIOD_CL_CD
+       AND SC.SVC_CD = LOC.SVC_CD
+       
+       AND PUSH.FUNC_AGR_CL_CD = '03'
+       AND SC.CNCT_CTG_CD = PUSH.CNCT_CTG_CD
+       AND SC.BASE_DT = PUSH.BASE_DT
+       AND SC.INT_KEY_CL_CD = PUSH.INT_KEY_CL_CD
+       AND SC.CMPLS_CROSS_AGR_CL_CD = PUSH.CMPLS_CROSS_AGR_CL_CD
+       AND SC.PERIOD_CL_CD = PUSH.PERIOD_CL_CD
+       AND SC.SVC_CD = PUSH.SVC_CD
+	   
+	   
+	ORDER BY SC.SVC_CD
+	</select>
+
+	<!--서비스별 모수 현황 및 report -->
+	<select id="selectCateServiceMosuReportList" parameterType="map" resultMap="dataList">
+	<![CDATA[
+    SELECT /* selectCateServiceMosuReportList */
+           FUNC_AGR_CL_CD
+         , LV
+         , TO_CHAR(TO_DATE(BASE_DT), 'YYYY.MM.DD') BASE_DT
+         , CASE WHEN SUM(TOT) > 0 THEN TO_CHAR(SUM(TOT), '999,999,999,999') ELSE '-' END   AS TOT
+         , CASE WHEN SUM(SYR) > 0 THEN TO_CHAR(SUM(SYR), '999,999,999,999') ELSE '-' END   AS SYR
+         , CASE WHEN SUM(OCB) > 0 THEN TO_CHAR(SUM(OCB), '999,999,999,999') ELSE '-' END   AS OCB
+         , CASE WHEN SUM(OCT) > 0 THEN TO_CHAR(SUM(OCT), '999,999,999,999') ELSE '-' END   AS OCT
+         , CASE WHEN SUM(TMA) > 0 THEN TO_CHAR(SUM(TMA), '999,999,999,999') ELSE '-' END   AS TMA
+         , CASE WHEN SUM(EVS) > 0 THEN TO_CHAR(SUM(EVS), '999,999,999,999') ELSE '-' END   AS EVS
+         , CASE WHEN SUM(TST) > 0 THEN TO_CHAR(SUM(TST), '999,999,999,999') ELSE '-' END   AS TST
+         , NVL(ROUND(SUM(SYR)/100,2),0)     SYR_GRP
+         , NVL(ROUND(SUM(OCB)/100,2),0)     OCB_GRP
+         , NVL(ROUND(SUM(OCT)/100,2),0)     OCT_GRP
+         , NVL(ROUND(SUM(TMA)/100,2),0)     TMA_GRP
+         , NVL(ROUND(SUM(EVS)/100,2),0)     EVS_GRP
+         , NVL(ROUND(SUM(TST)/100,2),0)     TST_GRP
+      FROM (
+            SELECT 
+                   LV
+                 , BASE_DT
+                 , FUNC_AGR_CL_CD
+                 , CASE WHEN LV = 1 AND SVC_CD = 'TOT' AND FUNC_AGR_CL_CD = '99' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'TOT' AND FUNC_AGR_CL_CD = '01' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'TOT' AND FUNC_AGR_CL_CD = '02' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'TOT' AND FUNC_AGR_CL_CD = '03' THEN MBR_CNT
+                        WHEN LV = 2 AND SVC_CD = 'TOT' AND FUNC_AGR_CL_CD = '99' AND PRMT_CMTR_RT < 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'TOT' AND FUNC_AGR_CL_CD = '01' AND PRMT_CMTR_RT < 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'TOT' AND FUNC_AGR_CL_CD = '02' AND PRMT_CMTR_RT < 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'TOT' AND FUNC_AGR_CL_CD = '03' AND PRMT_CMTR_RT < 100 THEN PRMT_CMTR_RT
+                   END    AS TOT
+                 , CASE WHEN LV = 1 AND SVC_CD = 'OCB' AND FUNC_AGR_CL_CD = '99' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'OCB' AND FUNC_AGR_CL_CD = '01' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'OCB' AND FUNC_AGR_CL_CD = '02' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'OCB' AND FUNC_AGR_CL_CD = '03' THEN MBR_CNT
+                        WHEN LV = 2 AND SVC_CD = 'OCB' AND FUNC_AGR_CL_CD = '99' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'OCB' AND FUNC_AGR_CL_CD = '01' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'OCB' AND FUNC_AGR_CL_CD = '02' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'OCB' AND FUNC_AGR_CL_CD = '03' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                   END    AS OCB
+                 , CASE WHEN LV = 1 AND SVC_CD = 'OCT' AND FUNC_AGR_CL_CD = '99' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'OCT' AND FUNC_AGR_CL_CD = '01' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'OCT' AND FUNC_AGR_CL_CD = '02' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'OCT' AND FUNC_AGR_CL_CD = '03' THEN MBR_CNT
+                        WHEN LV = 2 AND SVC_CD = 'OCT' AND FUNC_AGR_CL_CD = '99' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'OCT' AND FUNC_AGR_CL_CD = '01' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'OCT' AND FUNC_AGR_CL_CD = '02' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'OCT' AND FUNC_AGR_CL_CD = '03' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                   END    AS OCT
+                 , CASE WHEN LV = 1 AND SVC_CD = 'SYR' AND FUNC_AGR_CL_CD = '99' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'SYR' AND FUNC_AGR_CL_CD = '01' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'SYR' AND FUNC_AGR_CL_CD = '02' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'SYR' AND FUNC_AGR_CL_CD = '03' THEN MBR_CNT
+                        WHEN LV = 2 AND SVC_CD = 'SYR' AND FUNC_AGR_CL_CD = '99' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'SYR' AND FUNC_AGR_CL_CD = '01' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'SYR' AND FUNC_AGR_CL_CD = '02' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'SYR' AND FUNC_AGR_CL_CD = '03' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                   END    AS SYR
+                 , CASE WHEN LV = 1 AND SVC_CD = 'TMA' AND FUNC_AGR_CL_CD = '99' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'TMA' AND FUNC_AGR_CL_CD = '01' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'TMA' AND FUNC_AGR_CL_CD = '02' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'TMA' AND FUNC_AGR_CL_CD = '03' THEN MBR_CNT
+                        WHEN LV = 2 AND SVC_CD = 'TMA' AND FUNC_AGR_CL_CD = '99' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'TMA' AND FUNC_AGR_CL_CD = '01' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'TMA' AND FUNC_AGR_CL_CD = '02' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'TMA' AND FUNC_AGR_CL_CD = '03' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                   END    AS TMA
+                 , CASE WHEN LV = 1 AND SVC_CD = 'TST' AND FUNC_AGR_CL_CD = '99' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'TST' AND FUNC_AGR_CL_CD = '01' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'TST' AND FUNC_AGR_CL_CD = '02' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'TST' AND FUNC_AGR_CL_CD = '03' THEN MBR_CNT
+                        WHEN LV = 2 AND SVC_CD = 'TST' AND FUNC_AGR_CL_CD = '99' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'TST' AND FUNC_AGR_CL_CD = '01' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'TST' AND FUNC_AGR_CL_CD = '02' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'TST' AND FUNC_AGR_CL_CD = '03' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                   END    AS TST
+                 , CASE WHEN LV = 1 AND SVC_CD = 'EVS' AND FUNC_AGR_CL_CD = '99' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'EVS' AND FUNC_AGR_CL_CD = '01' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'EVS' AND FUNC_AGR_CL_CD = '02' THEN MBR_CNT
+                        WHEN LV = 1 AND SVC_CD = 'EVS' AND FUNC_AGR_CL_CD = '03' THEN MBR_CNT
+                        WHEN LV = 2 AND SVC_CD = 'EVS' AND FUNC_AGR_CL_CD = '99' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'EVS' AND FUNC_AGR_CL_CD = '01' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'EVS' AND FUNC_AGR_CL_CD = '02' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                        WHEN LV = 2 AND SVC_CD = 'EVS' AND FUNC_AGR_CL_CD = '03' AND PRMT_CMTR_RT <= 100 THEN PRMT_CMTR_RT
+                   END    AS EVS
+              FROM (
+                    SELECT 
+                           BASE_DT
+                         , LV
+                         , INT_KEY_CL_CD
+                         , CMPLS_CROSS_AGR_CL_CD
+                         , SVC_CD
+                         , FUNC_AGR_CL_CD
+                         , PERIOD_CL_CD
+                         , CNCT_CTG_CD
+                         , MBR_CNT
+                         , PRMT_CMTR_RT
+                         , OPER_DTM
+                      FROM INTGT_POC_SVC_CTG_MBR_CNT
+                         , (SELECT LEVEL LV FROM DUAL CONNECT BY LEVEL <= 2)
+                     WHERE 1 = 1
+                       AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+                       AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN : 바꿔야 함*/ 
+                       AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+                       AND PERIOD_CL_CD = #{periodClCd}
+                       AND CNCT_CTG_CD = #{cnctCtgCd}
+                   )
+           )
+     GROUP BY FUNC_AGR_CL_CD, LV, BASE_DT
+     ORDER BY FUNC_AGR_CL_CD DESC, LV, BASE_DT
+    ]]>
+	</select>
+	
+	<!--성연령대별 현황  : 연령대구성1 -->
+	<select id="selectCateSexAgeList1" parameterType="map" resultMap="dataList">
+	<![CDATA[
+    SELECT /* selectCateSexAgeList1 */
+           BASE_DT
+         , INT_KEY_CL_CD
+         , CMPLS_CROSS_AGR_CL_CD
+         , SVC_UNION_CD
+         , FUNC_AGR_CL_CD
+         , PERIOD_CL_CD
+         , CNCT_CTG_CD
+         , CASE WHEN CNCT_CTG_CD = '-' THEN '전체' ELSE (SELECT CD_NM FROM INTGT_COM_CD WHERE COM_CD = CNCT_CTG_CD AND ROWNUM <= 1) END CTG_NM
+         , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_012' AND COM_CD = AGE_RNG_CD AND ROWNUM <= 1) AGE_RNG_NM
+         , AGE_RNG_CD
+         , MBR_CNT
+         , ROUND(MBR_CNT/SUM(MBR_CNT) OVER(PARTITION BY BASE_DT, INT_KEY_CL_CD, CMPLS_CROSS_AGR_CL_CD, SVC_UNION_CD, FUNC_AGR_CL_CD, PERIOD_CL_CD, CNCT_CTG_CD), 3) * 100    AS TOT_MBR_CNT
+      FROM (
+            SELECT 
+                   BASE_DT
+                 , INT_KEY_CL_CD
+                 , CMPLS_CROSS_AGR_CL_CD
+                 , SVC_UNION_CD
+                 , FUNC_AGR_CL_CD
+                 , PERIOD_CL_CD
+                 , CNCT_CTG_CD
+                 , AGE_RNG_CD
+                 , SUM(MBR_CNT)     AS MBR_CNT
+              FROM INTGT_POC_SVC_CTG_SA_MBR_CNT
+             WHERE 1 = 1
+               AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+               AND INT_KEY_CL_CD = '01'
+               AND CMPLS_CROSS_AGR_CL_CD = '01'
+               AND SVC_UNION_CD = '31'
+               AND FUNC_AGR_CL_CD = '99'
+               AND PERIOD_CL_CD = #{periodClCd}
+               AND CNCT_CTG_CD = '-'
+             GROUP BY
+                   BASE_DT
+                 , INT_KEY_CL_CD
+                 , CMPLS_CROSS_AGR_CL_CD
+                 , SVC_UNION_CD
+                 , FUNC_AGR_CL_CD
+                 , PERIOD_CL_CD
+                 , CNCT_CTG_CD
+                 , AGE_RNG_CD
+            UNION ALL
+            SELECT 
+                   BASE_DT
+                 , INT_KEY_CL_CD
+                 , CMPLS_CROSS_AGR_CL_CD
+                 , SVC_UNION_CD
+                 , FUNC_AGR_CL_CD
+                 , PERIOD_CL_CD
+                 , CNCT_CTG_CD
+                 , AGE_RNG_CD
+                 , SUM(MBR_CNT)     AS MBR_CNT
+              FROM INTGT_POC_SVC_CTG_SA_MBR_CNT
+             WHERE 1 = 1
+               AND (#{svcUnionCd} != '31' OR #{cnctCtgCd} != '-')
+               AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+               AND INT_KEY_CL_CD = '01'
+               AND CMPLS_CROSS_AGR_CL_CD = '01'
+               AND SVC_UNION_CD = #{svcUnionCd}
+               AND FUNC_AGR_CL_CD = '99'
+               AND PERIOD_CL_CD = #{periodClCd}
+               AND CNCT_CTG_CD = #{cnctCtgCd}
+             GROUP BY
+                   BASE_DT
+                 , INT_KEY_CL_CD
+                 , CMPLS_CROSS_AGR_CL_CD
+                 , SVC_UNION_CD
+                 , FUNC_AGR_CL_CD
+                 , PERIOD_CL_CD
+                 , CNCT_CTG_CD
+                 , AGE_RNG_CD
+           ) A
+     ORDER BY CNCT_CTG_CD, AGE_RNG_CD
+	]]>
+	</select>
+	
+	<!--성연령대별 현황 : 연령대 구성2 -->
+	<select id="selectCateSexAgeList2" parameterType="map" resultMap="dataList">
+	<![CDATA[
+    SELECT /* selectCateSexAgeList2 */
+           BASE_DT
+         , INT_KEY_CL_CD
+         , CMPLS_CROSS_AGR_CL_CD
+         , SVC_UNION_CD
+         , FUNC_AGR_CL_CD
+         , PERIOD_CL_CD
+         , CNCT_CTG_CD
+         , CASE WHEN CNCT_CTG_CD = '-' THEN '전체' ELSE (SELECT CD_NM FROM INTGT_COM_CD WHERE COM_CD = CNCT_CTG_CD AND ROWNUM <= 1) END CTG_NM
+         , SEX_CD
+         , AGE_RNG_CD
+         , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_012' AND COM_CD = AGE_RNG_CD AND ROWNUM <= 1) AGE_RNG_NM
+         , MBR_CNT
+         , ROUND(MBR_CNT/SUM(MBR_CNT) OVER(PARTITION BY BASE_DT, INT_KEY_CL_CD, CMPLS_CROSS_AGR_CL_CD, SVC_UNION_CD, FUNC_AGR_CL_CD, PERIOD_CL_CD, CNCT_CTG_CD, SEX_CD), 3) * 100    AS TOT_MBR_CNT
+      FROM (
+            SELECT 
+                   BASE_DT
+                 , INT_KEY_CL_CD
+                 , CMPLS_CROSS_AGR_CL_CD
+                 , SVC_UNION_CD
+                 , FUNC_AGR_CL_CD
+                 , PERIOD_CL_CD
+                 , CNCT_CTG_CD
+                 , SEX_CD
+                 , AGE_RNG_CD
+                 , SUM(MBR_CNT)     AS MBR_CNT
+              FROM INTGT_POC_SVC_CTG_SA_MBR_CNT
+             WHERE 1 = 1
+               AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+               AND INT_KEY_CL_CD = '01'
+               AND CMPLS_CROSS_AGR_CL_CD = '01'
+               AND SVC_UNION_CD = #{svcUnionCd}
+               AND FUNC_AGR_CL_CD = '99'
+               AND PERIOD_CL_CD = #{periodClCd}
+               AND CNCT_CTG_CD = #{cnctCtgCd}
+               AND SEX_CD IN ('F', 'M')
+             GROUP BY
+                   BASE_DT
+                 , INT_KEY_CL_CD
+                 , CMPLS_CROSS_AGR_CL_CD
+                 , SVC_UNION_CD
+                 , FUNC_AGR_CL_CD
+                 , PERIOD_CL_CD
+                 , CNCT_CTG_CD
+                 , SEX_CD
+                 , AGE_RNG_CD
+           )
+     ORDER BY SEX_CD, AGE_RNG_CD
+	]]>
+	</select>
+	
+	<!--성연령대별 현황 : 성별구성 -->
+	<select id="selectCateSexList" parameterType="map" resultMap="dataList">
+	<![CDATA[
+    SELECT /* selectCateSexList */
+           BASE_DT
+         , INT_KEY_CL_CD
+         , CMPLS_CROSS_AGR_CL_CD
+         , SVC_UNION_CD
+         , FUNC_AGR_CL_CD
+         , PERIOD_CL_CD
+         , CNCT_CTG_CD
+         , CASE WHEN CNCT_CTG_CD = '-' THEN '전체' ELSE (SELECT CD_NM FROM INTGT_COM_CD WHERE COM_CD = CNCT_CTG_CD AND ROWNUM <= 1) END CTG_NM
+         , SEX_CD
+         , MBR_CNT
+         , ROUND(MBR_CNT/SUM(MBR_CNT) OVER(PARTITION BY BASE_DT, INT_KEY_CL_CD, CMPLS_CROSS_AGR_CL_CD, SVC_UNION_CD, FUNC_AGR_CL_CD, PERIOD_CL_CD, CNCT_CTG_CD), 3) * 100    AS TOT_MBR_CNT
+      FROM (
+            SELECT 
+                   BASE_DT
+                 , INT_KEY_CL_CD
+                 , CMPLS_CROSS_AGR_CL_CD
+                 , SVC_UNION_CD
+                 , FUNC_AGR_CL_CD
+                 , PERIOD_CL_CD
+                 , CNCT_CTG_CD
+                 , SEX_CD
+                 , SUM(MBR_CNT)     AS MBR_CNT
+              FROM INTGT_POC_SVC_CTG_SA_MBR_CNT
+             WHERE 1 = 1
+               AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+               AND INT_KEY_CL_CD = '01'
+               AND CMPLS_CROSS_AGR_CL_CD = '01'
+               AND SVC_UNION_CD = '31'
+               AND FUNC_AGR_CL_CD = '99'
+               AND PERIOD_CL_CD = #{periodClCd}
+               AND CNCT_CTG_CD = '-'
+               AND SEX_CD IN ('F','M')
+             GROUP BY
+                   BASE_DT
+                 , INT_KEY_CL_CD
+                 , CMPLS_CROSS_AGR_CL_CD
+                 , SVC_UNION_CD
+                 , FUNC_AGR_CL_CD
+                 , PERIOD_CL_CD
+                 , CNCT_CTG_CD
+                 , SEX_CD
+            UNION ALL
+            SELECT 
+                   BASE_DT
+                 , INT_KEY_CL_CD
+                 , CMPLS_CROSS_AGR_CL_CD
+                 , SVC_UNION_CD
+                 , FUNC_AGR_CL_CD
+                 , PERIOD_CL_CD
+                 , CNCT_CTG_CD
+                 , SEX_CD
+                 , SUM(MBR_CNT)     AS MBR_CNT
+              FROM INTGT_POC_SVC_CTG_SA_MBR_CNT
+             WHERE 1 = 1
+               AND (#{svcUnionCd} != '31' OR #{cnctCtgCd} != '-')
+               AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+               AND INT_KEY_CL_CD = '01'
+               AND CMPLS_CROSS_AGR_CL_CD = '01'
+               AND SVC_UNION_CD = #{svcUnionCd}
+               AND FUNC_AGR_CL_CD = '99'
+               AND PERIOD_CL_CD = #{periodClCd}
+               AND CNCT_CTG_CD = #{cnctCtgCd}
+               AND SEX_CD IN ('F','M')
+             GROUP BY
+                   BASE_DT
+                 , INT_KEY_CL_CD
+                 , CMPLS_CROSS_AGR_CL_CD
+                 , SVC_UNION_CD
+                 , FUNC_AGR_CL_CD
+                 , PERIOD_CL_CD
+                 , CNCT_CTG_CD
+                 , SEX_CD
+           )
+     ORDER BY CNCT_CTG_CD, SEX_CD
+	]]>
+	</select>
+	
+	<!--주활동지역현황 -->
+	<select id="selectCateMainActiveAreaList" parameterType="map" resultMap="dataList">
+	<![CDATA[
+    SELECT /* selectCateMainActiveAreaList */
+           ROWNUM SEQ
+         , BASE_DT
+         , INT_KEY_CL_CD
+         , CMPLS_CROSS_AGR_CL_CD
+         , SVC_UNION_CD
+         , FUNC_AGR_CL_CD
+         , PERIOD_CL_CD
+         , CNCT_CTG_CD
+         , MAIN_ACVT_ADM_DONG_CD
+         , (SELECT SIDO || ' ' || SIGUNGU FROM INTGT_ADM_DONG_META WHERE ADM_DONG_CD = MAIN_ACVT_ADM_DONG_CD AND ROWNUM <= 1) MAIN_AREA
+         , MBR_CNT
+      FROM (
+            SELECT 
+                   BASE_DT
+                 , INT_KEY_CL_CD
+                 , CMPLS_CROSS_AGR_CL_CD
+                 , SVC_UNION_CD
+                 , FUNC_AGR_CL_CD
+                 , PERIOD_CL_CD
+                 , CNCT_CTG_CD
+                 , MAIN_ACVT_ADM_DONG_CD
+                 , MBR_CNT
+              FROM INTGT_POC_SVC_CTG_MAIN_ACVT
+             WHERE 1 = 1
+               AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+               AND INT_KEY_CL_CD = '01'
+               AND CMPLS_CROSS_AGR_CL_CD = '01'
+               AND SVC_UNION_CD = #{svcUnionCd}
+               AND FUNC_AGR_CL_CD = '99'
+               AND PERIOD_CL_CD = #{periodClCd}
+               AND CNCT_CTG_CD = #{cnctCtgCd}
+             ORDER BY MBR_CNT DESC
+           )
+     WHERE 1 = 1
+       AND ROWNUM <= 10
+	]]>
+	</select>
+	
+
+
+</mapper>

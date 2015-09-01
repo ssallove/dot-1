@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>POC System</title>
+	<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="../js/parsley.min.js"></script>
+	
+	<!-- jQuery UI 1.11.1 -->
+	<link rel="stylesheet" href="../jquery-ui-themes-1.11.1/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+	<script src="../jquery-ui-1.11.1/jquery-ui.js"></script>
+
+	<!-- Bootstrap -->
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+	<script src="../bootstrap/js/holder.js"></script>
+	<script src="../js/main.js"></script>
+    
+    <link href="../css/dot.css" rel="stylesheet">
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	
+	<script type="text/javascript" src=" ../js/adm.common.js "></script>
+     <script type="text/javascript" src="../js/common.js "></script>
+
+	<script>
+	$(document).ready(function () {
+		var session_user_no = "admin";
+		
+		$('#loginoutBtn').click(function() {
+			if (session_user_no.length) logout();
+			else $('#login-popup').modal('show');
+		});
+		$('#searchBtn').click(function() {
+			if (session_user_no.length) goSearch();
+			else $('#login-popup').modal('show');
+		});	
+		$('#sub_home').click(function() {
+			alert("홈 화면은 준비중 입니다.");
+			/* if (session_user_no.length) location.href="/index.do";
+			else $('#login-popup').modal('show'); */
+		});
+		$('#sub_mosu').click(function() {
+			if (session_user_no.length) location.href="/agreement_mosu.do";
+			else $('#login-popup').modal('show');
+		});
+		$('#sub_category').click(function() {
+			if (session_user_no.length)  location.href="/category.do";
+			else $('#login-popup').modal('show');
+		});
+		$('#sub_area').click(function() {
+			if (session_user_no.length)  location.href="/main_activity_area.do";
+			else $('#login-popup').modal('show');
+		});	
+	    $('#pop-login-btn').click(function() {
+	    	login($('#popup-login-username'), $('#popup-login-password'));
+	    });	
+	});
+	/* ********************************************************
+	 * 검색어 조회함수
+	 ******************************************************** */
+	function goSearch(){
+		var prodName = $('#searchProdName').val().replace(/ /g, '').replace(/[^(가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9)]/gi,"");
+		if (prodName == '') {
+			alert('검색어를 입력해 주세요');
+			$('#searchProdName').focus();
+			return false;
+		} else {
+			$('#searchProdName').val(prodName);
+		    $('#detail-form').submit();
+		}
+	}
+	</script>
+</head>
+<body class="lfBg">
+<div id="wrapper">
+
+	<!--Header Area-->
+	<header>
+    	<h1><a href="#"><img src="../images/dotLogo.png"  alt="DOT"/></a></h1>
+    	<p id="loginoutBtn" class="logout"><button class="log btn_log">Logout</button></p>
+        <!--GNB-->
+        <div class="gnb">
+        	<ul>
+            	<li class="home"><img src="../images/icon_nav.png" alt="Home"/>Home</li>
+            	<li id="sub_mosu" class="agreeM active"><img src="../images/icon_nav.png" alt="동의"/><a href="#">동의</a></li>
+            	<li  id="sub_category" class="category"><img src="../images/icon_nav.png" alt="업종"/><a href="#">업종</a></li>
+            	<li id="sub_area" class="activityA"><img src="../images/icon_nav.png" alt="주활동지역"/><a href="#">주활동지역</a></li>
+            </ul>
+        </div>
+         <!--//GNB-->
+    </header>
+    <!--//Header Area-->
+    
+	<!--Main Area-->
+    <div class="conts">
+   		<!--Contents-->
+    	<main>
+        	Main Contents
+        </main>
+        <!--//Contents-->
+        
+        <!--Footer Area-->
+        <footer>
+        	<p class="copyright">
+            	(463-400) 경기도 성남시 분당구 판교로 264(삼평동) The Planet SK플래닛 주식회사 대표이사 서진우<br>
+				Copyright © 2015 SK Planet.  ALL RIGHTS RESERVED</p>
+        </footer>
+        <!--//Footer Area-->
+	</div>
+	<!--//Main Area-->
+</div>
+
+
+<script type="text/javascript">
+                    $(document).ready(function () {
+                    });
+
+                </script>
+</body>
+</html>

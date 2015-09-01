@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+	<property scope="local" name="logFilePath" value="${catalina.home}/logs/cdpf-dot.log" />
+
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- <filter class="ch.qos.logback.classic.filter.LevelFilter"> <level>INFO</level> 
+			<onMatch>ACCEPT</onMatch> <onMismatch>DENY</onMismatch> </filter> -->
+		<!-- <filter class="ch.qos.logback.classic.filter.ThresholdFilter"> <level>INFO</level> 
+			</filter> -->
+		<file>${logFilePath}</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${logFilePath}.%d{yyyyMMdd}</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%d] [%-5level] [%thread] %class.%method - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- Root Logger -->
+	<root level="info">
+		<appender-ref ref="FILE" />
+	</root>
+
+</configuration>

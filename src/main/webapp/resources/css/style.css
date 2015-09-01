@@ -1,0 +1,180 @@
+
+
+
+/* Common Style **************************************************************************************************************************************************************/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code, button,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend, frameset, frameborder, frame, img,
+table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0; border: 0; outline: 0; }
+
+/*form
+textarea {Border:1px SOLID #c2c6c9;  width:100%;}
+input, select, textarea {vertical-align: middle; font-size: 12px;}
+fieldset{border:none;}
+.input_t1{ Color:#544943; Border:1px SOLID #c5c6ca; padding:2px 0 2px 2px; line-height:19px; height:19px;}
+textarea{ Background-Color:#fff; Color:#544943; Border:1x SOLID #c5c6ca; }
+select{ Color:#717171; font-size: 12px; }
+select option{ Color:#717171; font-size: 12px;}*/
+
+li{list-style:none;}
+
+ul{list-style:none;}
+ul, ol, li, dl, dt, dd, input, textarea, select, h1, h2, h3, h4, em, address, fieldset, form, iframe, object {margin:0px; padding:0;}
+
+ol, ul {  list-style: none;}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table {  border-collapse: collapse;  border-spacing: 0;}
+
+/* Font Style */
+body,td,div		{	font-family: Dotum,Arial,Verdana,sans-serif; font-size: 12px; color:#5d5d5d;}
+a:link			{	font-family: Dotum,Arial,Verdana,sans-serif; font-size: 12px; color:#5d5d5d; text-decoration:none; }
+a:hover			{	font-family: Dotum,Arial,Verdana,sans-serif; font-size: 12px; color:#333435; text-decoration:none; }
+a:active		{	font-family: Dotum,Arial,Verdana,sans-serif; font-size: 12px; color:#5d5d5d; text-decoration:none; }
+a:visited		{	font-family: Dotum,Arial,Verdana,sans-serif; font-size: 12px; color:#5d5d5d; text-decoration:none; }
+
+
+/*����_0906*/
+/* Layout */
+#layoutHeader { width:auto; padding:0 30px 0 25px; height:60px; background:url("../images/top_bg.gif") repeat-x; } 
+#layoutHeader .TopBox1 { float:left; width:100%; height:32px; min-width: 770px; }
+#layoutHeader .TopBox1 p { float:left; width:320px; height:32px; padding-left:30px;}
+#layoutHeader .TopBox1 .tb_r { float:right; width:200px; height:23px; padding:7px 0 0 0; color:#646464;}
+#layoutHeader .TopBox1 .tb_r ul { overflow:hidden; float:right; }
+#layoutHeader .TopBox1 .tb_r ul li { float:left; padding-right:14px; }
+#layoutHeader .TopBox1 .tb_r ul li.pd_t3 { padding-top:6px; }
+#layoutHeader .TopBox2 { float:left; width:100%; height:26px; border-bottom:2px solid #e51937;}
+
+#layoutHeader_a { width:auto; padding:0 30px 0 25px; height:60px; background:url("../images/top_bg_a.gif") repeat-x; } 
+#layoutHeader_a .TopBox1 { float:left; width:100%; height:32px; min-width: 770px; }
+#layoutHeader_a .TopBox1 p { float:left; width:320px; height:32px; padding-left:10px;}
+#layoutHeader_a .TopBox1 .tb_r { float:right; width:200px; height:23px; padding:7px 0 0 0; color:#646464;}
+#layoutHeader_a .TopBox1 .tb_r ul { overflow:hidden; float:right; }
+#layoutHeader_a .TopBox1 .tb_r ul li { float:left; padding-right:12px; }
+#layoutHeader_a .TopBox1 .tb_r ul li.pd_t3 { padding-top:6px; }
+#layoutHeader_a .TopBox2 { float:left; width:100%; height:25px; min-width: 770px; border-bottom:3px solid #e51937; background:url("../images/navi_bg2_a.gif") repeat-x;}
+#layoutHeader_a .TopBox2 span {float:right; width:90px; color:#0e0e0e; font-size:12px; height:18px; font-weight:bold; background:url("../images/ico_help.png") no-repeat 20px 4px; padding: 7px 0 0 53px;}
+#layoutHeader_a .TopBox2 span a {color:#0e0e0e; font-size:12px; text-decoration:none;}
+#layoutHeader_a .TopBox2 span a:hover {color:#ff4810;}
+
+
+#layoutMiddle { width:100%; float:left; padding-top:14px; min-height:300px;}
+#layoutMiddle_2 { width:100%; float:left; padding-top:3px; min-height:300px;} 
+#Left_MenuBox { float:left; position:absolute; left:25px; width:200px; z-index:200; }
+#ContentBox { position:relative; margin:0 30px 0 25px; z-index:1; min-width: 500px;}
+#ContentBox_my {margin:0 30px 0 25px; min-width: 500px;}
+#ContentBox .TitleBox{ float:left; width:100%; height:36px; padding-bottom:12px; }
+#ContentBox .TitleBox .TitleLine { float:left; width:100%; height:36px; background: url("../images/tit_line.gif") repeat-x bottom; }
+#ContentBox .TitleBox .TitleLine .Tit_tx { float:left; height:26px; font-weight:bold; font-size:16px; color:#171717; padding:8px 0 0 28px; background: url("../images/tit_arrow.gif") no-repeat 5px 7px;}
+#ContentBox .TitleBox .TitleLine .Tit_tx_r { float:right; text-align:right; padding:9px 4px 0 0; }
+#ContentBox_admin { position:relative; margin:0 30px 0 250px; z-index:1; min-width: 500px;}
+
+#ContentBox .Section1{ float:left; width:100%; padding-bottom:15px; }
+#ContentBox .TitA_2 { border:1px solid #aaaaaa; height:37px; background: url("../images/th_bg.gif") repeat-x ; }
+#ContentBox .TitA_2 .TitA_2_l {float:left; width:200px; height:27px; padding:10px 0 0 20px; font-weight:bold; color:#515151;}
+#ContentBox .TitA_2 .TitA_2_r {float:right; padding:6px 15px 0 0;}
+
+
+/* Footer */
+#LayoutFooter{ width:auto; clear:both; padding:30px 30px 0 25px; } 
+.Footer{ border-top:2px #6b6b6b solid; width:100%; height:48px; padding:12px 0 0 0; color:#6e6e6e; font-size:11px; }
+
+
+/* Table */
+.t_bx {width:100%; border-top:solid 2px #595959;}
+.tstyle {width:100%;}
+.tstyle th {background-color:#f3eedd; border-bottom:solid 1px #acacac; border-right:solid 1px #D0D8E1; text-align:center; color:#2d2d2d; letter-spacing:-1px; padding:10px 5px 9px 5px;}
+.tstyle td {background-color:#FFFFFF; border-bottom:solid 1px #d6d6d6; border-right:solid 1px #D0D8E1; text-align:center; padding:9px 5px 8px 5px;}
+.tstyle th.lineNone{ border-right:0px;}
+.tstyle td.lineNone{ border-right:0px;}
+
+
+.tit_bx {margin:0 0 15px 0; height:35px; background: url("../images/tit_bg1.gif") repeat-x ; }
+.tit_ico {float:left; width:190px; height:27px; font-weight:bold; font-size:16px; color:#151515; padding:8px 0 0 60px; background: url("../images/tit_bg2.gif") no-repeat ; }
+
+
+	body{min-width:1000px;font-size:9pt;}
+ 	div#header{position:relative;}
+	div#header > h1{margin-left:28px;}
+	div#header .options{position:absolute;right:10px;top:50%;height:40px;line-height:40px;margin-top:-20px; font-size:11px;}
+	div#body{display:table;width:100%;}
+	div#aside{width:200px;display:table-cell;vertical-align:top; }
+	div#aside > div{padding:0px !important; border:0px; background-color:#f4f2f2;}
+	div#aside .ui-menu{z-index:100; border:0px; font-family: Dotum,Arial,Verdana,sans-serif; font-size: 12px; background-color:#f3f3ed;}
+	div#aside a + .ui-menu{width:200px; border:0px; font-family: Dotum,Arial,Verdana,sans-serif; font-size: 12px; }
+	div#aside a {color:#7a7a7a; padding-left:18px;}
+	div#aside a:hover {color:#252525; padding-left:18px;}
+
+	div#content{display:table-cell;}
+  
+ 	div#title{position:relative; height:40px; margin-bottom:12px; border-bottom:1px solid #bababa;}
+	div#title > h1{margin-left:10px;} 
+	div#title .Title_arrow{position:absolute; font-weight:bold; font-size:16px; color:#171717; padding:12px 0 5px 28px; background:url("../images/tit_arrow.gif") no-repeat 5px 12px;}
+    div#title .options{position:absolute;right:10px;top:25px;height:30px;line-height:40px;margin-top:-20px; font-size:12px;}
+	
+	div#panel{position:relative; margin-bottom:12px; border:1px solid #aaaaaa; height:37px; background: url("../images/th_bg.gif") repeat-x ; }
+	div#panel .panel_tx{font-weight:bold; color:#181818; font-size:12px; color:#; padding:12px 0 5px 17px;} 
+	div#panel > h3{margin-left:10px;} 
+    div#panel .options{position:absolute;right:10px;top:50%;height:40px;line-height:40px;margin-top:-20px;}
+
+.panel2{margin-bottom:12px; border:1px solid #aaaaaa; height:37px; background: url("../images/th_bg.gif") repeat-x ; }
+.panel2 .panel_tx2 {float:right; padding:9px 15px 0 0; }
+.panel2 .panel_tx2 dd {float:left; padding:0 0 0 0;}
+.panel2 .panel_tx2 dd.tx {float:left; width:60px; color:#666666; padding:4px 0 0 0;}
+.panel2 .panel_tx2 dd.in {float:left; width:220px; padding:0 0 0 0;}
+.panel2 .panel_tx2 dd input{float:left; Color:#544943; Border:1px SOLID #cbcbcb; background:#ffffff; padding:1px 0 0 2px; line-height:18px; height:18px;}
+
+
+  div#control {position:relative; margin-bottom:10px; padding:10px 20px 9px 20px; font-size:12px; color:#32312d; border:1px solid #dddbd5; background:#eeede8; }
+
+.pop_pd dl {float:left; width:100%;}
+.pop_pd dd.bx1 {float:left; padding:1px 0 1px 0;}
+.pop_pd dd.bx1 p {float:left; padding:5px 0 0 0; color:#6b6b6b;}
+
+.pop_inbx {float:left; width:100%;}
+
+
+.pop_icobx {float:left; width:100%; padding:20px 0 20px 0;}
+.pop_ico_img {float:left; padding:0 20px 0 16px;}
+.pop_ico_tx {float:left; padding:20px 0 0 0; font-weight:bold; color:#545454; line-height:17px;}
+.pop_ico_tx span {color:#ff3d09;}
+
+.pop_tx {float:left; font-weight:bold; color:#5b5b5b; width:75px; height:23px; padding:6px 0 0 12px; background:url("../images/popup_arrow.gif") no-repeat 1px 7px;}
+.pop_tx3 {float:left; font-weight:bold; color:#5b5b5b; width:95px; height:23px; padding:6px 0 0 12px; background:url("../images/popup_arrow.gif") no-repeat 1px 7px;}
+.pop_tx2 {float:left; color:#202020; padding:5px 0 0 0; height:23px;}
+.pop_pd {padding:10px 5px 10px 5px;}
+.pop_input{float:left; Color:#544943; Border:1px SOLID #cbcbcb; background:#ffffff; padding:1px 0 1px 2px; line-height:17px; height:17px;}
+
+.my_conbx {padding:20px 20px 20px 20px;}
+.my_contx {float:left; font-size:14px; font-weight:bold; color:#727069; width:200px; height:25px; padding:5px 0 5px 30px; background:url("../images/s_arrow.gif") no-repeat 10px 4px;}
+.my_conin {float:left; width:70%; height:25px; padding:5px 0 5px 0;}
+.my_bt {float:left; width:500px; height:40px; padding:3px 0 0 427px;}
+
+/* Etc Style */
+.scroll { overflow-x:hidden; overflow-y:auto; border:1px solid #dfdede; padding:10px 12px 10px 12px;}
+
+
+iframe.hidden { position:absolute; top:0px; left:0px; z-index:-99; width:252px; height:200px; filter:alpha(opacity=0);}
+
+
+/* New_navi 0909 */
+#layoutHeader .TopBox3 { float:left; width:100%; height:26px; border-bottom:2px solid #e51937;}
+.navi { float:left; padding:0; width:100%; height:25px; }
+.navi ul { }
+.navi ul li { overflow:hidden; float:left; padding:0;}
+.navi li.m_right {width:170px; height:25px; float:right; padding:6px 0 0 0; text-align:center; background: url("../images/ico_data.gif") no-repeat 42px 7px;}
+.navi li.m_right a {font-weight:bold; color:#000; text-decoration:none; }
+.navi li.m_right a:hover {color:#ff6102; text-decoration:none; }
+.navi li.m_left {float:left; text-align:center; padding:2px 0 0 0; text-align:center; }
+.navi li.m_left a {display:block; width:190px; height:23px; padding:4px 0 0 0; font-weight:bold; color:#000; text-decoration:none; background: url("../images/navi_bg3.gif") no-repeat 0 0px;}
+.navi li.m_left a:hover {color:#e80f2f; background: url("../images/navi_bg3_on.gif") no-repeat 0 0px; text-decoration:none;}
+.A_submenu { width:700px;}
+.A_submenu ul { list-style: none; float:left;}
+.A_submenu li { display: inline; text-decoration:none;}
+.A_submenu li a{ display: block; font-size:11px; padding:7px 10px 2px 10px; color:#8c8c8c; font-weight: bold; letter-spacing:-0.5px; text-align:center; text-decoration:none; }
+.A_submenu li a:hover { display: block; font-size:11px; color:#4d4d4d; font-weight: bold; letter-spacing:-0.5px; text-decoration:none; }
+.2depth {}
