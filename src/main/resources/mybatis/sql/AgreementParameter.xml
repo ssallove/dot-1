@@ -119,6 +119,93 @@
     ]]>
 	</select>
 	
+	<!-- 서비스 별 BM 간 교차 동의 교집합 통계 조회  -->
+	<select id="selectEachServiceCrossIntersect" resultType="map" resultSetType="FORWARD_ONLY" fetchSize="4096">
+	<![CDATA[
+	SELECT /* selectEachServiceCrossIntersect */
+	       CASE A.GBN WHEN 'TOT' THEN '1'
+	                  WHEN 'ACVT' THEN '2'
+	                  WHEN 'MAU' THEN '3' END AS LV
+	     , CASE B.LV WHEN 1 THEN '99'
+	                 WHEN 2 THEN '03'
+	                 WHEN 3 THEN '02'
+	                 WHEN 4 THEN '01' END AS FUNC_AGR_CL_CD
+	     , MAX(CASE WHEN STD_SVC_CD = 'SYR' AND AGR_SVC_CD = 'TMA' 
+	                     THEN CASE WHEN B.LV = 1 THEN TOT_CNT
+	                               WHEN B.LV = 2 THEN PUSH_CNT
+	                               WHEN B.LV = 3 THEN GPS_CNT
+	                               WHEN B.LV = 4 THEN BLE_CNT 
+	                          END
+	           END) AS SYR_TMA_CNT
+	     , MAX(CASE WHEN STD_SVC_CD = 'SYR' AND AGR_SVC_CD = 'EVS' 
+	                     THEN CASE WHEN B.LV = 1 THEN TOT_CNT
+	                               WHEN B.LV = 2 THEN PUSH_CNT
+	                               WHEN B.LV = 3 THEN GPS_CNT
+	                               WHEN B.LV = 4 THEN BLE_CNT 
+	                          END
+	           END) AS SYR_EVS_CNT
+	     , MAX(CASE WHEN STD_SVC_CD = 'SYR' AND AGR_SVC_CD = 'TST' 
+	                     THEN CASE WHEN B.LV = 1 THEN TOT_CNT
+	                               WHEN B.LV = 2 THEN PUSH_CNT
+	                               WHEN B.LV = 3 THEN GPS_CNT
+	                               WHEN B.LV = 4 THEN BLE_CNT 
+	                          END
+	           END) AS SYR_TST_CNT
+	     , MAX(CASE WHEN STD_SVC_CD = 'OCB' AND AGR_SVC_CD = 'TMA' 
+	                     THEN CASE WHEN B.LV = 1 THEN TOT_CNT
+	                               WHEN B.LV = 2 THEN PUSH_CNT
+	                               WHEN B.LV = 3 THEN GPS_CNT
+	                               WHEN B.LV = 4 THEN BLE_CNT 
+	                          END
+	           END) AS OCB_TMA_CNT
+	     , MAX(CASE WHEN STD_SVC_CD = 'OCB' AND AGR_SVC_CD = 'EVS' 
+	                     THEN CASE WHEN B.LV = 1 THEN TOT_CNT
+	                               WHEN B.LV = 2 THEN PUSH_CNT
+	                               WHEN B.LV = 3 THEN GPS_CNT
+	                               WHEN B.LV = 4 THEN BLE_CNT 
+	                          END
+	           END) AS OCB_EVS_CNT
+	     , MAX(CASE WHEN STD_SVC_CD = 'OCB' AND AGR_SVC_CD = 'TST' 
+	                     THEN CASE WHEN B.LV = 1 THEN TOT_CNT
+	                               WHEN B.LV = 2 THEN PUSH_CNT
+	                               WHEN B.LV = 3 THEN GPS_CNT
+	                               WHEN B.LV = 4 THEN BLE_CNT 
+	                          END
+	           END) AS OCB_TST_CNT
+	     , MAX(CASE WHEN STD_SVC_CD = 'OCT' AND AGR_SVC_CD = 'TMA' 
+	                     THEN CASE WHEN B.LV = 1 THEN TOT_CNT
+	                               WHEN B.LV = 2 THEN PUSH_CNT
+	                               WHEN B.LV = 3 THEN GPS_CNT
+	                               WHEN B.LV = 4 THEN BLE_CNT 
+	                          END
+	           END) AS OCT_TMA_CNT
+	     , MAX(CASE WHEN STD_SVC_CD = 'OCT' AND AGR_SVC_CD = 'EVS' 
+	                     THEN CASE WHEN B.LV = 1 THEN TOT_CNT
+	                               WHEN B.LV = 2 THEN PUSH_CNT
+	                               WHEN B.LV = 3 THEN GPS_CNT
+	                               WHEN B.LV = 4 THEN BLE_CNT 
+	                          END
+	           END) AS OCT_EVS_CNT
+	     , MAX(CASE WHEN STD_SVC_CD = 'OCT' AND AGR_SVC_CD = 'TST' 
+	                     THEN CASE WHEN B.LV = 1 THEN TOT_CNT
+	                               WHEN B.LV = 2 THEN PUSH_CNT
+	                               WHEN B.LV = 3 THEN GPS_CNT
+	                               WHEN B.LV = 4 THEN BLE_CNT 
+	                          END
+	           END) AS OCT_TST_CNT
+	  FROM Z_JSD_POC_DATA_CHECK_CNT_TMP A
+	     , (SELECT LEVEL AS LV FROM DUAL CONNECT BY LEVEL <= 4) B
+	 WHERE A.BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+	   AND A.INT_KEY_CL_CD = '01'
+	 GROUP BY A.GBN, B.LV
+	 ORDER BY CASE WHEN GBN = 'TOT' THEN 1
+	               WHEN GBN = 'ACVT' THEN 2
+	               ELSE 3
+	           END 
+	         , B.LV
+	]]>
+	</select>
+	
 	<!--교차활용동의 (Chart) 조회 -->
 	<!-- 
 	<select id="selectCrossMosuChart" parameterType="map" resultMap="AgreementParameterVO-RM">
@@ -158,23 +245,23 @@
 	-->
 	
 	<!-- 서비스 조합별 동의 모수 통계 조회 -->
-	<select id="selectMixedServiceMbrSum" parameterType="map" resultType="AgreementParameterVO">
+	<select id="selectMixedServiceMbrSum" parameterType="map" resultType="CamelizedKeyMap">
 	<![CDATA[
     SELECT
            /* selectMixedServiceMbrSum */
            CROSS_SVC_UNION_CD
-         , SUM(SCB_MBR_CNT_TOT) AS SCB_MBR_CNT_TOT
-         , SUM(SCB_MBR_CNT_PUSH) AS SCB_MBR_CNT_PUSH
-         , SUM(SCB_MBR_CNT_GEO) AS SCB_MBR_CNT_GEO
-         , SUM(SCB_MBR_CNT_BLE) AS SCB_MBR_CNT_BLE
-         , SUM(ACTV_MBR_CNT_TOT) AS ACTV_MBR_CNT_TOT
-         , SUM(ACTV_MBR_CNT_PUSH) AS ACTV_MBR_CNT_PUSH
-         , SUM(ACTV_MBR_CNT_GEO) AS ACTV_MBR_CNT_GEO
-         , SUM(ACTV_MBR_CNT_BLE) AS ACTV_MBR_CNT_BLE
-         , SUM(MAU_CNT_TOT) AS MAU_CNT_TOT
-         , SUM(MAU_CNT_PUSH) AS MAU_CNT_PUSH
-         , SUM(MAU_CNT_GEO) AS MAU_CNT_GEO
-         , SUM(MAU_CNT_BLE) AS MAU_CNT_BLE
+         , NVL(SUM(SCB_MBR_CNT_TOT), 0) AS SCB_MBR_CNT_TOT
+         , NVL(SUM(SCB_MBR_CNT_PUSH), 0) AS SCB_MBR_CNT_PUSH
+         , NVL(SUM(SCB_MBR_CNT_GEO), 0) AS SCB_MBR_CNT_GEO
+         , NVL(SUM(SCB_MBR_CNT_BLE), 0) AS SCB_MBR_CNT_BLE
+         , NVL(SUM(ACTV_MBR_CNT_TOT), 0) AS ACTV_MBR_CNT_TOT
+         , NVL(SUM(ACTV_MBR_CNT_PUSH), 0) AS ACTV_MBR_CNT_PUSH
+         , NVL(SUM(ACTV_MBR_CNT_GEO), 0) AS ACTV_MBR_CNT_GEO
+         , NVL(SUM(ACTV_MBR_CNT_BLE), 0) AS ACTV_MBR_CNT_BLE
+         , NVL(SUM(MAU_CNT_TOT), 0) AS MAU_CNT_TOT
+         , NVL(SUM(MAU_CNT_PUSH), 0) AS MAU_CNT_PUSH
+         , NVL(SUM(MAU_CNT_GEO), 0) AS MAU_CNT_GEO
+         , NVL(SUM(MAU_CNT_BLE), 0) AS MAU_CNT_BLE
       FROM (
             SELECT 
                    CROSS_SVC_UNION_CD
@@ -206,7 +293,7 @@
                      WHERE 1 = 1
                        AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
                        AND INT_KEY_CL_CD = '01'
-                       AND CMPLS_CROSS_AGR_CL_CD = '01'
+                       AND CMPLS_CROSS_AGR_CL_CD = #{agreementClassCode}
                        AND SET_CL_CD = #{setTypeCode}
                    )
            )

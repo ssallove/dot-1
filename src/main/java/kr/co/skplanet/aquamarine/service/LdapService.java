@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.filter.AndFilter;
@@ -23,8 +22,8 @@ import kr.co.skplanet.aquamarine.model.AccountVO;
  * @author skplanet
  *
  */
-@Service("ldapSvc")
-@Lazy
+@Service
+// @Lazy
 public class LdapService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(LdapService.class);
@@ -37,86 +36,96 @@ public class LdapService {
 		return ldapTemplate.search("", "(objectclass=Person)", new AttributesMapper<Object>() {
 
 			@Override
-			public Object mapFromAttributes(Attributes attrs) throws NamingException {
+			public Object mapFromAttributes(final Attributes attrs) throws NamingException {
+
 				return attrs.get("cn")
 							.get();
+
 			}
+
 		});
 
 	}
 
-	public boolean authenticate(String username,
-								String password) {
+	public boolean authenticate(final String username,
+								final String password) {
 
 		AndFilter filter = new AndFilter();
-		filter.and(new EqualsFilter("cn", username));
-		LOG.info("## filter=" + filter.toString());
+		filter.and(new EqualsFilter("cn", username.toUpperCase()));
+
+		LOG.debug("## filter=" + filter.toString());
+
 		return ldapTemplate.authenticate("", filter.toString(), password);
+
 	}
 
-	public AccountVO login(String username,
-						   String password) {
-
-		LOG.info("## username=" + username);
+	public AccountVO login(final String username,
+						   final String password) {
 
 		if (authenticate(username, password)) {
+
 			AndFilter filter = new AndFilter();
 			filter.and(new EqualsFilter("cn", username));
 
 			List<AccountVO> result = ldapTemplate.search("", filter.toString(), new AttributesMapper<AccountVO>() {
 
 				@Override
-				public AccountVO mapFromAttributes(Attributes attrs) throws NamingException {
+				public AccountVO mapFromAttributes(final Attributes attrs) throws NamingException {
 					return makeUserUsingLdapAttrs(attrs);
 				}
+
 			});
-			if (!CollectionUtils.isEmpty(result)) {
+
+			if (!CollectionUtils.isEmpty(result))
 				return result.get(0);
-			} else {
+			else
 				return null;
-			}
-		} else {
+
+		} else
 			return null;
-		}
 
 	}
 
-	public AccountVO getUser(String username) {
+	// public AccountVO getUser(String username) {
+	//
+	// AndFilter filter = new AndFilter();
+	//
+	// filter.and(new EqualsFilter("objectclass", "Person"))
+	// .and(new EqualsFilter("cn", username));
+	//
+	// List<AccountVO> result = ldapTemplate.search("", filter.toString(), new AttributesMapper<AccountVO>() {
+	//
+	// @Override
+	// public AccountVO mapFromAttributes(Attributes attrs) throws NamingException {
+	// return makeUserUsingLdapAttrs(attrs);
+	// }
+	//
+	// });
+	//
+	// if (!CollectionUtils.isEmpty(result))
+	// return result.get(0);
+	// else
+	// return null;
+	//
+	// }
 
-		AndFilter filter = new AndFilter();
-
-		filter.and(new EqualsFilter("objectclass", "Person"))
-			  .and(new EqualsFilter("cn", username));
-
-		List<AccountVO> result = ldapTemplate.search("", filter.toString(), new AttributesMapper<AccountVO>() {
-
-			@Override
-			public AccountVO mapFromAttributes(Attributes attrs) throws NamingException {
-				return makeUserUsingLdapAttrs(attrs);
-			}
-		});
-		if (!CollectionUtils.isEmpty(result)) {
-			return result.get(0);
-		} else {
-			return null;
-		}
-
-	}
-
-	private AccountVO makeUserUsingLdapAttrs(Attributes attrs) throws NamingException {
+	private AccountVO makeUserUsingLdapAttrs(final Attributes attrs) throws NamingException {
 
 		AccountVO user = new AccountVO();
 
 		if (attrs != null) {
+
 			user.setUser_nm(StringUtils.defaultIfEmpty((String) attrs.get("cn")
 																	 .get(),
 													   StringUtils.EMPTY));
+
 			if (attrs.get("ExADKoreanName") != null) {
 				user.setFullname((String) attrs.get("ExADKoreanName")
 											   .get());
 			} else {
 				user.setFullname(user.getUser_nm());
 			}
+
 			if (attrs.get("mail") != null)
 				user.setEmail((String) attrs.get("mail")
 											.get());
@@ -124,8 +133,9 @@ public class LdapService {
 				user.setMobile((String) attrs.get("mobile")
 											 .get());
 		}
-		LOG.debug("## user 정보", user);
+
 		return user;
 
 	}
+
 }

@@ -1951,6 +1951,9 @@ pre code {
   .col-md-3 {
     width: 25%;
   }
+    .col-md-3-1 {
+    width: 20%;
+  }
   .col-md-2 {
     width: 16.66666667%;
   }
@@ -2106,8 +2109,11 @@ pre code {
   .col-lg-4 {
     width: 33.33333333%;
   }
-  .col-lg-3 {
+   .col-lg-3 {
     width: 25%;
+  }
+  .col-lg-3-1 {
+    width: 20%;
   }
   .col-lg-2 {
     width: 16.66666667%;
@@ -3367,8 +3373,8 @@ input[type="button"].btn-block {
   width: 100%;
 }
 .fade {
-  opacity: 0;
-  -webkit-transition: opacity .15s linear;
+   opacity: 0;
+ -webkit-transition: opacity .15s linear;
        -o-transition: opacity .15s linear;
           transition: opacity .15s linear;
 }
@@ -5796,10 +5802,11 @@ button.close {
   position: relative;
   margin: 15px 0 15px 15px;
   overflow-y:auto;
-  max-height:600px;
+  max-height:550px;
   min-height:200px;
   height:auto;
   padding-right:15px;
+
 }
 @media screen and (max-height: 768px){
 
@@ -5808,11 +5815,6 @@ button.close {
 }
 
 
-}
-
-.modal-footer{
-	padding: 15px;
-	text-align: right;
 }
 
 .modal-footer .btn + .btn {
@@ -5848,18 +5850,13 @@ button.close {
 	overflow-y:auto;*/
   }
   .modal-sm {
-    width: 350px !important;
-    padding:0 10px;
-    min-width: 350px !important;
+    width: 300px;
   }
 }
 @media (min-width: 992px) {
   .modal-lg {
     width: 900px;
   }
-}
-.modal-sm .modal-body{
-	min-height: initial;
 }
 .tooltip {
   position: absolute;
@@ -6087,7 +6084,7 @@ button.close {
   border-left-color: #fff;
 }
 .carousel {
-  position: relative;
+  /*position: relative;*/
 }
 .carousel-inner {
   position: relative;
@@ -6168,7 +6165,7 @@ button.close {
 }
 .carousel-control {
   position: absolute;
-  top: 140px;
+  top: 160px;
   bottom: 0;
   left: 0;
   width: 60px;
@@ -6178,7 +6175,7 @@ button.close {
   text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
   filter: alpha(opacity=50);
   opacity: .5;
-  margin:0 30px;
+  margin:0 40px;
 }
 .carousel-control.left {
  /* background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .0001) 100%);
@@ -6241,7 +6238,7 @@ button.close {
 }
 .carousel-indicators {
   position: absolute;
-  bottom: 10px;
+  bottom: 20px;
   left: 50%;
   z-index: 15;
   width: 60%;
@@ -6307,7 +6304,7 @@ button.close {
     padding-bottom: 30px;
   }
   .carousel-indicators {
-    bottom: 14px;
+    bottom:20px;
   }
 }
 .clearfix:before,

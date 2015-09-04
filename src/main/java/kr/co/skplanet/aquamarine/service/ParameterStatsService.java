@@ -4,6 +4,7 @@ import static kr.co.skplanet.aquamarine.persistence.AgreementParameterDao.Agreem
 import static kr.co.skplanet.aquamarine.persistence.AgreementParameterDao.SetType.*;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,20 +70,35 @@ public class ParameterStatsService {
 	//
 	// }
 
-	public List<AgreementParameterVO> getMixedServiceMbrUnion() {
+	public List<Map<String, ?>> getEachServiceCrossIntersect() {
 
-		List<AgreementParameterVO> voList = agreementPopParamDao.selectMixedServiceMbrSum(Union);
-
-		return voList;
+		return agreementPopParamDao.selectEachServiceCrossIntersect();
 
 	}
 
-	public List<AgreementParameterVO> getMixedServiceMbrIntersect() {
+	public List<Map<String, ?>> getMixedServiceMbrUnion4Essential() {
 
-		List<AgreementParameterVO> voList = agreementPopParamDao.selectMixedServiceMbrSum(Intersect);
-
-		return voList;
+		return agreementPopParamDao.selectMixedServiceMbrSum(Essential, Union);
 
 	}
+
+	public List<Map<String, ?>> getMixedServiceMbrIntersect4Essential() {
+
+		return agreementPopParamDao.selectMixedServiceMbrSum(Essential, Intersect);
+
+	}
+	
+	public List<Map<String, ?>> getMixedServiceMbrUnion4Cross() {
+
+		return agreementPopParamDao.selectMixedServiceMbrSum(Cross, Union);
+
+	}
+
+	public List<Map<String, ?>> getMixedServiceMbrIntersect4Cross() {
+
+		return agreementPopParamDao.selectMixedServiceMbrSum(Cross, Intersect);
+
+	}
+
 
 }

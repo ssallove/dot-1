@@ -1,52 +1,177 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="Area">
 
-	<resultMap type="AreaVO" id="dataList">
-		
-	</resultMap>
-  
+    <resultMap type="AreaVO" id="dataList">
+
+    </resultMap>
+
+    <select id="selectAreaNodeList" parameterType="map" resultMap="dataList">
+        <![CDATA[
+        WITH V_AR AS
+        (
+            SELECT A.MAIN_ADM_DONG_CD
+                 , B.SIDO              AS MAIN_SIDO
+                 , B.SIGUNGU           AS MAIN_SIGUNGU
+                 , B.ADM_DONG          AS MAIN_ADM_DONG
+                 , A.CROSS_ADM_DONG_CD
+                 , C.SIDO              AS CROSS_SIDO
+                 , C.SIGUNGU           AS CROSS_SIGUNGU
+                 , C.ADM_DONG          AS CROSS_ADM_DONG
+                 , A.MAIN_MBR_CNT
+                 , A.MAIN_MBR_CNT_OF_CORSS
+                 , A.CONFIDENCE
+                 , A.RN_1
+                 , A.RN_2
+              FROM (
+                     SELECT /*+ INDEX(A IX1_INTGT_POC_AR_ACVT_AREA) */
+                            MAIN_ADM_DONG_CD
+                          , CROSS_ADM_DONG_CD
+                          , MAIN_MBR_CNT
+                          , CROSS_MBR_CNT AS MAIN_MBR_CNT_OF_CORSS
+                          , CONFIDENCE
+                          , DENSE_RANK() OVER (ORDER BY MAIN_MBR_CNT DESC) AS RN_1
+                          , ROW_NUMBER() OVER (PARTITION BY MAIN_ADM_DONG_CD ORDER BY CONFIDENCE DESC) AS RN_2
+                       FROM INTGT_POC_AR_ACVT_AREA A
+                       WHERE MAIN_ADM_DONG_CD LIKE #{mainAcvtAdmDongCd} || '%'
+                            -- MAIN_ADM_DONG_CD LIKE '41%' -- 경기도 샘플
+                   ) A
+                   LEFT OUTER JOIN INTGT_ADM_DONG_META B
+                        ON A.MAIN_ADM_DONG_CD  = B.ADM_DONG_CD
+                   LEFT OUTER JOIN INTGT_ADM_DONG_META C
+                        ON A.CROSS_ADM_DONG_CD = C.ADM_DONG_CD
+                  WHERE RN_1 <= #{mainAdmDongCdCnt}    /* MAIN  행정동 갯수 조절 변수*/
+                    AND RN_2 <= #{crossAdmDongCdCnt}    /* CROSS 행정동 갯수 조절 변수 */
+            )
+            SELECT ADM_DONG_CD
+                 , SIDO_NM
+                 , SIGUNGU_NM
+                 , DONG_NM
+                 , MBR_CNT
+              FROM (
+            SELECT MAIN_ADM_DONG_CD AS ADM_DONG_CD
+                 , MAIN_SIDO        AS SIDO_NM
+                 , MAIN_SIGUNGU     AS SIGUNGU_NM
+                 , MAIN_ADM_DONG    AS DONG_NM
+                 , MAIN_MBR_CNT     AS MBR_CNT
+              FROM V_AR
+             UNION ALL
+            SELECT CROSS_ADM_DONG_CD
+                 , CROSS_SIDO
+                 , CROSS_SIGUNGU
+                 , CROSS_ADM_DONG
+                 , MAIN_MBR_CNT_OF_CORSS
+              FROM V_AR
+        )
+        GROUP BY ADM_DONG_CD
+             , SIDO_NM
+             , SIGUNGU_NM
+             , DONG_NM
+             , MBR_CNT
+        ]]>
+    </select>
+
+    <select id="selectAreaLinkList" parameterType="map" resultMap="dataList">
+        <![CDATA[
+        WITH V_AR AS
+        (
+            SELECT A.MAIN_ADM_DONG_CD
+                 , B.SIDO              AS MAIN_SIDO
+                 , B.SIGUNGU           AS MAIN_SIGUNGU
+                 , B.ADM_DONG          AS MAIN_ADM_DONG
+                 , A.CROSS_ADM_DONG_CD
+                 , C.SIDO              AS CROSS_SIDO
+                 , C.SIGUNGU           AS CROSS_SIGUNGU
+                 , C.ADM_DONG          AS CROSS_ADM_DONG
+                 , A.MAIN_MBR_CNT
+                 , A.MAIN_MBR_CNT_OF_CORSS
+                 , A.CONFIDENCE
+                 , A.LIFT
+                 , A.RN_1
+                 , A.RN_2
+              FROM (
+                     SELECT /*+ INDEX(A IX1_INTGT_POC_AR_ACVT_AREA) */
+                            MAIN_ADM_DONG_CD
+                          , CROSS_ADM_DONG_CD
+                          , MAIN_MBR_CNT
+                          , CROSS_MBR_CNT AS MAIN_MBR_CNT_OF_CORSS
+                          , CONFIDENCE
+                          , LIFT
+                          , DENSE_RANK() OVER (ORDER BY MAIN_MBR_CNT DESC) AS RN_1
+                          , ROW_NUMBER() OVER (PARTITION BY MAIN_ADM_DONG_CD ORDER BY CONFIDENCE DESC) AS RN_2
+                       FROM INTGT_POC_AR_ACVT_AREA A
+                       WHERE MAIN_ADM_DONG_CD LIKE #{mainAcvtAdmDongCd} || '%'
+                            -- MAIN_ADM_DONG_CD LIKE '41%' -- 경기도 샘플
+                   ) A
+                   LEFT OUTER JOIN INTGT_ADM_DONG_META B
+                        ON A.MAIN_ADM_DONG_CD  = B.ADM_DONG_CD
+                   LEFT OUTER JOIN INTGT_ADM_DONG_META C
+                        ON A.CROSS_ADM_DONG_CD = C.ADM_DONG_CD
+                   WHERE RN_1 <= #{mainAdmDongCdCnt}    /* MAIN  행정동 갯수 조절 변수*/
+                     AND RN_2 <= #{crossAdmDongCdCnt}    /* CROSS 행정동 갯수 조절 변수 */
+        )
+        SELECT MAIN_ADM_DONG_CD AS SRC_ADM_DONG_CD
+             , MAIN_SIDO        AS SRC_SIDO_NM
+             , MAIN_SIGUNGU     AS SRC_SIGUNGU_NM
+             , MAIN_ADM_DONG    AS SRC_DONG_NM
+             , CROSS_ADM_DONG_CD AS TGT_ADM_DONG_CD
+             , CROSS_SIDO        AS TGT_SIDO_NM
+             , CROSS_SIGUNGU     AS TGT_SIGUNGU_NM
+             , CROSS_ADM_DONG    AS TGT_DONG_NM
+             , CONFIDENCE
+             , ROUND(LIFT * 1000) AS WEIGHT
+          FROM V_AR
+
+        ]]>
+    </select>
+
     <!--주활동지역_AR_POC조회쿼리 -->
     <select id="selectAreaArPocList" parameterType="map" resultMap="dataList">
     <![CDATA[
-        SELECT /* selectAreaArPocList */ 
-           A.MAIN_ADM_DONG_CD
-           , B.SIDO              AS MAIN_SIDO
-           , B.SIGUNGU           AS MAIN_SIGUNGU
-           , B.ADM_DONG          AS MAIN_ADM_DONG
-           , A.CROSS_ADM_DONG_CD
-           , C.SIDO              AS CROSS_SIDO
-           , C.SIGUNGU           AS CROSS_SIGUNGU
-           , C.ADM_DONG          AS CROSS_ADM_DONG
-           , A.MAIN_MBR_CNT
-           , A.MAIN_MBR_CNT_OF_CORSS
-           , A.CONFIDENCE
-           , A.RN
+
+        SELECT /* selectAreaArPocList */
+          A.MAIN_ADM_DONG_CD
+          , B.SIDO              AS MAIN_SIDO
+          , B.SIGUNGU           AS MAIN_SIGUNGU
+          , B.ADM_DONG          AS MAIN_ADM_DONG
+          , A.CROSS_ADM_DONG_CD
+          , C.SIDO              AS CROSS_SIDO
+          , C.SIGUNGU           AS CROSS_SIGUNGU
+          , C.ADM_DONG          AS CROSS_ADM_DONG
+          , A.MAIN_MBR_CNT
+          , A.MAIN_MBR_CNT_OF_CORSS
+          , A.CONFIDENCE
+          , A.RN_1
+          , A.RN_2
         FROM (
                SELECT /*+ INDEX(A IX1_INTGT_ACVT_AREA_AR) */
-                      MAIN_ADM_DONG_CD
-                    , CROSS_ADM_DONG_CD
-                    , MAIN_MBR_CNT
-                    , CROSS_MBR_CNT AS MAIN_MBR_CNT_OF_CORSS
-                    , CONFIDENCE
-                    , ROW_NUMBER() OVER (PARTITION BY MAIN_ADM_DONG_CD ORDER BY CONFIDENCE DESC) AS RN
-                 FROM INTGT_POC_AR_ACVT_AREA A
-                WHERE MAIN_ADM_DONG_CD LIKE #{mainAcvtAdmDongCd} || '%'
+                 MAIN_ADM_DONG_CD
+                 , CROSS_ADM_DONG_CD
+                 , MAIN_MBR_CNT
+                 , CROSS_MBR_CNT AS MAIN_MBR_CNT_OF_CORSS
+                 , CONFIDENCE
+                 , DENSE_RANK() OVER (ORDER BY MAIN_MBR_CNT DESC) AS RN_1
+                 , ROW_NUMBER() OVER (PARTITION BY MAIN_ADM_DONG_CD ORDER BY CONFIDENCE DESC) AS RN_2
+               FROM INTGT_POC_AR_ACVT_AREA A
+               WHERE MAIN_ADM_DONG_CD LIKE #{mainAcvtAdmDongCd} || '%'
              ) A
-             LEFT OUTER JOIN INTGT_ADM_DONG_META B
-                  ON A.MAIN_ADM_DONG_CD  = B.ADM_DONG_CD
-             LEFT OUTER JOIN INTGT_ADM_DONG_META C
-                  ON A.CROSS_ADM_DONG_CD = C.ADM_DONG_CD
-       WHERE RN < 16
-       ORDER BY A.MAIN_ADM_DONG_CD, A.CONFIDENCE DESC
-    ]]>
+          LEFT OUTER JOIN INTGT_ADM_DONG_META B
+            ON A.MAIN_ADM_DONG_CD  = B.ADM_DONG_CD
+          LEFT OUTER JOIN INTGT_ADM_DONG_META C
+            ON A.CROSS_ADM_DONG_CD = C.ADM_DONG_CD
+        WHERE RN_1 <= #{mainAdmDongCdCnt}    /* MAIN  행정동 갯수 조절 변수*/
+              AND RN_2 <= #{crossAdmDongCdCnt}    /* CROSS 행정동 갯수 조절 변수 */
+        ORDER BY A.MAIN_ADM_DONG_CD, A.CONFIDENCE DESC
+
+        ]]>
     </select>
-	
-	<!--지역별 모수 현황 -->
-	<select id="selectAreaMosuList" parameterType="map" resultMap="dataList">
+
+    <!--지역별 모수 현황 -->
+    <select id="selectAreaMosuList" parameterType="map" resultMap="dataList">
 	<![CDATA[
+
     SELECT /* selectAreaMosuList */
     	SEQ
     	, BASE_DT
@@ -135,12 +260,14 @@
 	         
 	     )
 	ORDER BY SEQ, MOSU DESC, PUSH DESC
-    ]]>
+
+        ]]>
 	</select>
-	
-	<!--지역별 모수 현황 가로 바차트-->
-	<select id="selectAreaMosuBarChartList" parameterType="map" resultMap="dataList">
+
+    <!--지역별 모수 현황 가로 바차트-->
+    <select id="selectAreaMosuBarChartList" parameterType="map" resultMap="dataList">
 	<![CDATA[
+
     SELECT /* selectAreaMosuBarChartList */
            SEQ
          , TO_CHAR(TO_DATE(BASE_DT), 'YYYY.MM.DD') BASE_DT
@@ -221,12 +348,14 @@
          , PERIOD_CL_CD
          , MAIN_ACVT_ADM_DONG_CD
      ORDER BY SEQ, H_BAR_TOTAL DESC, H_BAR_LEFT DESC
-    ]]>
+
+        ]]>
 	</select>
-	
-	<!--성연령대별 현황 1-->
-	<select id="selectAreaSexAgeList1" parameterType="map" resultMap="dataList">
+
+    <!--성연령대별 현황 1-->
+    <select id="selectAreaSexAgeList1" parameterType="map" resultMap="dataList">
 	<![CDATA[
+
     SELECT 
            /* selectAreaSexAgeList1 */
            SEQ
@@ -289,12 +418,14 @@
            SEX_CD DESC
          , SEQ
          , MAIN_ACVT_ADM_DONG_CD
-    ]]>
+
+        ]]>
 	</select>
-	
-	<!--성연령대별 현황 2-->
-	<select id="selectAreaSexAgeList2" parameterType="map" resultMap="dataList">
+
+    <!--성연령대별 현황 2-->
+    <select id="selectAreaSexAgeList2" parameterType="map" resultMap="dataList">
 	<![CDATA[
+
     SELECT 
            /* selectAreaSexAgeList2 */
            SEQ
@@ -358,12 +489,14 @@
            AGE_RNG_CD
          , SEQ
          , MAIN_ACVT_ADM_DONG_CD
-    ]]>
+
+        ]]>
 	</select>
-	
-	<!--성연령대별 현황 3-->
-	<select id="selectAreaSexAgeList3" parameterType="map" resultMap="dataList">
+
+    <!--성연령대별 현황 3-->
+    <select id="selectAreaSexAgeList3" parameterType="map" resultMap="dataList">
 	<![CDATA[
+
     SELECT 
            /* selectAreaSexAgeList3 */
            SEQ
@@ -431,12 +564,14 @@
          , SEX_CD DESC
          , SEQ
          , MAIN_ACVT_ADM_DONG_CD
-    ]]>
+
+        ]]>
 	</select>
-	
-	<!--업종순위 -->
-	<select id="selectAreaBusiRankList" parameterType="map" resultMap="dataList">
+
+    <!--업종순위 -->
+    <select id="selectAreaBusiRankList" parameterType="map" resultMap="dataList">
 	<![CDATA[
+
     SELECT 
            /* selectAreaBusiRankList */
            ROWNUM SEQ
@@ -471,12 +606,14 @@
            )
      WHERE 1 = 1
        AND ROWNUM <= 10
-    ]]>
+
+        ]]>
 	</select>
-	
-	<!--함께방문하는지역 -->
-	<select id="selectAreaTogatherVisitAreaList" parameterType="map" resultMap="dataList">
+
+    <!--함께방문하는지역 -->
+    <select id="selectAreaTogatherVisitAreaList" parameterType="map" resultMap="dataList">
 	<![CDATA[
+
     SELECT /* selectAreaTogatherVisitAreaList */
            ROWNUM SEQ
          , BASE_DT
@@ -510,8 +647,9 @@
            )
      WHERE 1 = 1
        AND ROWNUM <= 10
-    ]]>
+
+        ]]>
 	</select>
-	
-	
+
+
 </mapper>

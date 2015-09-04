@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.ldap.core.LdapTemplate;
@@ -23,12 +22,12 @@ import kr.co.skplanet.aquamarine.config.db.impl.DataSourceConfig4PTGT;
 @Configuration
 @Import({ DataSourceConfig4PTGT.class })
 @PropertySource({ "classpath:/application.properties", "classpath:/server-side-dependencies.properties" })
-@ComponentScan(basePackages = { "kr.co.skplanet.aquamarine" })
+@ComponentScan(basePackages = { "kr.co.skplanet.aquamarine.persistence", "kr.co.skplanet.aquamarine.service" })
 @EnableTransactionManagement
 public class RootContextConfig {
 
-//	@Autowired
-//	private Environment env;
+	// @Autowired
+	// private Environment env;
 
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
@@ -36,11 +35,10 @@ public class RootContextConfig {
 	}
 
 	@Bean
-	@Lazy
-	public LdapTemplate ldapTemplate(@Value("${ldap.url}") final String url,
-									 @Value("${ldap.base}") final String base,
-									 @Value("${ldap.user.dn}") final String userDn,
-									 @Value("${ldap.password}") final String password) {
+	public LdapContextSource ldapContextSource(@Value("${ldap.url}") final String url,
+											   @Value("${ldap.base}") final String base,
+											   @Value("${ldap.user.dn}") final String userDn,
+											   @Value("${ldap.password}") final String password) {
 
 		LdapContextSource ldapContextSource = new LdapContextSource();
 
@@ -48,6 +46,14 @@ public class RootContextConfig {
 		ldapContextSource.setBase(base);
 		ldapContextSource.setUserDn(userDn);
 		ldapContextSource.setPassword(password);
+
+		return ldapContextSource;
+
+	}
+
+	@Bean
+	// @Lazy
+	public LdapTemplate ldapTemplate(final LdapContextSource ldapContextSource) {
 
 		LdapTemplate template = new LdapTemplate(ldapContextSource);
 

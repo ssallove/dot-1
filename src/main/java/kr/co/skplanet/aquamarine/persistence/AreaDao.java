@@ -23,16 +23,42 @@ public class AreaDao extends AbstractDao4PTGT {
     	
     	return getSqlSession().selectList("Area.selectAreaMosuList", param);
     	
-    } 
-    
-    
-    
+    }
+
+    public List<AreaVO> selectAreaNodeList(Map<String, Object> p) {
+
+        Map<String, Object> param = new HashMap<String, Object>();
+
+        param.put("mainAcvtAdmDongCd", p.get("mainAcvtAdmDongCd"));
+        param.put("mainAdmDongCdCnt", p.get("mainAdmDongCdCnt"));
+        param.put("crossAdmDongCdCnt", p.get("crossAdmDongCdCnt"));
+
+        return getSqlSession().selectList("Area.selectAreaNodeList", param);
+
+    }
+
+    public List<AreaVO> selectAreaLinkList(Map<String, Object> p) {
+
+        Map<String, Object> param = new HashMap<String, Object>();
+
+        param.put("mainAcvtAdmDongCd", p.get("mainAcvtAdmDongCd"));
+        param.put("mainAdmDongCdCnt", p.get("mainAdmDongCdCnt"));
+        param.put("crossAdmDongCdCnt", p.get("crossAdmDongCdCnt"));
+
+        return getSqlSession().selectList("Area.selectAreaLinkList", param);
+
+    }
+
+
+
     public List<AreaVO> selectAreaArPocList(Map<String, Object> p) {
         
         Map<String, Object> param = new HashMap<String, Object>();
         
         param.put("mainAcvtAdmDongCd", p.get("mainAcvtAdmDongCd"));
-        
+        param.put("mainAdmDongCdCnt", p.get("mainAdmDongCdCnt"));
+        param.put("crossAdmDongCdCnt", p.get("crossAdmDongCdCnt"));
+
         return getSqlSession().selectList("Area.selectAreaArPocList", param);
         
     } 

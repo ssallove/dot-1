@@ -94,7 +94,7 @@
                             <div class="rankingLy">
                                 <p class="icon"></p>
 
-                                <div class="inBox">
+                                <div class="inBox inBoxBg">
                                     <h3>업종 순위 (소분류)</h3>
                                     <ul id="rankGrid"></ul>
                                 </div>
@@ -102,15 +102,16 @@
                         </div>
                         <!--//업종 순위-->
                         <!--함께 방문하는 지역 -->
-                        <div class="floatR mt80 regionLy" style="width: 65% !important">
-                            <p class="tit">함께 방문하는 지역</p>
+                        <div class="floatR mt80 regionLy2" style="width: 65% !important">
 
+                            <p class="tit">함께 방문하는 지역</p>
                             <p class="btnSp">
-                                <button class="button" type="button" data-toggle="modal" data-target="#myModa2">확대보기
+                                <button class="button" type="button" data-toggle="modal" id="chart6_popup" data-target="#myModa2">확대보기
                                 </button>
                             </p>
-                            <div class="inBox">
-                                <div id="chart4" style="width:100%; height: 390px;"></div>
+
+                            <div class="inBox2">
+                                <div id="chart4" style="width:100%; height: 480px;"></div>
                             </div>
                         </div>
                         <!--//함께 방문하는 지역 -->
@@ -162,11 +163,9 @@
                                 <col width="25%">
                                 <col width="25%">
                                 <col width="25%">
-                                <col width="25%">
                             </colgroup>
                             <thead>
                             <tr>
-                                <th>&nbsp;</th>
                                 <th>현황지역</th>
                                 <th>모수</th>
                                 <th>PUSH 동의</th>
@@ -256,8 +255,7 @@
                      <div class="floatR regionLy" style="width:65% !important">
                      	<p class="tit">함께 방문하는 지역</p>
                         <div class="inBox">
-                        	챠트 영역
-                            <div id="chart5" style="width:100%; height: 390px;"></div>
+                            <div id="chart5"  style="width:760px !important; height:370px;"></div>
                         </div>
                      </div>
                      <!--//함께 방문하는 지역 -->
@@ -295,58 +293,56 @@
                             <col width="220px">
                              <col width="50px">
                             <col width="220px">
-                             <col width="50px">
-                            <col width="*">
                         </colgroup>
     					<tbody>
         					<tr>
-        					    <th>시</th>
+        					    <th>소스 행정동 갯수</th>
         					    <td>
-                                	<select  name="size" id="sel_si" title="시선택" style="width:160px">
-                                        <option value="00">전체</option>
-                                        <option value="11">서울특별시</option>
-                                        <option value="26">부산광역시</option>
-                                        <option value="27">대구광역시</option>
-                                        <option value="28">인천광역시</option>
-                                        <option value="29">광주광역시</option>
-                                        <option value="30">대전광역시</option>
-                                        <option value="31">울산광역시</option>
-                                        <option value="36">세종특별자치시</option>
-                                        <option value="41">경기도</option>
-                                        <option value="42">강원도</option>
-                                        <option value="43">충청북도</option>
-                                        <option value="44">충청남도</option>
-                                        <option value="45">전라북도</option>
-                                        <option value="46">전라남도</option>
-                                        <option value="47">경상북도</option>
-                                        <option value="48">경상남도</option>
-                                        <option value="50">제주특별자치도</option>
+                                	<select  name="size" id="mainAdmDongCdCnt" title="main 행정동 " style="width:160px">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                        <option value="20">20</option>
 							    	</select>
-                                  </td>
-                                     <th>구</th>
+                                </td>
+                                <th>타켓 행정동 갯수</th>
         					    <td>
-                                    <select  style="width:150px"  name="size" id="sel_gu" disabled="disabled" title="구선택">
-                                 		<option value="">구</option>
-							    	</select>
-                                    </td>
-                                     <th>동</th>
-        					    <td>
-                                    <select style="width:150px" name="size" id="sel_dong" disabled="disabled" title="동선택">
-                                 		<option value="">동</option>
+                                    <select  style="width:150px"  name="size" id="crossAdmDongCdCnt" title="cross 행정동 ">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                        <option value="20">20</option>
 							    	</select>
                                 </td>
         					</tr>
        					</tbody>
 					</table>
                     <!--Btn_search-->
+
                     <p class="btnSrc_sm_modal"><button  name="btnSearch" id="btnSearch" type="button">검색버튼</button></p>
                      <!--//Btn_search-->
 				</div>
                 <!--//Search-->
-                <div class=" modalChartLy">
-                    <p class="chartIcon">챠트 확대 축소<br>아이콘 영역</p>
-                    <div id="chart6" style="width:1024px !important; height:500px;"></div>
+                <div class="layoutLR modalChartLy">
+
+                    <div class="floatL" style="width:80%">
+                        <div id="chart6"  style="width:100%; height:500px;"></div>
+                    </div>
+
+                    <div class="floatR" style="width:19%">
+                        <div class="chartIcon">
+                            <button class="plus" id="maxButton"><i class="fa fa-plus"></i></button>
+                            <button class="minus" id="minButton"><i class="fa fa-minus"></i></button>
+                            <p class="line">
+                                <button class="line1" id="thinethickLine"><i class="fa fa-plus"></i></button>
+                                <button class="line2" id="thineLine"><i class="fa fa-plus"></i></button>
+                                <button class="line3" id="thickLine"><i class="fa fa-plus"></i></button>
+                            </p>
+                        </div>
+                    </div>
+
                 </div>
+
             </div>
         </div>
     </div>
@@ -356,18 +352,49 @@
 
     </tiles:putAttribute>
     <tiles:putAttribute name="javascript.footer">
-        <%-- <link href="<c:url value="/resources/vis/vis.css"/>" rel="stylesheet">
-        <script type="text/javascript" src="<c:url value=" /resources/vis/vis.js "/>"></script> --%>
-        <%-- <script type="text/javascript" src="<c:url value=" /resources/echart/echarts.js "/>"></script> --%>
+
         <script src="<c:url value=" /resources/geo/geo.js "/>"></script>
-        <!--modal Tab-->
+
         <script type="text/javascript" src="<c:url value=" /resources/bootstrap/js/jasny-bootstrap.js "/>"></script>
 
         <script type="text/javascript">
+
+            var City = (function(){
+                return {
+                    cd : "",
+                    name : "",
+                    data : {}
+                }
+            })();
+
+            var Network = (function(){
+                return {
+                    option : {},
+                    mainAdmDongCdCnt : 10,
+                    crossAdmDongCdCnt : 5,
+                    height : 0,
+                    width : 0,
+                    MAIN_CHART_ID_NM : "chart4", // 메인 차트
+                    DONG_CHART_ID_NM : "chart5", // 동 차트
+                    MAX_CHART_ID_NM : "chart6", // 확대 /축소 차트
+                    NODE_COLOR : "",
+                    NODE_BORDER_COLOR : "",
+                    LINE_COLOR : ""
+                }
+            })();
+
             $(document).ready(function () {
-            	var chartWidth = (($(document).width() - 240)/100*98/3)-40;    // screen.availWidth
-                $('#chartDong1').width(chartWidth);    $('#chartDong2').width(chartWidth); $('#chartDong3').width(chartWidth);
-                
+
+                var chartWidth = (($(document).width() - 240)/100*98/3)-40;    // screen.availWidth
+
+                $('#chartDong1').width(chartWidth);
+                $('#chartDong2').width(chartWidth);
+                $('#chartDong3').width(chartWidth);
+                $('#chart6').width('1502');
+
+                $("#mainAdmDongCdCnt").selectBox("value", "10");
+                $("#crossAdmDongCdCnt").selectBox("value", "5");
+
             	callAjaxMainActivityArea("", "", "getCallBack");
 
                 $("#clickKoreaMap").click(function () {
@@ -375,9 +402,163 @@
                 });
                 
             });
-            
-            function _getNetworkChartOption(dataList) {
-                
+
+            $('#chart6_popup').click(function(){
+
+                if(City.cd.length != 8) {
+                    Network.mainAdmDongCdCnt = 10; // main 행정동 갯수
+                    Network.crossAdmDongCdCnt = 5;
+                    callAjaxMainActivityArea(City.name, City.cd, getNetworkChartPopup);
+                }
+
+            });
+
+            $('#thineLine').click(function(){
+
+                if(City.cd.length != 8) {
+
+                    var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
+
+                    $.each(Network.option.series[0].links, function(idx, data) {
+                        if (data.itemStyle.normal.width === 3) {
+                            data.itemStyle.normal.color = '#f8f8f8';
+                        } else {
+                            data.itemStyle.normal.color = Network.LINE_COLOR;
+                        }
+                    });
+
+                    myChart.setOption(Network.option);
+                    myChart.refresh();
+
+                    getNetworkChartClickEvent(myChart);
+
+                }
+
+            });
+
+            $('#thickLine').click(function(){
+
+                if(City.cd.length != 8) {
+
+                    var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
+
+                    $.each(Network.option.series[0].links, function(idx, data) {
+                        if (data.itemStyle.normal.width === 1.5) {
+                            data.itemStyle.normal.color = '#f8f8f8';
+                        } else {
+                            data.itemStyle.normal.color = Network.LINE_COLOR;
+                        }
+                    });
+
+                    myChart.setOption(Network.option);
+                    myChart.refresh();
+
+                    getNetworkChartClickEvent(myChart);
+
+                }
+
+            });
+
+            $('#thinethickLine').click(function(){
+
+                if(City.cd.length != 8) {
+
+                    var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
+
+                    $.each(Network.option.series[0].links, function(idx, data){
+                        data.itemStyle.normal.color = Network.LINE_COLOR;
+                    });
+
+                    myChart.setOption(Network.option);
+                    myChart.refresh();
+
+                    getNetworkChartClickEvent(myChart);
+
+                }
+
+            });
+
+            $('#minButton').click(function(){
+
+                if(City.cd.length != 8) {
+
+                    Network.option.series[0].scaling = Number(Network.option.series[0].scaling) - 0.3;
+                    Network.option.series[0].gravity = Number(Network.option.series[0].gravity) - 1;
+
+                    if(Network.option.series[0].scaling < 3) {
+                        Network.option.series[0].scaling = 3.1;
+                    }
+
+                    if(Network.option.series[0].gravity < 4){
+                        Network.option.series[0].gravity = 4.1;
+                    }
+
+                    var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
+                    myChart.setOption(Network.option);
+                    myChart.refresh();
+
+                    var height = $('#' + Network.MAX_CHART_ID_NM).height();
+                    height = height - 100;
+                    if(height < 500) {
+                        height = 500;
+                    }
+
+                    $('#modalChartLy').height(height); //  차트 박스 테두리
+                    $('#' + Network.MAX_CHART_ID_NM).height(height);
+
+                    var canvas = $('canvas');
+                    canvas.attr('z-index', 100);
+                    canvas.attr('margin', 0);
+                    canvas.attr('padding', 0);
+
+                    getNetworkChartClickEvent(myChart);
+
+                }
+
+            });
+
+            $('#maxButton').click(function(){
+
+                if(City.cd.length != 8) {
+
+                    Network.option.series[0].scaling = Number(Network.option.series[0].scaling) + 0.3;
+                    Network.option.series[0].gravity = Number(Network.option.series[0].gravity) + 1;
+
+                    var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
+                    myChart.setOption(Network.option);
+                    myChart.refresh();
+
+                    var height = $('#' + Network.MAX_CHART_ID_NM).height();
+                    height = height + 100;
+                    $('#modalChartLy').height(height); //  차트 박스 테두리
+                    $('#' + Network.MAX_CHART_ID_NM).height(height);
+
+                    var canvas = $('canvas');
+                    canvas.attr('z-index', 100);
+                    canvas.attr('margin', 0);
+                    canvas.attr('padding', 0);
+
+                    getNetworkChartClickEvent(myChart);
+
+                }
+
+            });
+
+            $('#btnSearch').click(function(){
+
+                if(City.cd.length != 8) {
+
+                    Network.mainAdmDongCdCnt = $('#mainAdmDongCdCnt option:selected').val(); // main 행정동 갯수
+                    Network.crossAdmDongCdCnt = $('#crossAdmDongCdCnt option:selected').val(); // cross 행정동 갯수
+
+                    callAjaxMainActivityArea(City.name, City.cd, "getCallBack");
+
+                }
+
+            });
+
+            function _getNetworkChartOption(dataNodeList, dataLinkList) {
+
                 var nodeList = [];
                 var linkList = [];
                 var categoriesList = [];
@@ -386,115 +567,173 @@
                 // category[1] : 상위지역
                 var cityName = $("#chart2ParentTitle").text();
                 var subCityName = $("#chart2SubTitle").text();
-                categoriesList[0] = {name: '삼성1동'};
+
+                Network.NODE_COLOR = '#49cdf4';
+                Network.NODE_BORDER_COLOR = '#2c9ae9';
+                Network.LINE_COLOR = '#2353a3';
+
+                categoriesList[0] = {name: ''};
                 categoriesList[1] = {name: ''};
 
-                for(var i=0; i<dataList.length; i++) {
+                var confidenceSum = 0.0;
+                for(var i=0; i<dataLinkList.length; i++){
+                    confidenceSum += Number(dataLinkList[i].confidence);
+                }
 
-                    if(dataList[i].mainAdmDong == categoriesList[0].name) {
+                var confidenceAve = confidenceSum / dataLinkList.length;
+
+                $.each(dataNodeList, function(idx, data){
+
+                    if(data.dongNm === categoriesList[0].name) {
                         categoryIdx = 0;
                     } else {
                         categoryIdx = 1;
                     }
 
-                    nodeList[i] = {
+                    nodeList[idx] = {
+
                         category: categoryIdx,
-                        name: dataList[i].mainAdmDong,
-                        value: dataList[i].mainMbrCnt,
-                        label: dataList[i].mainAdmDong,
-                        draggable: (categoryIdx === 0) ? true : false ,
+                        name: data.dongNm,
+                        value: data.mbrCnt,
+                        label: data.dongNm,
                         itemStyle: {
                             normal: {
                                 label: {
                                     position: 'right',
                                     textStyle: {
-                                        color: 'black'
+                                        color: 'black',
+                                        fontSize: 14
                                     }
-                                }
-                                /*color: 'rgba(252,206,16,1)'*/
+                                },
+//                                color: '#ff9000'
+                                color: '#49cdf4' // #49cdf4, #ff4f84
                             }
                         }
                     }
 
-                    linkList[i] = {
-                        source: dataList[i].mainAdmDong,
-                        target: dataList[i].crossAdmDong,
-                        weight: 1,
-                        name: dataList[i].mainAdmDong,
+                });
+
+                $.each(dataLinkList, function(idx, data){
+
+                    linkList[idx] = {
+                        source: data.srcDongNm,
+                        target: data.tgtDongNm,
+                        weight: data.weight,
+                        name: data.srcDongNm,
                         itemStyle: {
                             normal: {
-                                width: (Number(dataList[i].confidence) * 10),
-                                color: (i % 2 === 0) ? GV_GENDER_COLOR.male(1) : GV_GENDER_COLOR.female(1),
-                                type: (i===0) ? 'line' : 'curve'
+                                width: (confidenceAve < Number(data.confidence) ) ? 3 : 1.5,
+                                color: Network.LINE_COLOR
                             }
                         }
                     }
 
-                }
+                });
 
                 var option = {
                         tooltip: {
                             trigger: 'item',
                             formatter: '{b}'
                         },
-                        /*legend: {
-                            x: 'left',
-                            data: [
-                                categoriesList[0].name, categoriesList[1].name
-                            ]
-                        },*/
                         series: [
                             {
                                 type: 'force',
-                                ribbonType: true,
                                 categories: categoriesList,
                                 linkSymbol: 'arrow',
-                                width: '100%',
                                 itemStyle: {
                                     normal: {
                                         label: {
                                             show: true,
                                             textStyle: {
-                                                color: '#333'
+                                                color: '#333',
+                                                fontSize: 14
                                             },
                                             position: 'right'
                                         },
                                         nodeStyle: {
                                             brushType: 'both',
-                                            borderColor: 'rgba(255,215,0,0.4)',
-                                            borderWidth: 10
-                                        },
-                                        lineStyle : {
-                                            type: 'curve'
+                                            borderColor: '#cbeffa', // #2c9ae9, #db0948
+                                            borderWidth: 8
                                         }
                                     }
                                 },
-                                useWorker: true,
                                 minRadius: 10, // 노드 최소 크기
-                                maxRadius: 25, // 노드 최대 크기
-                                gravity: 2,
-                                scaling: 2, // 노드 간격
-                                roam: 'scale', // scale, move
-                                steps: 10,
-                                coolDown: 0.9,
+                                maxRadius: 30, // 노드 최대 크기
+                                gravity: 3.0,
+                                scaling: 2.5,
+//                                large: true,
+                                roam: 'move', // scale, move
                                 nodes: nodeList,
                                 links: linkList
                             }
                         ]
                     };
-                
+
+                Network.option = option;
+
                 return option;
             }
-            
-            
-            
-            function getNetworkChart(chartName, dataList) {
-                var myChart = echarts.init(document.getElementById(chartName));
-                myChart.setTheme(GV_CHART_THEME);
-                myChart.setOption(_getNetworkChartOption(dataList));
+
+            function getNetworkChartClickEvent(myChart) {
+
+                var ecConfig = echarts.config;
+
+                function focus(param) {
+
+                    $.each(Network.option.series[0].nodes, function(idx, data){
+
+                        if(data.name == param.name){
+
+                            data.itemStyle.normal.color = '#ff4f84';
+                            data.itemStyle.normal.label.textStyle.color = '#db0948';
+                            data.itemStyle.normal.label.textStyle.fontSize = 30;
+                            data.itemStyle.normal.label.textStyle.fontWeight = 'bold';
+
+                        }else{
+
+                            data.itemStyle.normal.color = Network.NODE_COLOR;
+                            data.itemStyle.normal.label.textStyle.color = 'black';
+                            data.itemStyle.normal.label.textStyle.fontSize = 14;
+                            data.itemStyle.normal.label.textStyle.fontWeight = 'normal';
+                            data.itemStyle.normal.label.textStyle.fontStyle = 'normal';
+
+                        }
+
+                    });
+
+                    myChart.setOption(Network.option);
+
+                    myChart.refresh();
+
+                }
+
+                myChart.on(ecConfig.EVENT.DBLCLICK, focus);
             }
 
+            function getNetworkChartPopup(data, cityName, cityCd) {
 
+                var height = 500;
+
+                $('#modalChartLy').height(height); //  차트 박스 테두리
+                $('#' + Network.MAX_CHART_ID_NM).height(height);
+
+                $("#mainAdmDongCdCnt").selectBox("value", "10");
+                $("#crossAdmDongCdCnt").selectBox("value", "5");
+
+                getNetworkChart("chart6", data.arPocNetworkNodeList, data.arPocNetworkLinkList); // 확대/축소 팝업 네트워크 차트
+
+            }
+
+            function getNetworkChart(chartName, dataNodeList, dataLinkList) {
+
+                var myChart = echarts.init(document.getElementById(chartName));
+                myChart.setTheme(GV_CHART_THEME);
+                myChart.setOption(_getNetworkChartOption(dataNodeList, dataLinkList));
+
+                if(City.cd.length != 8)
+                    getNetworkChartClickEvent(myChart);
+
+            }
 
             function openDongView(cityName, cityCd){
 				callAjaxMainActivityArea(cityName, cityCd, function(data, cityName, cityCd ){
@@ -519,10 +758,15 @@
 					GV_CITY_NM = cityName;
 					getSexAgePieChart('chartDong2', 'chartDong3', data.sexBarList, data.ageBarList);
 					getSexAgeBarChart('chartDong1', data.sexAgeBarList);
+                    getNetworkChart("chart5", data.arPocNetworkNodeList, data.arPocNetworkLinkList); // 동 팝업 네트워크 차트
 				});
 			}
-			
+
             function callAjaxMainActivityArea(cityName, cityCd, callbackFun) {
+
+                City.name = cityName;
+                City.cd = cityCd;
+
                 if ((cityName != null && cityName != '') && (cityCd == null || cityCd == 'undefined' || cityCd == '')) {
                     if (chartDataList != null && chartDataList.length != 0) {
                         var selectedData = chartDataList.getDataByKey("mainAcvtDongNm", cityName);
@@ -531,16 +775,20 @@
                         }
                     }
                 }
-                
+
                 $.ajax({
                     url: "/mainMosuList.do",
                     type: "POST",
                     dataType: "json",
                     data: {
                         "cityName": cityName,
-                        "cityCd": cityCd
+                        "cityCd": cityCd,
+                        "mainAdmDongCdCnt" : Network.mainAdmDongCdCnt,
+                        "crossAdmDongCdCnt" : Network.crossAdmDongCdCnt
                     },
                     success: function (data) {
+
+                        City.data = data;
                       
                         // callback
                         if (callbackFun != null && callbackFun != 'undefined' && callbackFun != '') {
@@ -575,10 +823,10 @@
                     getSexAgePieChart('chart1', 'chart2', data.sexBarList, data.ageBarList);
                     getSexAgeBarChart('chart3', data.sexAgeBarList);
                     getRankTable(data.rankTableList);
-                    getTogatherAreaTable(data.TogatherAreaTableList);
-                    getNetworkChart("chart4", data.arPocNetworkList);
-                    getNetworkChart("chart5", data.arPocNetworkList); // 동 팝업 네트워크 차트
-                    getNetworkChart("chart6", data.arPocNetworkList); // 확대/축소 팝업 네트워크 차트
+
+                    getNetworkChart("chart4", data.arPocNetworkNodeList, data.arPocNetworkLinkList);
+                    getNetworkChart("chart5", data.arPocNetworkNodeList, data.arPocNetworkLinkList); // 동 팝업 네트워크 차트
+                    getNetworkChart("chart6", data.arPocNetworkNodeList, data.arPocNetworkLinkList); // 확대/축소 팝업 네트워크 차트
                 }
 
                 if (cityName == "") {
@@ -586,7 +834,6 @@
                 }
 
             }
-
 
             // 지역별 모수 현황
             function getAreaMosuTable(list) {
@@ -631,13 +878,6 @@
                 $("#rankGrid").empty();
                 $("#rankGrid").append(contentTxt);
             }
-
-            // 함께 방문하는 지역
-            function getTogatherAreaTable(list) {
-
-            }
-
-
             /**
              * ##############  지역별 모수 현황 차트 START  ##############
              */
@@ -652,7 +892,10 @@
                     $('#chartContainer').height('700px');
                 } else if (dataSize > 15) {
                     $('#chartContainer').height('600px');
-                } else {
+                } else if  (dataSize > 40) {
+                    $('#chartContainer').height('900px');
+                }
+                else {
                     $('#chartContainer').height('500px');
                 }
 
@@ -675,7 +918,6 @@
                     }
                 });
             }
-
 
             // Chart의 Option 정보
             function _getAreaMosuStackOption(dataList) {
@@ -844,6 +1086,7 @@
                      '5099' : '50세 이상',
                      'ZZZZ' : '기타(연령)'
                  }
+
             function getSexAgePieChart(allChartId, chartId, sexList, ageList) {
             	var isMain = allChartId.indexOf('Dong') < 0;
                 var datas = _getSexAgePieChartData(isMain, sexList, ageList);
@@ -974,7 +1217,8 @@
                 var option = {
                 	grid : {}, 
                     tooltip: {
-                        trigger: 'axis'
+                        trigger: 'axis',
+                        axisPointer : { type : 'shadow' }
                     },
                     calculable: true,
                     legend: {

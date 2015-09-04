@@ -20,6 +20,7 @@
 		<typeAlias alias="CateVO" type="kr.co.skplanet.aquamarine.model.CateVO" />
 		<typeAlias alias="AreaVO" type="kr.co.skplanet.aquamarine.model.AreaVO" />
 		<typeAlias alias="CommCodeVO" type="kr.co.skplanet.aquamarine.model.CommCodeVO" />
+		<typeAlias alias="CamelizedKeyMap" type="kr.co.skplanet.aquamarine.model.CamelizedKeyMap" />
 	</typeAliases>
 
 	<mappers>

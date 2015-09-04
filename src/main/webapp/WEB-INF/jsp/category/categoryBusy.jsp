@@ -227,14 +227,14 @@
                 yAxis : [
                     {
                         type : 'value',
-                        splitNumber: 4,
                         scale: true
-                        //, max:9803932
                     }
                 ],
                 series : getChartData()    // Chart Data
             };
             
+            
+            //console.dir(JSON.stringify(option));
             return option;
         }
         
@@ -252,7 +252,7 @@
             $.each(serviceMap, function(svcCd, value){ chartData.push( _getChartData(svcCd, chartList));        });
             function _getChartData(svcCd, chartList){
                 var chartData = $.grep(chartList, function(value, idx){    return value.svcCd == svcCd;    });
-                var maxVal = ($.map(chartData, function(value, idx){ return value.mbrCnt; } )).max();
+                //var maxVal = ($.map(chartData, function(value, idx){ return value.mbrCnt; } )).max();
                 var data = []; $.each(chartData, function(idx, value){ var mbrCnt = value.mbrCnt; data.push([value.cnctCtgNm, mbrCnt, mbrCnt, value.bleMbrCnt, value.locMbrCnt, value.pushMbrCnt]);  } );
                 return {name:serviceMap[svcCd],    type:'scatter', data:data, symbolSize: function (value){    var size = 40*(value[2]/_CHART_MAX_VAL)+4;      return size;                    } };
             }

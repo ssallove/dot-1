@@ -38,7 +38,7 @@
 }
 
 	.showcase-content-container
-	{background:#fff; border:#678cc4 solid 3px; border-radius:10px;   height:450px;   position: relative;}
+	{background:#fff; /*border:#678cc4 solid 1px;*/ border-radius:10px;   height:450px;   position: relative;}
 	
 	/* Navigation arrows */
 	/*.showcase-arrow-previous
@@ -198,7 +198,7 @@
 		
 		.showcase-thumbnail:hover
 		{
-			border: solid 1px #999;
+			/*border: solid 1px #999;*/
 		}
 		
 			.showcase-thumbnail:hover .showcase-thumbnail-cover
@@ -208,7 +208,7 @@
 		
 		.showcase-thumbnail.active
 		{
-			border: solid 1px #999;
+			/*border: solid 1px #999;*/
 		}
 		
 			.showcase-thumbnail.active .showcase-thumbnail-cover
@@ -319,7 +319,7 @@
 
 
 /* */
-.overlay {
+.overlay{
 	position: absolute;
 	top: 0;
 	bottom: -1px;
@@ -329,9 +329,10 @@
 	overflow: hidden;
 	opacity: 0;
 	filter: alpha(opacity=0);
+
 	
 }
-.overlay:hover { background:#E2F0F5/* url(../images/DOTLogo2.png) 50% 50% no-repeat*/; opacity:0.6;  filter: alpha(opacity:'60'); display:block; cursor:pointer; }
+.overlay:hover { background:#fff/* url(../images/DOTLogo2.png) 50% 50% no-repeat*/; opacity:0.6;  filter: alpha(opacity:'60'); display:block; cursor:pointer; transform :scale(1); -webkit-transform::scale(1);  transition:all 0.4s ease-in-out}
 .overlay a {
 	display: inline-block;
 	width: 50px;
@@ -401,10 +402,24 @@ a.overlay i {
 	font-size: 40px;
 	color: #fff;
 	text-align: center;
-	color:##e84c3d;
+	color:#fff;
 	padding-top:12px;
 	
 }
+.imgBox a.overlay i {
+	position: absolute;
+	left:40%;
+	top: 40%;
+	color: #000;
+	text-align: center;
+	color:#000;
+	 background-color:transparent;
+	 vertical-align:top
+	
+}
+
+
+
 a.overlay.small i {
 	font-size: 50px;
 	line-height: 1;

@@ -205,6 +205,15 @@ Array.prototype.min = function() {
 	return Math.min.apply(null, this);
 };
 
+Array.prototype.sum = function() {
+	var sum = 0;
+	for(var i=0; i<this.length; i++){
+		if(typeof(this[i]) != 'number') return null;
+		sum+=this[i];
+	}
+	return sum;
+};
+
 Array.prototype.getDataByKey = function(key, value) {
 	for (var i = 0; i < this.length; i++) {
 		if(eval('this['+i+'].'+key) == value){	return this[i];	}

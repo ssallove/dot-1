@@ -21,16 +21,16 @@
 	
 	Map<String, String> unionDescMap = new HashMap<String, String>();
 	unionDescMap.put("01", "Syrup ∪ OCB");
-	unionDescMap.put("02", "Syrup ∪ OCB ∪ T map");
+	unionDescMap.put("02", "Syrup ∪ OCB ∪ T-Map");
 	unionDescMap.put("03", "Syrup ∪ OCB ∪ 11번가");
-	unionDescMap.put("04", "Syrup ∪ OCB ∪ T map ∪ 11번가");
+	unionDescMap.put("04", "Syrup ∪ OCB ∪ T-Map ∪ 11번가");
 	pageContext.setAttribute("unionDescMap" , unionDescMap);
 	
 	Map<String, String> intersectDescMap = new HashMap<String, String>();
 	intersectDescMap.put("01", "Syrup ∩ OCB");
-	intersectDescMap.put("02", "Syrup ∩ OCB ∩ T map");
+	intersectDescMap.put("02", "Syrup ∩ OCB ∩ T-Map");
 	intersectDescMap.put("03", "Syrup ∩ OCB ∩ 11번가");
-	intersectDescMap.put("04", "Syrup ∩ OCB ∩ T map ∩ 11번가");
+	intersectDescMap.put("04", "Syrup ∩ OCB ∩ T-Map ∩ 11번가");
 	pageContext.setAttribute("intersectDescMap" , intersectDescMap);
 	
 	ObjectMapper jsonMapper = new ObjectMapper();
@@ -39,33 +39,6 @@
 %><tiles:insertDefinition name="header.layout">
 
 	<tiles:putAttribute name="content">
-	
-		<style>
-/* 	 
-			.node rect {
-			  cursor: move;
-			  fill-opacity: .9;
-			  shape-rendering: crispEdges;
-			}
-			 
-			.node text {
-			  pointer-events: none;
-			  text-shadow: 0 1px 0 #fff;
-			}
-			 
-			.link {
-			  fill: none;
-			  stroke: #000;
-			  stroke-opacity: .2;
-			}
-			 
-			.link:hover {
-			  stroke-opacity: .5;
-			}
-		  */
-		</style>
-
-
 
 
 <!-- main-container -->
@@ -88,8 +61,8 @@
                 <!---서비스별 동의 현황--> 
                 <h2>서비스별 동의 현황</h2>
                 <!--Tab Layout-->
-                <div class="tab_content inTabLy ">
-                	<p class="btSpace"><button class="view" type="button" data-toggle="modal" data-target="#myModal">서비스 조합별 교차 고객 현황</button></p>
+                <div class="tab_content inTabLy inTabLyTR">
+                <p class="btSpace_Gspc"><button class="view" type="button" data-toggle="modal" data-target="#myModal">서비스 조합별 교차 고객 현황</button></p>
                 	<!--TAB-->
 					<ul class="tabSty">
       					<li class=" active"><a href="#tab1Chart"  data-toggle="tab"><p class="ico"></p>Chart</span></a></li>
@@ -110,23 +83,34 @@
                                 <button type="button" class="chartBt" data-stats-level="3">MAU</button>
                             </p>
                             <!--//버튼영역-->
-						
-						    <div class="layoutLR"> 
-						        <!-- 왼쪽 챠트영역-->
-						        <li class="floatL in_pane" style="width:60%;" id="tabChartL">
-						        	<%--
-						        	<div class="tab_pane2 active" style="width:100%;height:500px;" id="tabChartL"></div>
-						        	--%>
+
+							<ul class="in_pane wdh100" style="display:table;">
+								<li style="display:table-cell;">
+									<div class="in_pane3" id="paramBySvcBarChart" style="border-color:#fff;padding:20px 0 0;"></div>
 								</li>
-						        
-						        <!--오른쪽  챠트영역-->
-						        <li class="floatR in_pane" style="width:39%;" id="tabChartR">
-						            <!-- <ul>
-						                <li class="floatL in_pane2 wdh100 " >오른쪽 위 챠트 영역</li>
-						                <li  class="floatL in_pane2 wdh100 mt10 ">오른쪽 아래 챠트 영역</li>
-						            </ul> -->
-						        </li>
-						    </div>
+								<c:if test="${ type == 'cross' }">
+								<li style="display:table-cell;width:30%;vertical-align:top;">
+									<div class="in_pane3" style="margin-left:15px;width:auto;">
+										<div id="intersectBySvcBarChart" style="height:290px;"></div>
+										<div class="chartexpLy">
+											<p class="box">
+												<strong><img src="<c:url value="/resources/images/ci_sm_tmap.png"/>" width="90" height="46" alt="T-Map" /></strong><span class="intersectBySvcCount" data-bm="tma"></span>
+											</p>
+											<p class="box">
+												<strong><img src="<c:url value="/resources/images/ci_sm_tstore.png"/>" width="90" height="46" alt="T-Store" /></strong><span class="intersectBySvcCount" data-bm="tst"></span>
+											</p>
+											<p class="box">
+												<strong><img src="<c:url value="/resources/images/c_sm_i_11.png"/>" width="90" height="46" alt="11번가" /></strong><span class="intersectBySvcCount" data-bm="evs"></span>
+											</p>
+										</div>
+									</div>
+								</li>
+								</c:if>
+								<li style="display:table-cell;width:35%;">
+									<div class="in_pane3" style="margin-left:15px;width:auto;" id="paramBySegPieChart"></div>
+								</li>
+							</ul>
+
 						</div>
 						<!--//TAB Chart 1-->
 <!-- 
@@ -145,10 +129,12 @@
                         <!--TAB Table-->
                         <div  class="tab_pane2" id="tab1Table" >
                         	<!--필수 동의 Table-->
-                        	<p class="expTb mt20">※ Active 고객수 -> 앱활동성 3개월, MAU -> 앱활동성 1개월, Active 고객은 OCB, Syrup, T map </p>
+                        	<p class="expTb mt20">※ Active 고객수 -> 앱활동성 3개월, MAU -> 앱활동성 1개월, Active 고객은 OCB, Syrup, T-Map </p>
                         	<table class="listTB tStriped ">
                             	<colgroup>
                                 	<col width="*">
+                                	<c:choose>
+                                	<c:when test="${ type == 'essential' }">
                          			<col width="10%">
                                 	<col width="12%">
                                 	<col width="12%">
@@ -157,6 +143,15 @@
                                 	<col width="12%">
                                 	<col width="12%">
                                 	<col width="12%">
+                                	</c:when>
+                                	<c:when test="${ type == 'cross' }">
+                         			<col width="16%">
+                                	<col width="20%">
+                                	<col width="20%">
+                                	<col width="20%">
+                                	<col width="20%">
+                                	</c:when>
+                                	</c:choose>
                             	</colgroup>
     							<thead>
         							<tr>
@@ -166,9 +161,11 @@
             							<th>Syrup</th>
             							<th>OCB</th>
             							<th>OCB(App)</th>
-            							<th>T map</th>
+            							<c:if test="${ type == 'essential' }">
+            							<th>T-Map</th>
             							<th>11번가</th>
-            							<th>T store</th>
+            							<th>T-Store</th>
+            							</c:if>
             						</tr>
     							</thead>
                             	<tbody>
@@ -185,9 +182,11 @@
 									<td><fmt:formatNumber value="${voList.syr}"/></td>
 									<td><fmt:formatNumber value="${voList.ocb}"/></td>
 									<td><fmt:formatNumber value="${voList.oct}"/></td>
+									<c:if test="${ type == 'essential' }">
 									<td><fmt:formatNumber value="${voList.tma}"/></td>
 									<td><fmt:formatNumber value="${voList.evs}"/></td>
 									<td><fmt:formatNumber value="${voList.tst}"/></td>
+									</c:if>
 								</tr>
 							</c:forEach>
 							</c:when>
@@ -224,7 +223,7 @@
                 
                 
 				                <!-- <h2>서비스 조합별 교차 고객 현황</h2> No Modal -->
-				                <h3>합집합 현황 <span  class="floatR expTb">※ T map, 11번가는 현재기준 동의가 없음.</span></h3>
+				                <h3>합집합 현황 <span  class="floatR expTb">※ T-Map, 11번가는 현재기준 동의가 없음.</span></h3>
 				                    <!--합집합 현황-->
 									<table class="listTB tStriped ">
 				                    	<colgroup>
@@ -265,27 +264,27 @@
 				    					    </tr>
 				        				<tbody>
 				        				
-									<c:if test="${listVoUnion.size() == 0}">
+									<c:if test="${listUnionStats.size() == 0}">
 										<tr>
 											<td colspan="13" class="txtC">데이터가 없습니다.</td>
 										</tr>
 									</c:if>
 				
-									<c:forEach items="${listVoUnion}" var="voList" varStatus="status">
+									<c:forEach items="${listUnionStats}" var="item" varStatus="status">
 										<tr>
-											<td class="depth2 txtC"><c:out value="${unionDescMap[voList.crossSvcUnionCd]}" /></td>
-											<td class="total"><fmt:formatNumber value="${voList.scbMbrCntTot}"/></td>
-											<td><fmt:formatNumber value="${voList.scbMbrCntPush}"/></td>
-											<td><fmt:formatNumber value="${voList.scbMbrCntGeo}"/></td>
-											<td><fmt:formatNumber value="${voList.scbMbrCntBle}"/></td>
-											<td class="total"><fmt:formatNumber value="${voList.actvMbrCntTot}"/></td>
-											<td><fmt:formatNumber value="${voList.actvMbrCntPush}"/></td>
-											<td><fmt:formatNumber value="${voList.actvMbrCntGeo}"/></td>
-											<td><fmt:formatNumber value="${voList.actvMbrCntBle}"/></td>
-											<td class="total"><fmt:formatNumber value="${voList.mauCntTot}"/></td>
-											<td><fmt:formatNumber value="${voList.mauCntPush}"/></td>
-											<td><fmt:formatNumber value="${voList.mauCntGeo}"/></td>
-											<td><fmt:formatNumber value="${voList.mauCntBle}"/></td>
+											<td class="depth2 txtC"><c:out value="${unionDescMap[item.crossSvcUnionCd]}" /></td>
+											<td class="total"><fmt:formatNumber value="${item.scbMbrCntTot}"/></td>
+											<td><fmt:formatNumber value="${item.scbMbrCntPush}"/></td>
+											<td><fmt:formatNumber value="${item.scbMbrCntGeo}"/></td>
+											<td><fmt:formatNumber value="${item.scbMbrCntBle}"/></td>
+											<td class="total"><fmt:formatNumber value="${item.actvMbrCntTot}"/></td>
+											<td><fmt:formatNumber value="${item.actvMbrCntPush}"/></td>
+											<td><fmt:formatNumber value="${item.actvMbrCntGeo}"/></td>
+											<td><fmt:formatNumber value="${item.actvMbrCntBle}"/></td>
+											<td class="total"><fmt:formatNumber value="${item.mauCntTot}"/></td>
+											<td><fmt:formatNumber value="${item.mauCntPush}"/></td>
+											<td><fmt:formatNumber value="${item.mauCntGeo}"/></td>
+											<td><fmt:formatNumber value="${item.mauCntBle}"/></td>
 										</tr>
 									</c:forEach>
 				        				
@@ -293,7 +292,7 @@
 									</table>
 									<!--//합집합 현황-->
 				                     
-									<h3 class="mt80">교집합 현황 <span  class="floatR expTb">※ T map, 11번가는 현재기준 동의가 없음.</span></h3>
+									<h3 class="mt80">교집합 현황 <span  class="floatR expTb">※ T-Map, 11번가는 현재기준 동의가 없음.</span></h3>
 				                    <!--교집합 현황-->
 									<table class="listTB tStriped">
 				                    	<colgroup>
@@ -335,27 +334,27 @@
 				        				<tbody>
 				        				
 				        				
-				        				<c:if test="${listVoIntersect.size() == 0}">
+				        				<c:if test="${listIntersectStats.size() == 0}">
 											<tr>
 												<td colspan="13" class="txtC">데이터가 없습니다.</td>
 											</tr>
 										</c:if>
 				
-										<c:forEach items="${listVoIntersect}" var="voList" varStatus="status">
+										<c:forEach items="${listIntersectStats}" var="item" varStatus="status">
 											<tr>
-												<td class="depth2 txtC"><c:out value="${intersectDescMap[voList.crossSvcUnionCd]}" /></td>
-												<td class="total"><fmt:formatNumber value="${voList.scbMbrCntTot}"/></td>
-												<td><fmt:formatNumber value="${voList.scbMbrCntPush}"/></td>
-												<td><fmt:formatNumber value="${voList.scbMbrCntGeo}"/></td>
-												<td><fmt:formatNumber value="${voList.scbMbrCntBle}"/></td>
-												<td class="total"><fmt:formatNumber value="${voList.actvMbrCntTot}"/></td>
-												<td><fmt:formatNumber value="${voList.actvMbrCntPush}"/></td>
-												<td><fmt:formatNumber value="${voList.actvMbrCntGeo}"/></td>
-												<td><fmt:formatNumber value="${voList.actvMbrCntBle}"/></td>
-												<td class="total"><fmt:formatNumber value="${voList.mauCntTot}"/></td>
-												<td><fmt:formatNumber value="${voList.mauCntPush}"/></td>
-												<td><fmt:formatNumber value="${voList.mauCntGeo}"/></td>
-												<td><fmt:formatNumber value="${voList.mauCntBle}"/></td>
+												<td class="depth2 txtC"><c:out value="${intersectDescMap[item.crossSvcUnionCd]}" /></td>
+												<td class="total"><fmt:formatNumber value="${item.scbMbrCntTot}"/></td>
+												<td><fmt:formatNumber value="${item.scbMbrCntPush}"/></td>
+												<td><fmt:formatNumber value="${item.scbMbrCntGeo}"/></td>
+												<td><fmt:formatNumber value="${item.scbMbrCntBle}"/></td>
+												<td class="total"><fmt:formatNumber value="${item.actvMbrCntTot}"/></td>
+												<td><fmt:formatNumber value="${item.actvMbrCntPush}"/></td>
+												<td><fmt:formatNumber value="${item.actvMbrCntGeo}"/></td>
+												<td><fmt:formatNumber value="${item.actvMbrCntBle}"/></td>
+												<td class="total"><fmt:formatNumber value="${item.mauCntTot}"/></td>
+												<td><fmt:formatNumber value="${item.mauCntPush}"/></td>
+												<td><fmt:formatNumber value="${item.mauCntGeo}"/></td>
+												<td><fmt:formatNumber value="${item.mauCntBle}"/></td>
 											</tr>
 										</c:forEach>
 										
@@ -383,9 +382,11 @@
 	
 	var statsLevel = null;
 	
-	var floatingBarChart = null;
-	var nestedPieChart = null;
+	var charts = [];
 	
+	var paramBySvcBarChart = null;
+	var paramBySegPieChart = null;
+
 	<c:choose>
 	<c:when test="${ type == 'essential' }">
 	var serviceMap = {
@@ -395,14 +396,117 @@
 		'tma' : 'T-Map',
 		'tst' : 'T-Store',
 		'evs' : '11번가'
-	}
+	};
 	</c:when>
 	<c:when test="${ type == 'cross' }">
 	var serviceMap = {
 		'syr' : 'Syrup',
 		'ocb' : 'OCB',
 		'oct' : 'OCB(App)'
+	};
+	
+	var intersectMap = {
+		'tma' : 'T-Map',
+		'tst' : 'T-Store',
+		'evs' : '11번가'
+	};
+	
+	var intersectBySvcBarChart = null;
+	
+	var intersectBySvcBarChartOption = {
+	    title : {
+	    	text : '',
+	    	subtext : '해당 모수와 다른 BM간의 교집합',
+	    	itemGap : 10
+	    },
+   	    tooltip : {
+   	        trigger: 'axis',
+   	     	formatter: "{a0} <br/>{b0} : {c0}",
+   	        axisPointer : {         
+   	            type : 'shadow'     
+   	        }
+   	    },
+   	    grid: {
+   	        y : 80,
+   	        y2 : 30,
+   	        x2 : 20
+   	    },
+   	    xAxis : [
+   	        {
+   	            type : 'category',
+   	         	data : $.map(intersectMap, function(val, i){ return val; })
+   	        }
+   	    ],
+   	    yAxis : [
+   	        {
+   	            type : 'value'
+   	        }
+   	    ],
+   	    backgroundColor : '#fff',
+   	    series : [
+   	    	{
+   	    		name : '교차모수',
+   	    		type : 'bar',
+   	    		barCategoryGap : '50%',
+   	    		itemStyle : {
+   	    			normal : {
+   	    				color : function(params){
+   	    					return intersectBySvcBarChart._themeConfig.color[params.dataIndex + 3];
+   	    				}
+   	    			}
+   	    		},
+   	    		data : ['-', '-', '-']
+   	    	}
+   	    ]
+	};
+	
+	// 회원 모수 구분 > 동의 형식 > 서비스(Syrup, OCB, OCB(App))
+	var intersectBySvcData = [];
+	intersectBySvcData.done = false;
+		
+	function parseIntersectBySvcData(){
+		
+		var data = {}, _data = null;
+		
+		for(var svc in serviceMap)
+			data[svc] = [];
+		
+		var listCrossIntersectStats = <spring:eval expression="jsonWriter.writeValueAsString(listCrossIntersectStats)"/>;
+		
+		$.each(listCrossIntersectStats, function(i, item){
+			
+			var dataIndex = i % 4;
+			
+			if(dataIndex == 0)
+				_data = $.extend(true, {}, data);
+			
+			for(var svc in serviceMap)
+				_data[svc][dataIndex] = $.map(intersectMap, function(val, itSvcKey){ return { value : item[svc][itSvcKey], serviceKey : itSvcKey }; });
+			
+			if(dataIndex == 3)
+				intersectBySvcData[item.lv] = _data
+			
+		});
+		
+		intersectBySvcData.done = true;
+		
 	}
+	
+	function drawIntersectBySvcBarChart(serviceKey, agreementTypeIndex){
+		
+		intersectBySvcBarChartOption.title.text = serviceMap[serviceKey] +' > '+ agreementTypes[agreementTypeIndex];
+
+		intersectBySvcBarChartOption.series[0].data = intersectBySvcData[statsLevel][serviceKey][agreementTypeIndex];
+		
+		var countSpan = $('.intersectBySvcCount');
+		$.each(intersectBySvcBarChartOption.series[0].data, function(i, item){
+			countSpan.filter('[data-bm='+ item.serviceKey +']').text(formatCurrency(item.value));
+		});
+		
+		intersectBySvcBarChart.setOption(intersectBySvcBarChartOption);
+		
+	}
+	
 	</c:when>
 	</c:choose>
 	
@@ -424,7 +528,7 @@
 		'ZZZZ' : '기타(연령)'
 	}
 	
-	var floatingBarChartConfMap = {
+	var paramBySvcBarChartConfMap = {
 	
 		dataStyle : { 
           	    normal: {
@@ -468,15 +572,12 @@
 		    },
        	    tooltip : {
        	        trigger: 'item',
-       	        axisPointer : {         
-       	            type : 'shadow'     
-       	        },
        	        formatter : function(params, ticket, callback){
        	        	
        	        	if(params.seriesIndex % 2 == 0)
        	        		return params.name +'<br/>'+ params.seriesName +' : '+ formatCurrency(params.data.actual);
        	        	else
-       	        		return params.name +'<br/>'+ params.seriesName +' : '+ formatCurrency(floatingBarChart.getSeries()[params.seriesIndex - 1].data[params.dataIndex].actual);
+       	        		return params.name +'<br/>'+ params.seriesName +' : '+ formatCurrency(paramBySvcBarChart.getSeries()[params.seriesIndex - 1].data[params.dataIndex].actual);
        	        	
        	        }
        	    },
@@ -496,8 +597,10 @@
        	    },
        	    grid: {
        	        y : 80,
-       	        y2 : 30,
-       	        x2 : 20
+       	        y2 : 20,
+       	        x : 70,
+       	        x2 : 30,
+       	        borderWidth : 0
        	    },
        	    xAxis : [
        	        {
@@ -521,7 +624,7 @@
        	}
 	}
 	
-	var nestedPieChartConfMap = {
+	var paramBySegPieChartConfMap = {
 			
 		option : {
 		    title : {
@@ -562,7 +665,7 @@
 	            center : ['50%', '60%'],
 	            selectedMode: 'single',
 	            selectedOffset: 5, 
-	            radius : [0, '30%'],
+	            radius : [0, '29%'],
 	            itemStyle : {
 	                normal : {
 	                    label : {
@@ -585,11 +688,11 @@
 	            type:'pie',
 	            center : ['50%', '60%'],
 	            selectedOffset: 3, 
-	            radius : ['40%', '55%'],
+	            radius : ['39%', '53%'],
 	            itemStyle : {
 	                normal : {
 	                    labelLine : {
-	                        length : 10
+	                        length : 8
 	                    }
 	                }
 	            },
@@ -599,9 +702,9 @@
 		
 	}
 	
-	var floatingBarChartData = [];
+	var paramBySvcData = [];
 	
-	function parseFloatingBarChartData(){
+	function parseParamBySvcData(){
 		
 		var nominalMax = 600;
 		var placeHoledMin = nominalMax / 100 * 10;
@@ -611,59 +714,58 @@
 		for(var svc in serviceMap)
 			data[svc] = [];
 		
-		var recordMap = null;
+		var listVoSum = <spring:eval expression="jsonWriter.writeValueAsString(listVoSum)"/>;
 		
-		<c:forEach items="${listVoSum}" var="voList" varStatus="status">
-		
-		<c:set var="dataIndex" value="${status.index % 4}"/>
-		
-		recordMap = <spring:eval expression="jsonWriter.writeValueAsString(voList)"/>;
-		
-		//data['tot'][dataIdx] = ${voList.tot};
-		for(var svc in serviceMap)
-			data[svc][${dataIndex}] = recordMap[svc];
+		$.each(listVoSum, function(i, item){
 			
-		<c:if test="${dataIndex == 3}">
-		
-			var maxValues = [];
-		
-			for(var svc in data)
-				maxValues.push(data[svc].max())
+			var dataIndex = i % 4;
+			
+			for(var svc in serviceMap)
+				data[svc][dataIndex] = item[svc];
+			
+			if(dataIndex == 3){
 				
-			var maxValue = maxValues.max();
-			
-			for(var svc in data)
-				for(var i = 0, end = data[svc].length ; i < end ; i++){
+				var maxValues = [];
+				
+				for(var svc in data)
+					maxValues.push(data[svc].max())
 					
-					var n = data[svc][i];
-					
-					data[svc][i] = { value : nominalMax * n / maxValue, actual : n};
-					
-				}
+				var maxValue = maxValues.max();
+				
+				for(var svc in data)
+					for(var j = 0, end = data[svc].length ; j < end ; j++){
+						
+						var n = data[svc][j];
+						
+						data[svc][j] = { value : nominalMax * n / maxValue, actual : n, serviceKey : svc };
+						
+					}
+				
+				paramBySvcData[item.lv] = [];
+				
+				for(var svc in data)
+					for(var j = 0 ; j < 2 ; j++)
+						paramBySvcData[item.lv].push({
+							name : serviceMap[svc],
+							type : 'bar',
+							stack : item.lv,
+							itemStyle : j == 0 ? paramBySvcBarChartConfMap.dataStyle : paramBySvcBarChartConfMap.placeHoledStyle,
+							data : j == 0 ? data[svc].slice() : $.map(data[svc], function(_item, _i){ return  { value : nominalMax - _item.value + placeHoledMin, serviceKey : _item.serviceKey };})
+						});
+				
+			}
 			
-			floatingBarChartData[${voList.lv}] = [];
-			
-			for(var svc in data)
-				for(var i = 0 ; i < 2 ; i++)
-					floatingBarChartData[${voList.lv}].push({
-						name : serviceMap[svc],
-						type : 'bar',
-						stack : '${voList.lv}',
-						itemStyle : i == 0 ? floatingBarChartConfMap.dataStyle : floatingBarChartConfMap.placeHoledStyle, 
-						data : i == 0 ? data[svc].slice() : $.map(data[svc], function(val, i){ return  nominalMax - val.value + placeHoledMin;})
-					});
-			
-		</c:if>
-		</c:forEach>
+		});
+		
 	}
 	
-	var nestedPieChartData = {
+	var paramBySegData = {
 		sex : [],
 		age : [],
 		done : false
 	};
 	
-	function parseNextedPieChartData(){
+	function parseParamBySegData(){
 		
 		var itemStyle4Sex = {
 			'M' : {
@@ -683,73 +785,65 @@
 			}
 		}
 		
-		var recordMap = null;
+		var data = {}, _data = null;
 		
-		<c:forEach items="${listVoSumBySex}" var="item" varStatus="status">
-		<c:set var="dataIndex" value="${status.index % 3}"/>
+		for(var svc in serviceMap)
+			data[svc] = [];
 		
-		<c:if test="${dataIndex == 0}">
-		{
+		var listVoSumBySex = <spring:eval expression="jsonWriter.writeValueAsString(listVoSumBySex)"/>;
+		
+		$.each(listVoSumBySex, function(i, item){
 			
-			var data = {};
+			var dataIndex = i % 3;
 			
-			for(var svc in serviceMap)
-				data[serviceMap[svc]] = [];
-		</c:if>
-		
-			recordMap = <spring:eval expression="jsonWriter.writeValueAsString(item)"/>;
-		
-			//data['tot'][dataIdx] = ${voList.tot};
-			for(var svc in serviceMap)
-				data[serviceMap[svc]][${dataIndex}] = {name : sexMap[recordMap['sexCd']], value : recordMap[svc], itemStyle : itemStyle4Sex[recordMap['sexCd']]};
-		
-		<c:if test="${dataIndex == 2}">
-			if(nestedPieChartData.sex[${item.lv}] == undefined)
-				nestedPieChartData.sex[${item.lv}] = [];
-			
-			nestedPieChartData.sex[${item.lv}].push(data);
-			
-		}
-		</c:if>
-		
-		</c:forEach>
-		
-		<c:forEach items="${listVoSumByAge}" var="item" varStatus="status">
-		<c:set var="dataIndex" value="${status.index % 7}"/>
-		
-		<c:if test="${dataIndex == 0}">
-		{
-			
-			var data = {};
+			if(dataIndex == 0)
+				_data = $.extend(true, {}, data);
 			
 			for(var svc in serviceMap)
-				data[serviceMap[svc]] = [];
-		</c:if>
-		
-			recordMap = <spring:eval expression="jsonWriter.writeValueAsString(item)"/>;
+				_data[svc][dataIndex] = {name : sexMap[item['sexCd']], value : item[svc], itemStyle : itemStyle4Sex[item['sexCd']]};
 			
+			if(dataIndex == 2){
+				
+				if(paramBySegData.sex[item.lv] == undefined)
+					paramBySegData.sex[item.lv] = [];
+				
+				paramBySegData.sex[item.lv].push(_data);
+				
+			}
+			
+		});
+		
+		var listVoSumByAge = <spring:eval expression="jsonWriter.writeValueAsString(listVoSumByAge)"/>;
+		
+		$.each(listVoSumByAge, function(i, item){
+			
+			var dataIndex = i % 7;
+		
+			if(dataIndex == 0)
+				_data = $.extend(true, {}, data);
+		
 			for(var svc in serviceMap)
-				data[serviceMap[svc]][${dataIndex}] = {name : ageRangeMap[recordMap['ageRngCd']], value : recordMap[svc]};
-		
-		<c:if test="${dataIndex == 6}">
-			if(nestedPieChartData.age[${item.lv}] == undefined)
-				nestedPieChartData.age[${item.lv}] = [];
+				_data[svc][dataIndex] = {name : ageRangeMap[item['ageRngCd']], value : item[svc]};
 			
-			nestedPieChartData.age[${item.lv}].push(data);
-			
-		}
-		</c:if>
+			if(dataIndex == 6){
+
+				if(paramBySegData.age[item.lv] == undefined)
+					paramBySegData.age[item.lv] = [];
+				
+				paramBySegData.age[item.lv].push(_data);
+
+			}
 		
-		</c:forEach>
+		});
 		
-		nestedPieChartData.done =  true;
+		paramBySegData.done =  true;
 		
 	}
 	
 	<c:choose>
    	<c:when test="${fn:length(listVoSum) > 0}">
    	
-	parseFloatingBarChartData();
+	parseParamBySvcData();
 	
 	
 	
@@ -761,13 +855,18 @@
 		
 			statsLevel = _this.data('stats-level');
 
-			floatingBarChartConfMap.option.title.text = _this.text() + ' 회원';
-			floatingBarChartConfMap.option.series = floatingBarChartData[statsLevel];
+			paramBySvcBarChartConfMap.option.title.text = _this.text() + ' 회원';
+			paramBySvcBarChartConfMap.option.series = paramBySvcData[statsLevel];
 			
-			floatingBarChart.setOption(floatingBarChartConfMap.option);
+			paramBySvcBarChart.setOption(paramBySvcBarChartConfMap.option);
 			
-			if(nestedPieChartData.done)
-				drawNestedPieChart(serviceMap['syr'], agreementTypes[0], 0);
+			<c:if test="${ type == 'cross' }">
+			if(intersectBySvcData.done)
+				drawIntersectBySvcBarChart('syr', 0);
+			</c:if>
+			
+			if(paramBySegData.done)
+				drawParamBySegPieChart('syr', 0);
 		
 		}
 		
@@ -775,16 +874,16 @@
 	
 	
 	
-	function drawNestedPieChart(serviceName, agreementTypeName, agreementTypeIndex){
+	function drawParamBySegPieChart(serviceKey, agreementTypeIndex){
 			
-		nestedPieChartConfMap.option.title.text = serviceName +' > '+ agreementTypeName;
-		//nestedPieChartConfMap.option.title.subtext = formatCurrency(param.data);
+		paramBySegPieChartConfMap.option.title.text = serviceMap[serviceKey] +' > '+ agreementTypes[agreementTypeIndex];
+		//paramBySegPieChartConfMap.option.title.subtext = formatCurrency(param.data);
 
-		nestedPieChartConfMap.series[0].data = nestedPieChartData.sex[statsLevel][agreementTypeIndex][serviceName];
-		nestedPieChartConfMap.series[1].data = nestedPieChartData.age[statsLevel][agreementTypeIndex][serviceName];
+		paramBySegPieChartConfMap.series[0].data = paramBySegData.sex[statsLevel][agreementTypeIndex][serviceKey];
+		paramBySegPieChartConfMap.series[1].data = paramBySegData.age[statsLevel][agreementTypeIndex][serviceKey];
 		
-		nestedPieChart.setOption(nestedPieChartConfMap.option);
-		nestedPieChart.setSeries(nestedPieChartConfMap.series);
+		paramBySegPieChart.setOption(paramBySegPieChartConfMap.option);
+		paramBySegPieChart.setSeries(paramBySegPieChartConfMap.series);
 		
 	}
 	
@@ -792,38 +891,54 @@
 	
 	$(function() {
 		
-		var leftChartDiv = $('#tabChartL');
+		var charts = [];
 		
-		floatingBarChart = echarts.init(leftChartDiv[0], GV_CHART_THEME);
+		charts.push(paramBySvcBarChart = echarts.init($('#paramBySvcBarChart')[0], GV_CHART_THEME));
            
 		$('button[data-stats-level=1]').click();
+		//툴팁의 enterable 옵션 적용이 제대로 되지 않는 버그에 대한 임시 해결 방안
+		statsLevel = null;
+		paramBySvcBarChartConfMap.option.tooltip.enterable = true;
+		$('button[data-stats-level=1]').click();
 
-		floatingBarChart.on(echarts.config.EVENT.CLICK, function(param){
+		paramBySvcBarChart.on(echarts.config.EVENT.CLICK, function(param){
 			
-			if(param.seriesIndex % 2 == 0)
-				if(nestedPieChartData.done)
-					drawNestedPieChart(param.seriesName, param.name, param.dataIndex);
+			<c:if test="${ type == 'cross' }">
+			if(intersectBySvcData.done)
+				drawIntersectBySvcBarChart(param.data.serviceKey, param.dataIndex);
+			</c:if>
+			if(paramBySegData.done)
+				drawParamBySegPieChart(param.data.serviceKey, param.dataIndex);
 		
         });
 		
-		var rightChartDiv = $('#tabChartR');
+		<c:if test="${ type == 'cross' }">
+		charts.push(intersectBySvcBarChart = echarts.init($('#intersectBySvcBarChart')[0], GV_CHART_THEME));
 		
-		nestedPieChart = echarts.init(rightChartDiv[0], GV_CHART_THEME);
+		setTimeout(function(){
+			
+			parseIntersectBySvcData();
+			drawIntersectBySvcBarChart('syr', 0);
+			
+		}, 100);
+		</c:if>
+		
+		charts.push(paramBySegPieChart = echarts.init($('#paramBySegPieChart')[0], GV_CHART_THEME));
           
 		setTimeout(function(){
 			
-			parseNextedPieChartData();
-			drawNestedPieChart(serviceMap['syr'], agreementTypes[0], 0);
+			parseParamBySegData();
+			drawParamBySegPieChart('syr', 0);
 			
 		}, 100);
 		
-		resizeChartOnWinResizeHandler.on(floatingBarChart, nestedPieChart);
+		resizeChartOnWinResizeHandler.on(charts);
 		  
 	});
 	
 	</c:when>
 	<c:otherwise>
-	$('#tabChartL').css({'line-height' : '500px', 'text-align' : 'center'}).html('<strong>데이터가 없습니다.</strong>');
+	$('#paramBySvcBarChart').css({'line-height' : '500px', 'text-align' : 'center'}).html('<strong>데이터가 없습니다.</strong>');
 	</c:otherwise>
 	</c:choose>
 

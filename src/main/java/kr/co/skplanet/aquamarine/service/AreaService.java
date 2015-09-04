@@ -61,14 +61,32 @@ public class AreaService  {
     
     
     public List<AreaVO> selectAreaArPocList(Map<String, Object> p ) throws Exception {
-        
+
         List<AreaVO> voList = areaDao.selectAreaArPocList(p);
           LOG.debug("## AreaVO Result : ", voList.size());
           
           return voList;
           
-      }
-    
+    }
+
+    public List<AreaVO> selectAreaNodeList(Map<String, Object> p ) throws Exception {
+
+        List<AreaVO> voList = areaDao.selectAreaNodeList(p);
+          LOG.debug("## AreaVO Result : ", voList.size());
+
+          return voList;
+
+    }
+
+    public List<AreaVO> selectAreaLinkList(Map<String, Object> p ) throws Exception {
+
+        List<AreaVO> voList = areaDao.selectAreaLinkList(p);
+          LOG.debug("## AreaVO Result : ", voList.size());
+
+          return voList;
+
+    }
+
     
     
     public List<AreaVO> selectAreaMosuBarChartList(Map<String, Object> p ) throws Exception {

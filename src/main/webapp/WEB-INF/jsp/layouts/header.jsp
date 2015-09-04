@@ -218,7 +218,7 @@
 				<!-- header-left -->
 				<div class="headerLF clearfix">
 					<!-- logo -->
-                    <p class="logo"><span>Dig Out Treasure</span></p>
+                    <a href="<c:url value="/home.do"/>"><p class="logo"><span>Dig Out Treasure</span></p></a>
 				</div>
 				<!--// header-left -->
                 
@@ -231,9 +231,6 @@
 							<div class="container-fluid">
 								<div class="collapse navbar-collapse" >
 									<ul class="nav navbar-nav navbar-right">
-										<li class="dropdown">
-											<a href="<c:url value="/home.do"/>" class="dropdown-toggle" data-toggle="dropdown">Home</a>
-										</li>
                                         <li class="dropdown">
 											<a href="<c:url value="/parameterStats/overview.do"/>" class="dropdown-toggle" data-toggle="dropdown">모수현황 <span class="fa fa-angle-down"></span></a>
 											<ul class="dropdown-menu" style="left:-50px;">
@@ -257,16 +254,11 @@
 											<a href="<c:url value="/main_activity_area.do"/>" class="dropdown-toggle" data-toggle="dropdown">주 활동지역</a>
 										</li>
 										<li class="dropdown">
-											<a href="#" class="dropdown-toggle" class="dropdown-toggle " data-toggle="dropdown">Insights <span class="fa fa-angle-down"></span></a>
-											<ul class="dropdown-menu" style="left:-50px;">
-                                                <p><img src="<c:url value="/resources/images/icon-dropdownMenu.png"/>"></p>
-                                                <!--업종 2depth-->
-                                                <li><a href="<c:url value="/insights/syruppay.do"/>">Syrup Pay</a></li>
-                                                <li><a href="<c:url value="/insights/mobile.do"/>">모바일 전단 반응확률</a></li>
-                                                <li><a href="<c:url value="/insights/timeseries.do"/>">시계열</a></li>
-                                            </ul>
-											
-										</li>
+                                            <a href="<c:url value="/insights/insights.do"/>" class="dropdown-toggle" data-toggle="dropdown">Insights</a>
+                                        </li>
+                                        <li class="dropdown">
+                                            <a href="<c:url value="/insights/insights.do"/>" class="dropdown-toggle" data-toggle="dropdown">그날에 우리</a>
+                                        </li>
 									</ul>
 								</div>
 							</div>
@@ -292,7 +284,8 @@
 			<footer>
 	        	<div class="container">
 					<p class="copyR">(463-400) 경기도 성남시 분당구 판교로 264(삼평동) The Planet SK플래닛 주식회사 대표이사 서진우<br>
-					Copyright © 2015 SK Planet.  ALL RIGHTS RESERVED</p></p>
+					Copyright © 2015 SK Planet.  ALL RIGHTS RESERVED</p>
+					<p class="wording">Commerce Data PF Team 이란</p>
 	            </div>
 			</footer> 
 			<!-- //footer -->

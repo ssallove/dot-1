@@ -34,37 +34,41 @@ public class ParameterStatsController {
 
 	@Autowired
 	private ParameterStatsService agreementPopParamService; // 동의
-	
+
 	@RequestMapping("/overview")
-	public String overview(){
-		
+	public String overview() {
+
 		return "parameterStats/overview";
-		
+
 	}
 
 	@RequestMapping("/agreement/{type:essential|cross}")
 	public String agreement(@PathVariable String type,
 							Model model) {
 
-		List<AgreementParameterVO> listVoTemp = null;
-		List<AgreementParameterVO> listVoSum = null;
-		List<AgreementParameterVO> listVoSumBySex = null;
-		List<AgreementParameterVO> listVoSumByAge = null;
+		List<AgreementParameterVO> listVoTemp = null, listVoSum = null, listVoSumBySex = null, listVoSumByAge = null;
+
+		List<Map<String, ?>> listUnionStats = null, listIntersectStats = null;
 
 		switch (type) {
 
 			case "essential":
+				
 				listVoTemp = agreementPopParamService.getEachServiceMbrSumBySexAge4Essential();
+				listUnionStats = agreementPopParamService.getMixedServiceMbrUnion4Essential();
+				listIntersectStats = agreementPopParamService.getMixedServiceMbrIntersect4Essential();
 
 				break;
 
 			case "cross":
+				
 				listVoTemp = agreementPopParamService.getEachServiceMbrSumBySexAge4Cross();
+				listUnionStats = agreementPopParamService.getMixedServiceMbrUnion4Cross();
+				listIntersectStats = agreementPopParamService.getMixedServiceMbrIntersect4Cross();
+				
+				model.addAttribute("listCrossIntersectStats", agreementPopParamService.getEachServiceCrossIntersect());
 
 				break;
-
-			default:
-				throw new RuntimeException();
 
 		}
 
@@ -158,14 +162,12 @@ public class ParameterStatsController {
 
 		}
 
-		List<AgreementParameterVO> listVoUnion = agreementPopParamService.getMixedServiceMbrUnion();
-		List<AgreementParameterVO> listVoIntersect = agreementPopParamService.getMixedServiceMbrIntersect();
-
 		model.addAttribute("listVoSum", listVoSum);
 		model.addAttribute("listVoSumBySex", listVoSumBySex);
 		model.addAttribute("listVoSumByAge", listVoSumByAge);
-		model.addAttribute("listVoUnion", listVoUnion);
-		model.addAttribute("listVoIntersect", listVoIntersect);
+
+		model.addAttribute("listUnionStats", listUnionStats);
+		model.addAttribute("listIntersectStats", listIntersectStats);
 
 		return "parameterStats/agreement";
 

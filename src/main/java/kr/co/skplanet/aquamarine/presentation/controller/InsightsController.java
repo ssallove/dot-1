@@ -15,7 +15,7 @@ import kr.co.skplanet.aquamarine.service.CateService;
 import kr.co.skplanet.aquamarine.service.CommCodeService;
 
 @Controller
-@RequestMapping("/insights/{type:syruppay|timeseries|mobile}")
+@RequestMapping("/insights/{type:syruppay|timeseries|mobile|insights}")
 public class InsightsController {
     private static final Logger LOG = LoggerFactory.getLogger(InsightsController.class);
     

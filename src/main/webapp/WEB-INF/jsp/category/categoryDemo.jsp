@@ -130,11 +130,16 @@
                 <div class="layoutLR ">
                     <!-- <h2>Title</h2> -->
                     <!--주활동지역 현황-->
-                    <div class="LF" style="width:66% !important">
+                    <div class="LF" style="width:66% !important; position:relative" >
                         <ul class="chartLy_1p ">
                         <li>
-                            <p class="chartTitle "><i class="fa fa-bar-chart"></i>성연령대 구성<span>${subTxt }</span></p>
-                            <div class="chartArea" id="SexAgeChart" style="width:100%; height:400px">챠트 영역</div>
+                            <p class="chartTitle"><i class="fa fa-bar-chart"></i>성연령대 구성<span>${subTxt }</span></p>
+
+                            <p style="position:absolute; left:40%; top:200px; background:url(../resources/images/icon_woman.png) 0 0 no-repeat; width:128px; height:128px; background-size: 60%"></p>
+                            <p style="position:absolute; right:35%; top:200px; background:url(../resources/images/icon_man.png) 0 0 no-repeat; width:128px; height:128px; background-size: 60%"></p>
+
+                            <div class="chartArea" id="SexAgeChart" style="width:100%; height:400px; >
+                            </div>
                         </li>
                         
                     </ul>
@@ -361,10 +366,11 @@ var subTitle = (smallTx != '' && smallTx != '-' && smallTx != '전체') ? smallT
 	    // define default chart option
 	   	var _ageChartOpt = {    
 	               tooltip  : { trigger: 'axis', textStyle : { align : 'left'},
-	                     axisPointer:{ show: true,    type : 'line',    lineStyle: {type : 'dashed', width : 1}},
+	            	     axisPointer : { type : 'shadow' },
+	                     //axisPointer:{ show: true,    type : 'line',    lineStyle: {type : 'dashed', width : 1}},
 	                     formatter: function(value){ return value[0].name+"</br>"+value[0].seriesName+" : "+value[0].value+"% </br>"+(value[1].seriesName == "전체" ? "" : value[1].seriesName+" : "+value[1].value+" %"); }},
 	               legend   : { data : [], x : 'right', y : 'top' },
-	               xAxis    : [ { data : [], type : 'category', boundaryGap : false}],
+	               xAxis    : [ { data : [], type : 'category', boundaryGap : true}],
 	               yAxis    : [ { type : 'value', scale : true,    axisLabel : {    formatter: '{value} %'    }    }],
 	               series   : [ { data : [], type : 'line', name : '전체', markPoint : { data : [ {type : 'max'}, {type : 'min'} ] }, 
 	                               itemStyle: {  normal: {    areaStyle: { color : 'rgba(178,235,244,0.2)' },
@@ -452,7 +458,7 @@ var subTitle = (smallTx != '' && smallTx != '-' && smallTx != '전체') ? smallT
 	               legend  : { data:[],    x:'right'    },
 	               grid    : { y: 80 },
 	               xAxis   : [ { type : 'value', position: 'bottom', scale : false,
-	                             axisLabel:{formatter:function(value){ if(value > 0) return value + "%"; else return (-1 * value)  + "%";}},
+	            	             axisLabel:{formatter:function(value){ if(value > 0) return value + "%"; else return (-1 * value)  + "%";}},
 	                             splitLine: {lineStyle:{type:'dashed'}}    }    ],
 	               yAxis   : [ { data : [], boundaryGap : false, type : 'category', axisLine: {show: false}, axisTick: {show: false} }    ],
 	                           // 전체 (남)        
@@ -461,9 +467,11 @@ var subTitle = (smallTx != '' && smallTx != '-' && smallTx != '전체') ? smallT
 	                                                       color : GV_GENDER_COLOR.male(),
 	                                                       areaStyle: {color : GV_GENDER_COLOR.male(0.2)} ,
 	                                                       lineStyle: {color : 'rgba(255,255,255,0)'}  }    }  },
+
 	                           // 카테고리 (남)
 	                           { data : [], name:'', type:'line', symbolSize : 5, barWidth : 32,
 	                               itemStyle: {normal: {   label : {show: true}, lineStyle: {width : 3.5} }    }   },
+	                               
 	                              // 전체 (여)
 	                           { data : [], name:'', type:'line', symbolSize : 0,
 	                               itemStyle: {normal: {   label : {show: false},
@@ -474,13 +482,26 @@ var subTitle = (smallTx != '' && smallTx != '-' && smallTx != '전체') ? smallT
 	                           { data : [], name:'', type:'line', symbolSize : 5, barWidth : 32,
 	                               itemStyle: {normal: {    label : {show: true, position: 'left'
 	                                                               , formatter : function (value){    return (-1 * value.data);}    }
-	                                                       ,lineStyle: {    width : 3.5}    }    }   }    ]    };
+	                                                       ,lineStyle: {    width : 3.5}    }    }   },
+	                           // 전체 legend 를 위한 Temp	                                                       
+                               { data:[0, 0, 0, 0, 0, 0, 0], name:'', type:'bar', symbolSize : 0,
+                                   itemStyle: {normal: {   label : {show: false},
+                                                           color : GV_GENDER_COLOR.male(),
+                                                           areaStyle: {color : GV_GENDER_COLOR.male(0.2)} ,
+                                                           lineStyle: {color : 'rgba(255,255,255,0)'}  }    }  },
+                               { data : [0, 0, 0, 0, 0, 0, 0], name:'', type:'bar', symbolSize : 0,
+                                   itemStyle: {normal: {   label : {show: false},
+                                                           color : GV_GENDER_COLOR.female(),
+                                                           areaStyle: {color : GV_GENDER_COLOR.female(0.2)}  ,
+                                                           lineStyle: {color : 'rgba(255,255,255,0)'}     }    }    }
+
+	                                                       ]    };
 
         // set chart option
         _sexAgeChartOpt.legend.data = sexCategory;
         _sexAgeChartOpt.yAxis[0].data = ageRangeCategory;
        
-        _sexAgeChartOpt.series[0].name = sexCategory[2];
+        _sexAgeChartOpt.series[0].name = "전체"; 
         _sexAgeChartOpt.series[0].data = _grepSexChartData('M', ${jsonSexAgeAllChartList});
         
 
@@ -488,13 +509,17 @@ var subTitle = (smallTx != '' && smallTx != '-' && smallTx != '전체') ? smallT
         _sexAgeChartOpt.series[1].data = _grepSexChartData('M', ${jsonSexAgeChartList});
         
 
-        _sexAgeChartOpt.series[2].name = sexCategory[3];
+        _sexAgeChartOpt.series[2].name = "전체";
         _sexAgeChartOpt.series[2].data = _grepSexChartData('F', ${jsonSexAgeAllChartList}, -1);
         
         
 
         _sexAgeChartOpt.series[3].name = sexCategory[1];
         _sexAgeChartOpt.series[3].data = _grepSexChartData('F', ${jsonSexAgeChartList}, -1);
+        
+        
+        _sexAgeChartOpt.series[4].name = sexCategory[2]; _sexAgeChartOpt.series[5].name = sexCategory[3];
+        
         
         return _sexAgeChartOpt;
     }  
