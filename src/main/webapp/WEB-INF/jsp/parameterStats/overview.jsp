@@ -93,17 +93,17 @@
 						
 						    <div class="layoutLR">
 						    	<!-- 왼쪽 챠트영역-->
-						        <div class="floatL in_pane" style="width:45%;" id="tmapCoveragePieChart"></div>
+						    	<div class="floatL in_pane" style="width:54%;" id="ocbCoveragePieChart"></div>
 						        <!--오른쪽  챠트영역-->
-						        <div class="floatR in_pane" style="width:54%;" id="ocbCoveragePieChart"></div>
-						        <p class="floatL" style="width:45%;"><strong id="tmapCoverageChartComment"></strong></p>
-						        <p class="floatR" style="width:54%;">
+						        <div class="floatR in_pane" style="width:45%;" id="tmapCoveragePieChart"></div>
+						        <p class="floatL" style="width:54%;">
 						        	<strong>
 						        	* 캐쉬백 가입율 = 캐쉬백 가입자 / 전국국민
 						        	<br/>
 						        	** 전국민 : 통계청, 2010년 인구주택 총조사 기준
 						        	</strong>
 						        </p>
+						        <p class="floatR" style="width:45%;"><strong id="tmapCoverageChartComment"></strong></p>
 						    </div>
 						</div>
 						<!--//TAB Chart 1-->
@@ -111,49 +111,7 @@
                         <!--TAB Table-->
                         <div class="tab_pane2" id="ocbCoverageTableTab" >
                         
-                        	<div class="floatL" style="width:33%;">
-	                        	<h3>운전고객 대비 T-Map 이용자 현황</h3>
-	                        	<p class="expTb">※ 차량등록대수 : 국토교통부, '15년 6월 기준</p>
-	                        	<table class="listTB tStriped tmapCoverageTable">
-	                            	<colgroup>
-	                                	<col width="*">
-	                                	<col width="40%">
-	                                	<col width="40%">
-	                            	</colgroup>
-	                            	<tbody>
-									</tbody>
-								</table>
-							</div>
-							
-							<div class="floatL" style="width:32%;margin-left:1%;">
-								<h3>운전면허 소지자 중 T-Map 이용자 현황</h3>
-	                        	<p class="expTb">※ 운전면허 소지자 : 경찰청, 2014년말 기준</p>
-	                        	<table class="listTB tStriped tmapCoverageTable">
-	                            	<colgroup>
-	                                	<col width="*">
-	                                	<col width="40%">
-	                                	<col width="40%">
-	                            	</colgroup>
-	                            	<tbody>
-									</tbody>
-								</table>
-							</div>
-							
-							<div class="floatR" style="width:33%;">
-								<h3>택시 운전자 고객 중 T-Map 택시 운전기사 가입현황</h3>
-	                        	<p class="expTb">※ 택시 운전자수 : 전국택시운송사업조합연합회, '15년 6월기준</p>
-	                        	<table class="listTB tStriped tmapCoverageTable">
-	                            	<colgroup>
-	                                	<col width="*">
-	                                	<col width="40%">
-	                                	<col width="40%">
-	                            	</colgroup>
-	                            	<tbody>
-									</tbody>
-								</table>
-							</div>
-
-							<div class="floatL mt50" style="width:33%;">
+							<div class="floatL" style="width:33%;">
 								<h3>캐쉬백 가입자 현황 </h3>
 								<p class="expTb">※ 전국민 : 통계청, 2010년 인구주택 총조사 기준</p>
 	                        	<table class="listTB tStriped" id="ocbCoverageTable">
@@ -165,6 +123,52 @@
 	                            	<tbody>
 									</tbody>
 								</table>
+							</div>
+							
+							<div class="floatL mt50" style="width:100%;">
+                        
+	                        	<div class="floatL" style="width:33%;">
+		                        	<h3>운전고객 대비 T-Map 이용자 현황</h3>
+		                        	<p class="expTb">※ 차량등록대수 : 국토교통부, '15년 6월 기준</p>
+		                        	<table class="listTB tStriped tmapCoverageTable">
+		                            	<colgroup>
+		                                	<col width="*">
+		                                	<col width="40%">
+		                                	<col width="40%">
+		                            	</colgroup>
+		                            	<tbody>
+										</tbody>
+									</table>
+								</div>
+								
+								<div class="floatL" style="width:32%;margin-left:1%;">
+									<h3>운전면허 소지자 중 T-Map 이용자 현황</h3>
+		                        	<p class="expTb">※ 운전면허 소지자 : 경찰청, 2014년말 기준</p>
+		                        	<table class="listTB tStriped tmapCoverageTable">
+		                            	<colgroup>
+		                                	<col width="*">
+		                                	<col width="40%">
+		                                	<col width="40%">
+		                            	</colgroup>
+		                            	<tbody>
+										</tbody>
+									</table>
+								</div>
+								
+								<div class="floatR" style="width:33%;">
+									<h3>택시 운전자 고객 중 T-Map 택시 운전기사 가입현황</h3>
+		                        	<p class="expTb">※ 택시 운전자수 : 전국택시운송사업조합연합회, '15년 6월기준</p>
+		                        	<table class="listTB tStriped tmapCoverageTable">
+		                            	<colgroup>
+		                                	<col width="*">
+		                                	<col width="40%">
+		                                	<col width="40%">
+		                            	</colgroup>
+		                            	<tbody>
+										</tbody>
+									</table>
+								</div>
+							
 							</div>
 							
                         </div>
@@ -353,7 +357,7 @@
 	};
 	
 	var mbrDemoBySvcAgeData = {
-		'전국민'       : $.map(eapByAge, function(val, label){ return val; }),
+		'경제활동인구'       : $.map(eapByAge, function(val, label){ return val; }),
 		'Syrup Wallet' : [147720, 1291207, 1762855, 1127385, 419238, 133586],
 		'OCB App'      : [25457,  376159,  910518,  648691,  206693, 55459 ],
 		'11st'         : [108125, 1287479, 2209587, 1246648, 339159, 111302]
@@ -379,7 +383,7 @@
 	
 	//[여성,남성]
 	var mbrDemoBySvcGenderData = {
-		'전국민'       : [11568000, 15736000],
+		'경제활동인구'       : [11568000, 15736000],
 		'Syrup Wallet' : [2968688,  1913303 ],
 		'OCB App'      : [1202437,  1020540 ],
 		'11st'         : [2758126,  2548385 ]

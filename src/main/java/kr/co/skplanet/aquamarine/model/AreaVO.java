@@ -63,6 +63,15 @@ public class AreaVO implements Serializable {
     private String sidoNm;
     private String sigunguNm;
     private String dongNm;
+    private String dongType;
+
+    public String getDongType() {
+        return dongType;
+    }
+
+    public void setDongType(String dongType) {
+        this.dongType = dongType;
+    }
 
     public String getAdmDongCd() {
         return admDongCd;

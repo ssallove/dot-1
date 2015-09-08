@@ -5843,6 +5843,22 @@ button.close {
 	padding:0 100px;
 	min-width:1200px !important;
   }
+   .modal-dialog2{/*Insights modal*/
+  
+   width:96%;
+   max-width: 1800px;
+    margin: 8px auto;
+	padding:0;
+	min-width:1200px !important;
+  }
+   .modal-dialog3{/*주 활동지역modal*/
+  
+   width:100%;
+   max-width: 1900px;
+    margin: 8px auto;
+	padding:0 20px;
+	min-width:1200px !important;
+  }
   .modal-content {
     -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
             box-shadow: 0 5px 15px rgba(0, 0, 0, .5);

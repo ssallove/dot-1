@@ -296,7 +296,7 @@
                         </colgroup>
     					<tbody>
         					<tr>
-        					    <th>소스 행정동 갯수</th>
+        					    <th>기준 행정동</th>
         					    <td>
                                 	<select  name="size" id="mainAdmDongCdCnt" title="main 행정동 " style="width:160px">
                                         <option value="5">5</option>
@@ -305,7 +305,7 @@
                                         <option value="20">20</option>
 							    	</select>
                                 </td>
-                                <th>타켓 행정동 갯수</th>
+                                <th>연관 행정동</th>
         					    <td>
                                     <select  style="width:150px"  name="size" id="crossAdmDongCdCnt" title="cross 행정동 ">
                                         <option value="5">5</option>
@@ -395,165 +395,143 @@
                 $("#mainAdmDongCdCnt").selectBox("value", "10");
                 $("#crossAdmDongCdCnt").selectBox("value", "5");
 
-            	callAjaxMainActivityArea("", "", "getCallBack");
+            	callAjaxMainActivityArea("", "11", "getCallBack");
 
                 $("#clickKoreaMap").click(function () {
                     callAjaxMainActivityArea("", "", "getCallBack");
                 });
-                
+
             });
 
             $('#chart6_popup').click(function(){
 
-                if(City.cd.length != 8) {
-                    Network.mainAdmDongCdCnt = 10; // main 행정동 갯수
-                    Network.crossAdmDongCdCnt = 5;
-                    callAjaxMainActivityArea(City.name, City.cd, getNetworkChartPopup);
+                Network.mainAdmDongCdCnt = 10; // main 행정동 갯수
+                Network.crossAdmDongCdCnt = 5;
+                var cityCd = "";
+                if(City.cd.length > 6) {
+                    cityCd = City.cd.substring(0, 6);
                 }
+                callAjaxMainActivityArea(City.name, cityCd, getNetworkChartPopup);
 
             });
 
             $('#thineLine').click(function(){
 
-                if(City.cd.length != 8) {
+                var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
 
-                    var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
+                $.each(Network.option.series[0].links, function(idx, data) {
+                    if (data.itemStyle.normal.width === 3) {
+                        data.itemStyle.normal.color = '#f8f8f8';
+                    } else {
+                        data.itemStyle.normal.color = Network.LINE_COLOR;
+                    }
+                });
 
-                    $.each(Network.option.series[0].links, function(idx, data) {
-                        if (data.itemStyle.normal.width === 3) {
-                            data.itemStyle.normal.color = '#f8f8f8';
-                        } else {
-                            data.itemStyle.normal.color = Network.LINE_COLOR;
-                        }
-                    });
+                myChart.setOption(Network.option);
+                myChart.refresh();
 
-                    myChart.setOption(Network.option);
-                    myChart.refresh();
-
-                    getNetworkChartClickEvent(myChart);
-
-                }
+                getNetworkChartClickEvent(myChart);
 
             });
 
             $('#thickLine').click(function(){
 
-                if(City.cd.length != 8) {
+                var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
 
-                    var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
+                $.each(Network.option.series[0].links, function(idx, data) {
+                    if (data.itemStyle.normal.width === 1.5) {
+                        data.itemStyle.normal.color = '#f8f8f8';
+                    } else {
+                        data.itemStyle.normal.color = Network.LINE_COLOR;
+                    }
+                });
 
-                    $.each(Network.option.series[0].links, function(idx, data) {
-                        if (data.itemStyle.normal.width === 1.5) {
-                            data.itemStyle.normal.color = '#f8f8f8';
-                        } else {
-                            data.itemStyle.normal.color = Network.LINE_COLOR;
-                        }
-                    });
+                myChart.setOption(Network.option);
+                myChart.refresh();
 
-                    myChart.setOption(Network.option);
-                    myChart.refresh();
-
-                    getNetworkChartClickEvent(myChart);
-
-                }
+                getNetworkChartClickEvent(myChart);
 
             });
 
             $('#thinethickLine').click(function(){
 
-                if(City.cd.length != 8) {
+                var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
 
-                    var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
+                $.each(Network.option.series[0].links, function(idx, data){
+                    data.itemStyle.normal.color = Network.LINE_COLOR;
+                });
 
-                    $.each(Network.option.series[0].links, function(idx, data){
-                        data.itemStyle.normal.color = Network.LINE_COLOR;
-                    });
+                myChart.setOption(Network.option);
+                myChart.refresh();
 
-                    myChart.setOption(Network.option);
-                    myChart.refresh();
-
-                    getNetworkChartClickEvent(myChart);
-
-                }
+                getNetworkChartClickEvent(myChart);
 
             });
 
             $('#minButton').click(function(){
 
-                if(City.cd.length != 8) {
+                Network.option.series[0].scaling = Number(Network.option.series[0].scaling) - 0.3;
+                Network.option.series[0].gravity = Number(Network.option.series[0].gravity) - 1;
 
-                    Network.option.series[0].scaling = Number(Network.option.series[0].scaling) - 0.3;
-                    Network.option.series[0].gravity = Number(Network.option.series[0].gravity) - 1;
-
-                    if(Network.option.series[0].scaling < 3) {
-                        Network.option.series[0].scaling = 3.1;
-                    }
-
-                    if(Network.option.series[0].gravity < 4){
-                        Network.option.series[0].gravity = 4.1;
-                    }
-
-                    var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
-                    myChart.setOption(Network.option);
-                    myChart.refresh();
-
-                    var height = $('#' + Network.MAX_CHART_ID_NM).height();
-                    height = height - 100;
-                    if(height < 500) {
-                        height = 500;
-                    }
-
-                    $('#modalChartLy').height(height); //  차트 박스 테두리
-                    $('#' + Network.MAX_CHART_ID_NM).height(height);
-
-                    var canvas = $('canvas');
-                    canvas.attr('z-index', 100);
-                    canvas.attr('margin', 0);
-                    canvas.attr('padding', 0);
-
-                    getNetworkChartClickEvent(myChart);
-
+                if(Network.option.series[0].scaling < 3) {
+                    Network.option.series[0].scaling = 3.1;
                 }
+
+                if(Network.option.series[0].gravity < 4){
+                    Network.option.series[0].gravity = 4.1;
+                }
+
+                var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
+                myChart.setOption(Network.option);
+                myChart.refresh();
+
+                var height = $('#' + Network.MAX_CHART_ID_NM).height();
+                height = height - 100;
+                if(height < 500) {
+                    height = 500;
+                }
+
+                $('#modalChartLy').height(height); //  차트 박스 테두리
+                $('#' + Network.MAX_CHART_ID_NM).height(height);
+
+                var canvas = $('canvas');
+                canvas.attr('z-index', 100);
+                canvas.attr('margin', 0);
+                canvas.attr('padding', 0);
+
+                getNetworkChartClickEvent(myChart);
 
             });
 
             $('#maxButton').click(function(){
 
-                if(City.cd.length != 8) {
+                Network.option.series[0].scaling = Number(Network.option.series[0].scaling) + 0.3;
+                Network.option.series[0].gravity = Number(Network.option.series[0].gravity) + 1;
 
-                    Network.option.series[0].scaling = Number(Network.option.series[0].scaling) + 0.3;
-                    Network.option.series[0].gravity = Number(Network.option.series[0].gravity) + 1;
+                var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
+                myChart.setOption(Network.option);
+                myChart.refresh();
 
-                    var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
-                    myChart.setOption(Network.option);
-                    myChart.refresh();
+                var height = $('#' + Network.MAX_CHART_ID_NM).height();
+                height = height + 100;
+                $('#modalChartLy').height(height); //  차트 박스 테두리
+                $('#' + Network.MAX_CHART_ID_NM).height(height);
 
-                    var height = $('#' + Network.MAX_CHART_ID_NM).height();
-                    height = height + 100;
-                    $('#modalChartLy').height(height); //  차트 박스 테두리
-                    $('#' + Network.MAX_CHART_ID_NM).height(height);
+                var canvas = $('canvas');
+                canvas.attr('z-index', 100);
+                canvas.attr('margin', 0);
+                canvas.attr('padding', 0);
 
-                    var canvas = $('canvas');
-                    canvas.attr('z-index', 100);
-                    canvas.attr('margin', 0);
-                    canvas.attr('padding', 0);
-
-                    getNetworkChartClickEvent(myChart);
-
-                }
+                getNetworkChartClickEvent(myChart);
 
             });
 
             $('#btnSearch').click(function(){
 
-                if(City.cd.length != 8) {
+                Network.mainAdmDongCdCnt = $('#mainAdmDongCdCnt option:selected').val(); // main 행정동 갯수
+                Network.crossAdmDongCdCnt = $('#crossAdmDongCdCnt option:selected').val(); // cross 행정동 갯수
 
-                    Network.mainAdmDongCdCnt = $('#mainAdmDongCdCnt option:selected').val(); // main 행정동 갯수
-                    Network.crossAdmDongCdCnt = $('#crossAdmDongCdCnt option:selected').val(); // cross 행정동 갯수
-
-                    callAjaxMainActivityArea(City.name, City.cd, "getCallBack");
-
-                }
+                callAjaxMainActivityArea(City.name, City.cd, "getCallBack");
 
             });
 
@@ -571,6 +549,10 @@
                 Network.NODE_COLOR = '#49cdf4';
                 Network.NODE_BORDER_COLOR = '#2c9ae9';
                 Network.LINE_COLOR = '#2353a3';
+
+                if(City.cd.length === 8 ) {
+                    var dongName = $('#dongNm').text().split(' ')[2];
+                }
 
                 categoriesList[0] = {name: ''};
                 categoriesList[1] = {name: ''};
@@ -605,8 +587,19 @@
                                         fontSize: 14
                                     }
                                 },
-//                                color: '#ff9000'
-                                color: '#49cdf4' // #49cdf4, #ff4f84
+                                color: (function(d){
+                                    if(City.cd.length === 8) {
+                                        var cityColor = "";
+                                        (dongName === d.dongNm) ? cityColor = '#ff4f84' : cityColor = '#49cdf4'
+                                        return cityColor;
+                                    } else {
+                                        if (d.dongType === '1') {
+                                            return '#ff4f84';
+                                        } else {
+                                            return '#49cdf4';
+                                        }
+                                    }
+                                })(data)
                             }
                         }
                     }
@@ -622,7 +615,7 @@
                         name: data.srcDongNm,
                         itemStyle: {
                             normal: {
-                                width: (confidenceAve < Number(data.confidence) ) ? 3 : 1.5,
+                                width: (confidenceAve < Number(data.confidence) ) ? 1 : 0.2,
                                 color: Network.LINE_COLOR
                             }
                         }
@@ -656,6 +649,7 @@
                                             borderWidth: 8
                                         }
                                     }
+
                                 },
                                 minRadius: 10, // 노드 최소 크기
                                 maxRadius: 30, // 노드 최대 크기
@@ -672,6 +666,7 @@
                 Network.option = option;
 
                 return option;
+
             }
 
             function getNetworkChartClickEvent(myChart) {
@@ -708,6 +703,7 @@
                 }
 
                 myChart.on(ecConfig.EVENT.DBLCLICK, focus);
+
             }
 
             function getNetworkChartPopup(data, cityName, cityCd) {
@@ -727,11 +723,14 @@
             function getNetworkChart(chartName, dataNodeList, dataLinkList) {
 
                 var myChart = echarts.init(document.getElementById(chartName));
+
                 myChart.setTheme(GV_CHART_THEME);
+
                 myChart.setOption(_getNetworkChartOption(dataNodeList, dataLinkList));
 
-                if(City.cd.length != 8)
-                    getNetworkChartClickEvent(myChart);
+                getNetworkChartClickEvent(myChart);
+
+                resizeChartOnWinResizeHandler.on(myChart);
 
             }
 
@@ -766,6 +765,12 @@
 
                 City.name = cityName;
                 City.cd = cityCd;
+
+                // 동 선택시 기준행정동은 1개 연관 행정동은 10개 선택되어야 함
+                if(City.cd.length === 8) {
+                    Network.mainAdmDongCdCnt = 1;
+                    Network.crossAdmDongCdCnt = 10;
+                }
 
                 if ((cityName != null && cityName != '') && (cityCd == null || cityCd == 'undefined' || cityCd == '')) {
                     if (chartDataList != null && chartDataList.length != 0) {
@@ -809,12 +814,11 @@
                 GV_CITY_CD = cityCd;
                 GV_CITY_NM = cityName;
                 $('#chart2SubTitle').text(GV_CITY_NM);
-                
-                $("#baseDt").text("데이터 기준일 : "+data.baseDt);
 
-                chartDataList = data.mosuTableList;
-                getAreaMosuStackChart(data.mosuTableList); // 지역별 모수 현황 차트
+                $("#baseDt").text("데이터 기준일 : "+data.baseDt);
                 getAreaMosuTable(data.mosuTableList);
+                getAreaMosuStackChart(data.mosuTableList); // 지역별 모수 현황 차트
+                chartDataList = data.mosuTableList;
                 if (cityCd == "" || cityCd == "00") {
                     $('#divSubData').hide();
 
@@ -823,10 +827,7 @@
                     getSexAgePieChart('chart1', 'chart2', data.sexBarList, data.ageBarList);
                     getSexAgeBarChart('chart3', data.sexAgeBarList);
                     getRankTable(data.rankTableList);
-
                     getNetworkChart("chart4", data.arPocNetworkNodeList, data.arPocNetworkLinkList);
-                    getNetworkChart("chart5", data.arPocNetworkNodeList, data.arPocNetworkLinkList); // 동 팝업 네트워크 차트
-                    getNetworkChart("chart6", data.arPocNetworkNodeList, data.arPocNetworkLinkList); // 확대/축소 팝업 네트워크 차트
                 }
 
                 if (cityName == "") {
@@ -922,7 +923,12 @@
             // Chart의 Option 정보
             function _getAreaMosuStackOption(dataList) {
                 var chartDatas = _getAreaMosuStackChartData(dataList);
+
                 var option = {
+                    title : {
+                        text: $("#areaDong").text(),
+                        subtext: "모수 : " + $("#areaMosu").text() + ", PUSH 동의 : " + $("#areaPush").text()
+                    },
                     grid: {
                         x: 100
                     },
@@ -1097,6 +1103,8 @@
                 myChart = echarts.init(document.getElementById(chartId));
                 myChart.setTheme(GV_CHART_THEME);
                 myChart.setOption(_getSexAgePieOptions(isMain, datas[2], datas[3]));
+
+                resizeChartOnWinResizeHandler.on(myChart);
             }
 
             // Chart의 Option 정보
@@ -1207,6 +1215,7 @@
                 var myChart = echarts.init(document.getElementById(chartId));
                 myChart.setTheme(GV_CHART_THEME);
                 myChart.setOption(_getSexAgeBarOptions(chartId.indexOf('Dong') < 0, dataList));
+                resizeChartOnWinResizeHandler.on(myChart);
             }
 
             // Chart의 Option 정보

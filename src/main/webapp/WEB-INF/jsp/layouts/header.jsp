@@ -246,8 +246,8 @@
                                             	<p><img src="<c:url value="/resources/images/icon-dropdownMenu.png"/>"></p>
                                                 <!--업종 2depth-->
                                             	<li><a href="<c:url value="/category/categoryBusy.do"/>">업종별 현황</a></li>
-                                                <li><a href="<c:url value="/category/categoryMosu.do"/>">서비스별 모수 현황</a></li>
-                                                <li><a href="<c:url value="/category/categoryDemo.do"/>">서비스별 데모 현황</a></li>
+                                                <%-- <li><a href="<c:url value="/category/categoryMosu.do"/>">서비스별 모수 현황</a></li> --%>
+                                                <li><a href="<c:url value="/category/categoryDemo.do"/>">서비스별 현황</a></li>
 											</ul>
 										</li>
 										<li class="dropdown">
@@ -257,7 +257,7 @@
                                             <a href="<c:url value="/insights/insights.do"/>" class="dropdown-toggle" data-toggle="dropdown">Insights</a>
                                         </li>
                                         <li class="dropdown">
-                                            <a href="<c:url value="/insights/insights.do"/>" class="dropdown-toggle" data-toggle="dropdown">그날에 우리</a>
+                                            <a href="<c:url value="/insights/todayus.do"/>" class="dropdown-toggle" data-toggle="dropdown">그날에 우리</a>
                                         </li>
 									</ul>
 								</div>
@@ -282,10 +282,10 @@
 			
 			<!--footer-->
 			<footer>
-	        	<div class="container">
+	        	<div class="container posiR">
 					<p class="copyR">(463-400) 경기도 성남시 분당구 판교로 264(삼평동) The Planet SK플래닛 주식회사 대표이사 서진우<br>
 					Copyright © 2015 SK Planet.  ALL RIGHTS RESERVED</p>
-					<p class="wording">Commerce Data PF Team 이란</p>
+					<p class="wording">Commerce Data PF Team</p>
 	            </div>
 			</footer> 
 			<!-- //footer -->

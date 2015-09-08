@@ -80,20 +80,21 @@
 		</div>
 		<!-- //page-wrapper-->
 
-		<c:if test="${ !(empty status) && !(status eq '1') }">
+		<c:if test="${ !(empty loginFailureException) }">
 		<div class="modal fade" id="errorInfoModal" tabindex="-1" role="dialog" aria-labelledby="errorInfoModalLabel">
-			<div class="modal-dialog modal-sm"> 
+			<div class="modal-dialog modalWd800"> 
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h3 id="errorInfoModalLabel">로그인 실패</h3>
 					</div>
 					<div class="modal-body">
-					아이디, 또는 비밀번호가 틀립니다.
+		            	<div class="login_fail">
+		                	<p><img src="<c:url value="/resources/images/login_fail.gif"/>" alt="로그인 실패"/></p>
+		                    <strong><span class="fontOrg">로그인에 실패</span> 했습니다</strong>
+		                    <p class="exp"><c:out value="${ loginFailureException.message }"/></p>
+		                </div>
+		                <div class="btn_goPg mt50"><button type="button" data-dismiss="modal">확인</button></div>.
 					</div>
-					<div class="modal-footer">
-        				<button type="button" class="btn btn-default" data-dismiss="modal">확인</button>
-        			</div>
 				</div>
 			</div>
 		</div>

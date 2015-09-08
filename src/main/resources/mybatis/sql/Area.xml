@@ -12,64 +12,72 @@
         <![CDATA[
         WITH V_AR AS
         (
-            SELECT A.MAIN_ADM_DONG_CD
-                 , B.SIDO              AS MAIN_SIDO
-                 , B.SIGUNGU           AS MAIN_SIGUNGU
-                 , B.ADM_DONG          AS MAIN_ADM_DONG
-                 , A.CROSS_ADM_DONG_CD
-                 , C.SIDO              AS CROSS_SIDO
-                 , C.SIGUNGU           AS CROSS_SIGUNGU
-                 , C.ADM_DONG          AS CROSS_ADM_DONG
-                 , A.MAIN_MBR_CNT
-                 , A.MAIN_MBR_CNT_OF_CORSS
-                 , A.CONFIDENCE
-                 , A.RN_1
-                 , A.RN_2
-              FROM (
-                     SELECT /*+ INDEX(A IX1_INTGT_POC_AR_ACVT_AREA) */
-                            MAIN_ADM_DONG_CD
-                          , CROSS_ADM_DONG_CD
-                          , MAIN_MBR_CNT
-                          , CROSS_MBR_CNT AS MAIN_MBR_CNT_OF_CORSS
-                          , CONFIDENCE
-                          , DENSE_RANK() OVER (ORDER BY MAIN_MBR_CNT DESC) AS RN_1
-                          , ROW_NUMBER() OVER (PARTITION BY MAIN_ADM_DONG_CD ORDER BY CONFIDENCE DESC) AS RN_2
-                       FROM INTGT_POC_AR_ACVT_AREA A
-                       WHERE MAIN_ADM_DONG_CD LIKE #{mainAcvtAdmDongCd} || '%'
-                            -- MAIN_ADM_DONG_CD LIKE '41%' -- 경기도 샘플
-                   ) A
-                   LEFT OUTER JOIN INTGT_ADM_DONG_META B
-                        ON A.MAIN_ADM_DONG_CD  = B.ADM_DONG_CD
-                   LEFT OUTER JOIN INTGT_ADM_DONG_META C
-                        ON A.CROSS_ADM_DONG_CD = C.ADM_DONG_CD
-                  WHERE RN_1 <= #{mainAdmDongCdCnt}    /* MAIN  행정동 갯수 조절 변수*/
-                    AND RN_2 <= #{crossAdmDongCdCnt}    /* CROSS 행정동 갯수 조절 변수 */
-            )
-            SELECT ADM_DONG_CD
-                 , SIDO_NM
-                 , SIGUNGU_NM
-                 , DONG_NM
-                 , MBR_CNT
-              FROM (
-            SELECT MAIN_ADM_DONG_CD AS ADM_DONG_CD
-                 , MAIN_SIDO        AS SIDO_NM
-                 , MAIN_SIGUNGU     AS SIGUNGU_NM
-                 , MAIN_ADM_DONG    AS DONG_NM
-                 , MAIN_MBR_CNT     AS MBR_CNT
-              FROM V_AR
-             UNION ALL
-            SELECT CROSS_ADM_DONG_CD
-                 , CROSS_SIDO
-                 , CROSS_SIGUNGU
-                 , CROSS_ADM_DONG
-                 , MAIN_MBR_CNT_OF_CORSS
-              FROM V_AR
+                SELECT A.MAIN_ADM_DONG_CD
+                     , B.SIDO              AS MAIN_SIDO
+                     , B.SIGUNGU           AS MAIN_SIGUNGU
+                     , B.ADM_DONG          AS MAIN_ADM_DONG
+                     , A.CROSS_ADM_DONG_CD
+                     , C.SIDO              AS CROSS_SIDO
+                     , C.SIGUNGU           AS CROSS_SIGUNGU
+                     , C.ADM_DONG          AS CROSS_ADM_DONG
+                     , A.MAIN_MBR_CNT
+                     , A.MAIN_MBR_CNT_OF_CORSS
+                     , A.CONFIDENCE
+                     , A.RN_1
+                     , A.RN_2
+
+                  FROM (
+                         SELECT /*+ INDEX(A IX1_INTGT_POC_AR_ACVT_AREA) */
+                                MAIN_ADM_DONG_CD
+                              , CROSS_ADM_DONG_CD
+                              , MAIN_MBR_CNT
+                              , CROSS_MBR_CNT AS MAIN_MBR_CNT_OF_CORSS
+                              , CONFIDENCE
+                              , DENSE_RANK() OVER (ORDER BY MAIN_MBR_CNT DESC) AS RN_1
+                              , ROW_NUMBER() OVER (PARTITION BY MAIN_ADM_DONG_CD ORDER BY CONFIDENCE DESC) AS RN_2
+                           FROM INTGT_POC_AR_ACVT_AREA A
+                           WHERE MAIN_ADM_DONG_CD LIKE #{mainAcvtAdmDongCd} || '%'
+                                /* MAIN_ADM_DONG_CD LIKE '41%' -- 경기도 샘플 */
+                       ) A
+                       LEFT OUTER JOIN INTGT_ADM_DONG_META B
+                            ON A.MAIN_ADM_DONG_CD  = B.ADM_DONG_CD
+                       LEFT OUTER JOIN INTGT_ADM_DONG_META C
+                            ON A.CROSS_ADM_DONG_CD = C.ADM_DONG_CD
+                      WHERE RN_1 <= #{mainAdmDongCdCnt}    /* MAIN  행정동 갯수 조절 변수*/
+                        AND RN_2 <= #{crossAdmDongCdCnt}    /* CROSS 행정동 갯수 조절 변수 */
         )
-        GROUP BY ADM_DONG_CD
+        SELECT ADM_DONG_CD
              , SIDO_NM
              , SIGUNGU_NM
              , DONG_NM
              , MBR_CNT
+             , DONG_TYPE
+         FROM (
+                SELECT ADM_DONG_CD
+                     , SIDO_NM
+                     , SIGUNGU_NM
+                     , DONG_NM
+                     , MBR_CNT
+                     , ROW_NUMBER() OVER (PARTITION BY ADM_DONG_CD ORDER BY DONG_TYPE) AS RN_3
+                     , DONG_TYPE
+                  FROM (
+                SELECT MAIN_ADM_DONG_CD AS ADM_DONG_CD
+                     , MAIN_SIDO        AS SIDO_NM
+                     , MAIN_SIGUNGU     AS SIGUNGU_NM
+                     , MAIN_ADM_DONG    AS DONG_NM
+                     , MAIN_MBR_CNT     AS MBR_CNT
+                     , '1'              AS DONG_TYPE
+                  FROM V_AR
+                 UNION ALL
+                SELECT CROSS_ADM_DONG_CD
+                     , CROSS_SIDO
+                     , CROSS_SIGUNGU
+                     , CROSS_ADM_DONG
+                     , MAIN_MBR_CNT_OF_CORSS
+                     , '2'              AS DONG_TYPE
+                  FROM V_AR )
+             )
+         WHERE RN_3 = 1
         ]]>
     </select>
 

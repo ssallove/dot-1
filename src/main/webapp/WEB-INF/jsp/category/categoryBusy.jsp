@@ -69,8 +69,30 @@
                 <div class="chartLy">
                     <ul class="chartLy_1p ">
                         <li>
-                            <p class="chartTitle "><i class="fa fa-bar-chart"></i>업종별 모수<span id="subChartTxt"></span></p>
-                            <div class="chartArea" id="chartContainer" style="height:500px"></div>
+                            <p class="chartTitle "><i class="fa fa-bar-chart"></i>통합 기준   업종별 모수<span id="subChartTxt"></span></p>
+                            <div class="chartArea" id="chartContainer_tot" style="height:500px"></div>
+                        </li>
+                    </ul>
+                  </div>
+                <!--// 업종별 모수 챠트-->
+                
+                <!--업종별 모수 챠트 -->
+                <div class="chartLy mt50">
+                    <ul class="chartLy_1p ">
+                        <li>
+                            <p class="chartTitle "><i class="fa fa-bar-chart"></i>Syrup PUSH 동의자 기준   업종별 모수<span id="subChartTxt"></span></p>
+                            <div class="chartArea" id="chartContainer_syr" style="height:500px">Chart</div>
+                        </li>
+                    </ul>
+                  </div>
+                <!--// 업종별 모수 챠트-->
+                
+                <!--업종별 모수 챠트 -->
+                <div class="chartLy mt50">
+                    <ul class="chartLy_1p ">
+                        <li>
+                            <p class="chartTitle "><i class="fa fa-bar-chart"></i>OCB PUSH 동의자 기준   업종별 모수<span id="subChartTxt"></span></p>
+                            <div class="chartArea" id="chartContainer_ocb" style="height:500px">Chart</div>
                         </li>
                     </ul>
                   </div>
@@ -97,11 +119,19 @@
             defineEvent();
             
             // draw chart
-            var myChart = echarts.init(document.getElementById('chartContainer'));
-            myChart.setTheme(GV_CHART_THEME);     // , 'infographic'       
-            myChart.setOption(getOption());
-            
-            resizeChartOnWinResizeHandler.on(myChart);
+            var charts = [];
+            $.each([{type:'tot', chartList:${jsonBubbleChartList}, selected:{'통합':false}}
+		            , {type:'syr', chartList:$.grep(${jsonBubbleChartListByPush}, function(value, idx){    return value.srcSvcCd == "SYR";    }) , selected:{'Syrup':false}}
+		            , {type:'ocb', chartList:$.grep(${jsonBubbleChartListByPush}, function(value, idx){    return value.srcSvcCd == "OCB";    }) , selected:{'OCB':false}}], function(idx, data){
+            	
+            	var serviceMap = eval(data.type+'ServiceMap');
+            	var myChart = echarts.init(document.getElementById('chartContainer_'+data.type));
+                myChart.setTheme(GV_CHART_THEME);     // , 'infographic'
+                myChart.setOption(getOption(serviceMap, data.selected, data.chartList));
+                charts.push(myChart);
+            });
+     
+            resizeChartOnWinResizeHandler.on(charts);
         });
                     
             
@@ -175,32 +205,27 @@
             
             
                 
-        var serviceMap = {
-                'SYR' : 'Syrup',
-                'OCB' : 'OCB',
-                'TMA' : 'Tmap',
-                'TST' : 'Tstore',
-                'EVS' : '11번가',
-                'TOT' : '통합'
-            };    
+        var totServiceMap = {'SYR' : 'Syrup', 'OCB' : 'OCB', 'TMA' : 'Tmap', 'TST' : 'Tstore', 'EVS' : '11번가', 'TOT' : '통합'};
+        var syrServiceMap = {'TMA' : 'Tmap', 'TST' : 'Tstore', 'EVS' : '11번가', 'OCB' : 'OCB', 'SYR' : 'Syrup'};
+        var ocbServiceMap = {'TMA' : 'Tmap', 'TST' : 'Tstore', 'EVS' : '11번가', 'SYR' : 'Syrup', 'OCB' : 'OCB'};    
+        
         // Chart의 Option 정보  
-        function getOption(){
+        function getOption(_serviceMap, selected, chartList){
             var categoryData = [];
             $.each(${jsonCategorylist}, function(idx, value){ if(categoryData.indexOf(value.cdNm) < 0) categoryData.push(value.cdNm); });
-            var chartData = ${jsonCategorylist};
             
             var option = {
-            	calculable : true,
+                calculable : true,
                 tooltip : {
                     trigger: 'item',
                     showDelay : 0,
                     textStyle : { align : 'left'},
                     formatter : 
-                    	function (param) {   return "<font size='2px'><b>["+param.seriesName+"]</b>&nbsp;&nbsp;"+param.data[0]+" : "+  formatCurrency(param.data[1])+"</font>"
-                    	    +"</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BLE동의 : "+formatCurrency(param.data[3])
-                    	    +"</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;위치동의 : "+formatCurrency(param.data[4])
-                    	    +"</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH동의 : "+formatCurrency(param.data[5]);    } ,
-                    	
+                        function (param) {   return "<font size='2px'><b>["+param.seriesName+"]</b>&nbsp;&nbsp;"+param.data[0]+" : "+  formatCurrency(param.data[1])+"</font>"
+                            +"</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BLE동의 : "+formatCurrency(param.data[3])
+                            +"</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;위치동의 : "+formatCurrency(param.data[4])
+                            +"</br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUSH동의 : "+formatCurrency(param.data[5]);    } ,
+                        
                     axisPointer:{
                         show: true,
                         type : 'cross',
@@ -211,54 +236,42 @@
                     }
                 },
                 legend: {
-                    data: $.map(serviceMap, function(value, idx){ return value; } )
-                    , selected: { '통합' : false }
+                    data: $.map(_serviceMap, function(value, idx){ return value; } )
+                    , selected: selected
                 },
                 xAxis : [
                     {
-                        type : 'category',
-                        splitLine: {show: false}
+                        type : 'category'
+                        , splitLine: {show: false}
                         , data : categoryData
-                         /*, axisLabel :{interval:function(p, data){
-                            return (${jsonCategoryViewlist}.indexOf(data) >= 0);
-                        }} */
                     }
                 ],
                 yAxis : [
                     {
-                        type : 'value',
-                        scale: true
+                        type : 'value'
+                        , scale: true
                     }
                 ],
-                series : getChartData()    // Chart Data
+                series : getChartData(chartList, _serviceMap)    // Chart Data
             };
-            
-            
-            //console.dir(JSON.stringify(option));
             return option;
         }
         
-        
+     // Chart Data로 parsing
+     function getChartData(chartList, _serviceMap){
+         var maxVal =($.map(chartList, function(value, idx){ return value.mbrCnt; } )).max();
+         var chartData=[];
+         $.each(_serviceMap, function(svcCd, value){ chartData.push( _getChartData(svcCd, chartList));        });
+         function _getChartData(svcCd, chartList){
+             var chartData = $.grep(chartList, function(value, idx){    return value.svcCd == svcCd;    });
+             var data = []; $.each(chartData, function(idx, value){ var mbrCnt = value.mbrCnt; data.push([value.cnctCtgNm, mbrCnt, mbrCnt, value.bleMbrCnt, value.locMbrCnt, value.pushMbrCnt]);  } );
+             return {name:_serviceMap[svcCd],    type:'scatter', data:data, symbolSize: function (value){    var size = 40*(value[2]/maxVal)+4;      return size;                    } };
+         }
+         return chartData;
+     }
             
+     
         
-        // Chart Data로 parsing
-        var _CHART_MAX_VAL;
-        var _CHATR_PER = 200;
-        function getChartData(){
-            var chartList = ${jsonBubbleChartList};
-            _CHART_MAX_VAL =($.map(chartList, function(value, idx){ return value.mbrCnt; } )).max();
-
-            var chartData=[];
-            $.each(serviceMap, function(svcCd, value){ chartData.push( _getChartData(svcCd, chartList));        });
-            function _getChartData(svcCd, chartList){
-                var chartData = $.grep(chartList, function(value, idx){    return value.svcCd == svcCd;    });
-                //var maxVal = ($.map(chartData, function(value, idx){ return value.mbrCnt; } )).max();
-                var data = []; $.each(chartData, function(idx, value){ var mbrCnt = value.mbrCnt; data.push([value.cnctCtgNm, mbrCnt, mbrCnt, value.bleMbrCnt, value.locMbrCnt, value.pushMbrCnt]);  } );
-                return {name:serviceMap[svcCd],    type:'scatter', data:data, symbolSize: function (value){    var size = 40*(value[2]/_CHART_MAX_VAL)+4;      return size;                    } };
-            }
-            return chartData;
-        }
-            
 
         </script>
     </tiles:putAttribute>

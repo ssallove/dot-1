@@ -270,6 +270,8 @@
 				
 			    $("#btnSearch").click(function () {
 			      var periodClCd = $("#sel_period option:selected").val();
+			      
+			      
 			      var largeTx = $("#sel_cate_large option:selected").text();
 			      var midTx = $("#sel_cate_mid option:selected").text();
 			      var smallTx = $("#sel_cate_small option:selected").text();
@@ -303,335 +305,48 @@
 			
 			    });
 			    
-			  });
-			
-			  /* 분류 category 조회 */ 
-			  function changeCategory(com_cd, properties_gb) {
-				
-				if(properties_gb == "L"){
-					$("#sel_cate_mid").selectBox("options", "<option value=''>전체</option>"); 
-			        $("#sel_cate_mid").selectBox("disable");
-				}
-				
-				$("#sel_cate_small").selectBox("options", "<option value=''>전체</option>"); 
-			    $("#sel_cate_small").selectBox("disable");
-			           
-			    var subCateNm = (properties_gb == "L") ? "mid" : "small";
-			    
-			    if ("-" != com_cd && com_cd != "") {
-			    	$("#sel_cate_"+subCateNm).selectBox("enable");
-
-				    $.ajax({
-				        beforeSend: function () {},
-				        data      : {
-				            "com_cd": com_cd,
-				            "properties_gb": properties_gb
-				        },
-				        dataType  : "json",
-				        type      : "POST",
-				        url       : "/cateList.do",
-				        success   : function (data) {
-				        	var optionStrs = "";
-				            for (i = 0; i < data.cateList.length; i++) {
-				            	optionStrs = optionStrs+"<option value='" + data.cateList[i].comCd + "'>" + data.cateList[i].cdNm + "</option>";
-				            }
-				            
-				            if (data.cateList.length == 0) {
-				            	optionStrs = optionStrs+"<option value=''>전체</option>";
-				            }
-				            $("#sel_cate_"+subCateNm).selectBox("options", optionStrs); 
-				        }
-				    });
-			    } 
-			  }
-			  
-			/* 
-			  
-			  <!-- 
-              서비스별 모수 현황 챠트
-              <h2>서비스별 모수 현황</h2>
-              <div class="chartLy">
-              	<ul class="chartLy_4p ">
-              		<li>
-                  		<p class="chartTitle "><i class="fa fa-bar-chart"></i>전체</p>
-                      	<div class="chartArea" id="chart5" val="5"  style="height:200px !important" ><svg></svg></div>
-                  	</li>
-                  	<li>
-                  		<p class="chartTitle ico"><i class="fa fa-bar-chart"></i>PUSH 동의</p>
-                      	<div class="chartArea" id="chart6" val="5"  style="height:200px !important" ><svg></svg></div>
-                  	</li>
-                      <li>
-                  		<p class="chartTitle ico"><i class="fa fa-bar-chart"></i>위치 동의</p>
-                      	<div class="chartArea" id="chart7" style="height:200px !important"><svg></svg></div>
-                  	</li>
-                      <li>
-                  		<p class="chartTitle ico"><i class="fa fa-bar-chart"></i>BLE 동의</p>
-                      	<div class="chartArea" id="chart8" val="6"  style="height:200px !important" ><svg></svg></div>
-                  	</li>
-              	</ul>
-				</div>
-              // 서비스별 모수 현황 챠트
-               -->
-			  var lineArrData = new Array();
-			  var lineArrData2 = new Array();
-			  function myRadarChart() {
-					
-				var w = 108;
-				var h = 130;
-
-				var colorscale = d3.scale.category10();
-	
-				//Legend titles
-				var LegendOptions = ['Smartphone','Tablet'];
+		  });
 		
-					//Data
-				var data1=[];
-				var data2=[];
-				var data3=[];
-				var data4=[];
-				<c:forEach items="${mosulist}" var="voList" varStatus="status">
-				
-					<c:if test="${voList.funcAgrClCd == '99'}">
-						<c:if test="${voList.lv == 2}">
-							data1 = [[
-								{axis:"Syrup",value:"${voList.syrGrp}"},
-								{axis:"OCB",value:"${voList.ocbGrp}"},
-								{axis:"T map",value:"${voList.tmaGrp}"},
-								{axis:"11번가",value:"${voList.evsGrp}"},
-								{axis:"T store",value:"${voList.tstGrp}"}
-							]];
-						</c:if>
-					</c:if>
-	
-					<c:if test="${voList.funcAgrClCd == '03'}">
-						<c:if test="${voList.lv == 2}">
-						data2 = [[
-							{axis:"Syrup",value:"${voList.syrGrp}"},
-							{axis:"OCB",value:"${voList.ocbGrp}"},
-							{axis:"T map",value:"${voList.tmaGrp}"},
-							{axis:"11번가",value:"${voList.evsGrp}"},
-							{axis:"T store",value:"${voList.tstGrp}"}
-						]];
-						</c:if>
-					</c:if>
-					
-					<c:if test="${voList.funcAgrClCd == '02'}">
-						<c:if test="${voList.lv == 2}">
-						data3 = [[
-							{axis:"Syrup",value:"${voList.syrGrp}"},
-							{axis:"OCB",value:"${voList.ocbGrp}"},
-							{axis:"T map",value:"${voList.tmaGrp}"},
-							{axis:"11번가",value:"${voList.evsGrp}"},
-							{axis:"T store",value:"${voList.tstGrp}"}
-						]];
-						</c:if>
-					</c:if>
-					
-					<c:if test="${voList.funcAgrClCd == '01'}">
-						<c:if test="${voList.lv == 2}">
-						data4 = [[
-							{axis:"Syrup",value:"${voList.syrGrp}"},
-							{axis:"OCB",value:"${voList.ocbGrp}"},
-							{axis:"T map",value:"${voList.tmaGrp}"},
-							{axis:"11번가",value:"${voList.evsGrp}"},
-							{axis:"T store",value:"${voList.tstGrp}"}
-						]];
-						</c:if>
-					</c:if>
+		  /* 분류 category 조회 */ 
+		  function changeCategory(com_cd, properties_gb) {
+			
+			if(properties_gb == "L"){
+				$("#sel_cate_mid").selectBox("options", "<option value=''>전체</option>"); 
+		        $("#sel_cate_mid").selectBox("disable");
+			}
+			
+			$("#sel_cate_small").selectBox("options", "<option value=''>전체</option>"); 
+		    $("#sel_cate_small").selectBox("disable");
+		           
+		    var subCateNm = (properties_gb == "L") ? "mid" : "small";
+		    
+		    if ("-" != com_cd && com_cd != "") {
+		    	$("#sel_cate_"+subCateNm).selectBox("enable");
 
-				</c:forEach>
-				
-				//Options for the Radar chart, other than default
-				var mycfg = {
-				  w: w,
-				  h: h,
-				  maxValue: 1.0,
-				  levels: 4,
-				  ExtraWidthX: 100
-				}
-	
-				//Call function to draw the Radar chart
-				//Will expect that data is in %'s
-				
-				console.log(data1);
-				
-				if ( data1.length == 0 && data2.length == 0 && data3.length == 0 && data4.length == 0 )
-				{
-					return ;
-				}
-				
-				RadarChart.draw("#chart5", data1, mycfg);
-	 			RadarChart.draw("#chart6", data2, mycfg);
-				RadarChart.draw("#chart7", data3, mycfg);
-				RadarChart.draw("#chart8", data4, mycfg);
-	
-				////////////////////////////////////////////
-				/////////// Initiate legend ////////////////
-				////////////////////////////////////////////
-	
-				var svg = d3.select('#body')
-					.selectAll('svg')
-					.append('svg')
-					.attr("width", w+300)
-					.attr("height", h)
-	
-				//Create the title for the legend
-				var text = svg.append("text")
-					.attr("class", "title")
-					.attr('transform', 'translate(90,0)') 
-					.attr("x", w - 70)
-					.attr("y", 10)
-					.attr("font-size", "12px")
-					.attr("fill", "#FF0000")
-					.text("What % of owners use a specific service in a week");
-						
-				//Initiate Legend	
-				var legend = svg.append("g")
-					.attr("class", "legend")
-					.attr("height", 100)
-					.attr("width", 200)
-					.attr('transform', 'translate(90,20)') 
-					;
-					//Create colour squares
-					legend.selectAll('rect')
-					  .data(LegendOptions)
-					  .enter()
-					  .append("rect")
-					  .attr("x", w - 65)
-					  .attr("y", function(d, i){ return i * 20;})
-					  .attr("width", 10)
-					  .attr("height", 10)
-					  .style("fill", function(d, i){ return colorscale(i);})
-					  ;
-					//Create text next to squares
-					legend.selectAll('text')
-					  .data(LegendOptions)
-					  .enter()
-					  .append("text")
-					  .attr("x", w - 52)
-					  .attr("y", function(d, i){ return i * 20 + 9;})
-					  .attr("font-size", "11px")
-					  .attr("fill", "#FF0000")
-					  .text(function(d) { return d; })
-					  ;	
-					
-			  }
-			 
-			 */
-			  /* 
-			  function pieData1() {
-				  
-					var pieData = [];
-					
-					<c:forEach items= "${ageLineList5}" var ="item1" varStatus="status">
-					
-						console.log("${item1.sexCd}");
-						pieData.push({
-							key : "${item1.sexCd}",
-							y : "${item1.totMbrCnt}"
-						});
-					
-					</c:forEach>
-					
-					return pieData;
-					
-				}
-			  
-			  
-			  
-				function pieData2() {
-					
-					var pieData = [];
-					
-					<c:forEach items= "${ageLineList6}" var ="item1" varStatus="status">
-					
-						pieData.push({
-							key : "${item1.sexCd}",
-							y : "${item1.totMbrCnt}"
-						});
-					
-					</c:forEach>
-
-					return pieData;
-					
-				}
-
-				
-				
-				function lineData() {
-					
-					var sin = [], cos = [];
-
-					<c:forEach items= "${ageLineList1}" var ="item1" varStatus="status">
-					
-						lineArrData["${status.index}"] = "${item1.ageRngNm}";
-						sin.push({
-							x : Number("${status.index}"),
-							y : Number("${item1.totMbrCnt}")
-						});
-						
-					</c:forEach>
-					
-					<c:forEach items= "${ageLineList2}" var ="item1" varStatus="status">
-					
-						lineArrData["${status.index}"] = "${item1.ageRngNm}";
-						cos.push({
-							x : Number("${status.index}"),
-							y : Number("${item1.totMbrCnt}")
-						});
-						
-					</c:forEach>
-
-					return [ {
-						values : sin,
-						key : "${ageListTitle1}   ",
-						color : "#78FF97"
-					}, {
-						values : cos,
-						key : "${ageListTitle2}",
-						color : "#24B245"
-					} ];
-					
-				}
-
-				
-				
-				function lineData2() {
-					
-					var sin = [], cos = [];
-
-					<c:forEach items= "${ageLineList3}" var ="item1" varStatus="status">
-					
-						lineArrData2["${status.index}"] = "${item1.ageRngNm}";
-						sin.push({
-							x : Number("${status.index}"),
-							y : Number("${item1.totMbrCnt}")
-						});
-						
-					</c:forEach>
-					
-					<c:forEach items= "${ageLineList4}" var ="item1" varStatus="status">
-					
-						lineArrData2["${status.index}"] = "${item1.ageRngNm}";
-						cos.push({
-							x : Number("${status.index}"),
-							y : Number("${item1.totMbrCnt}")
-						});
-						
-					</c:forEach>
-
-					return [ {
-						values : sin,
-						key : "${ageListTitle3}    ",
-						color : "#B25437"
-					}, {
-						values : cos,
-						key : "${ageListTitle4}",
-						color : "#FF9878"
-					} ];
-					
-				} */
-			  
+			    $.ajax({
+			        beforeSend: function () {},
+			        data      : {
+			            "com_cd": com_cd,
+			            "properties_gb": properties_gb
+			        },
+			        dataType  : "json",
+			        type      : "POST",
+			        url       : "/cateList.do",
+			        success   : function (data) {
+			        	var optionStrs = "";
+			            for (i = 0; i < data.cateList.length; i++) {
+			            	optionStrs = optionStrs+"<option value='" + data.cateList[i].comCd + "'>" + data.cateList[i].cdNm + "</option>";
+			            }
+			            
+			            if (data.cateList.length == 0) {
+			            	optionStrs = optionStrs+"<option value=''>전체</option>";
+			            }
+			            $("#sel_cate_"+subCateNm).selectBox("options", optionStrs); 
+			        }
+			    });
+		    } 
+		  }
+		  
 		</script>
 		
 	</tiles:putAttribute>

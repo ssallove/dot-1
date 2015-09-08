@@ -24,7 +24,26 @@ public class CateDao extends AbstractDao4PTGT {
     	
     	return getSqlSession().selectList("Category.selectCateServiceMosuReportList", param);
     	
-    } 
+    }
+
+    public List<CateVO> selectCateNetworkLink(Map<String, String> p) {
+
+        p.put("mainCtgCd", p.get("mainCtgCd"));
+        p.put("mainCateCnt", p.get("mainCateCnt"));
+        p.put("crossCateCnt", p.get("crossCateCnt"));
+
+        return getSqlSession().selectList("Category.selectCateNetworkLink", p);
+    }
+
+    public List<CateVO> selectCateNetworkNode(Map<String, String> p) {
+
+        p.put("mainCtgCd", p.get("mainCtgCd"));
+        p.put("mainCateCnt", p.get("mainCateCnt"));
+        p.put("crossCateCnt", p.get("crossCateCnt"));
+
+        return getSqlSession().selectList("Category.selectCateNetworkNode", p);
+    }
+
     
     
     
@@ -43,6 +62,10 @@ public class CateDao extends AbstractDao4PTGT {
     
     public List<CateVO> selectBusyBubbleChartData(Map<String, String> p) {
     	return getSqlSession().selectList("Category.selectBusyBubbleChartData", p);
+    	
+    }
+    public List<CateVO> selectBusyBubbleChartDataByPush(Map<String, String> p) {
+    	return getSqlSession().selectList("Category.selectBusyBubbleChartDataByPush", p);
     	
     }
     

@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+
 <mapper namespace="Category">
 
 	<resultMap type="CateVO" id="dataList">
@@ -43,6 +44,124 @@
 		<result column="PUSH_MBR_CNT" property="pushMbrCnt"/>
 		
 	</resultMap>
+
+    <!--  업종별 AR 네트워크 노드 쿼리 -->
+    <select id="selectCateNetworkNode" parameterType="map" resultMap="dataList">
+
+        <![CDATA[
+
+        WITH V_AR AS
+        (
+        SELECT MAIN_CTG_CD
+             , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_008' AND COM_CD = SUBSTR(MAIN_CTG_CD, 1, 5)) AS MAIN_L_CTG_NM
+             , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_009' AND COM_CD = SUBSTR(MAIN_CTG_CD, 1, 7)) AS MAIN_M_CTG_NM
+             , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_010' AND COM_CD = MAIN_CTG_CD) AS MAIN_S_CTG_NM
+             , CROSS_CTG_CD
+             , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_008' AND COM_CD = SUBSTR(CROSS_CTG_CD, 1, 5)) AS CROSS_L_CTG_NM
+             , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_009' AND COM_CD = SUBSTR(CROSS_CTG_CD, 1, 7)) AS CROSS_M_CTG_NM
+             , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_010' AND COM_CD = CROSS_CTG_CD) AS CROSS_S_CTG_NM
+             , MAIN_MBR_CNT
+             , MAIN_MBR_CNT_OF_CORSS
+             , CONFIDENCE
+          FROM (
+                SELECT MAIN_CTG_CD
+                     , CROSS_CTG_CD
+                     , MAIN_MBR_CNT
+                     , CROSS_MBR_CNT AS MAIN_MBR_CNT_OF_CORSS
+                     , CONFIDENCE
+                     , DENSE_RANK() OVER (ORDER BY MAIN_MBR_CNT DESC) AS RN_1
+                     , ROW_NUMBER() OVER (PARTITION BY MAIN_CTG_CD ORDER BY CONFIDENCE DESC) AS RN_2
+                  FROM INTGT_POC_CTG_AR A
+                 WHERE MAIN_CTG_CD LIKE #{mainCtgCd} || '%'
+               ) P
+         WHERE RN_1 <= #{mainCateCnt}    /* MAIN  카테고리 갯수 조절 변수 */
+           AND RN_2 <= #{crossCateCnt}    /* CROSS 카테고리 갯수 조절 변수 */
+        )
+        SELECT /* selectCateNetworkNode */ CTG_CD
+             , L_CTG_NM
+             , M_CTG_NM
+             , S_CTG_NM
+             , MBR_CNT
+             , CTG_TYPE
+          FROM (
+                SELECT CTG_CD
+                     , L_CTG_NM
+                     , M_CTG_NM
+                     , S_CTG_NM
+                     , MBR_CNT
+                     , ROW_NUMBER() OVER (PARTITION BY CTG_CD ORDER BY CTG_TYPE) AS RN_3
+                     , CTG_TYPE
+                  FROM (
+                        SELECT MAIN_CTG_CD      AS CTG_CD
+                             , MAIN_L_CTG_NM    AS L_CTG_NM
+                             , MAIN_M_CTG_NM    AS M_CTG_NM
+                             , MAIN_S_CTG_NM    AS S_CTG_NM
+                             , MAIN_MBR_CNT     AS MBR_CNT
+                             , '1'              AS CTG_TYPE
+                          FROM V_AR
+                         UNION ALL
+                        SELECT CROSS_CTG_CD
+                             , CROSS_L_CTG_NM
+                             , CROSS_M_CTG_NM
+                             , CROSS_S_CTG_NM
+                             , MAIN_MBR_CNT_OF_CORSS
+                             , '2'              AS CTG_TYPE
+                          FROM V_AR
+                       )
+               ) R
+         WHERE RN_3 = 1
+
+        ]]>
+
+    </select>
+
+    <!--  업종별 AR 네트워크 링크 쿼리 -->
+    <select id="selectCateNetworkLink" parameterType="map" resultMap="dataList">
+
+        <![CDATA[
+        WITH V_AR AS
+        (
+        SELECT MAIN_CTG_CD
+             , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_008' AND COM_CD = SUBSTR(MAIN_CTG_CD, 1, 5)) AS MAIN_L_CTG_NM
+             , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_009' AND COM_CD = SUBSTR(MAIN_CTG_CD, 1, 7)) AS MAIN_M_CTG_NM
+             , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_010' AND COM_CD = MAIN_CTG_CD) AS MAIN_S_CTG_NM
+             , CROSS_CTG_CD
+             , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_008' AND COM_CD = SUBSTR(CROSS_CTG_CD, 1, 5)) AS CROSS_L_CTG_NM
+             , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_009' AND COM_CD = SUBSTR(CROSS_CTG_CD, 1, 7)) AS CROSS_M_CTG_NM
+             , (SELECT CD_NM FROM INTGT_COM_CD WHERE LCL_CD = 'POC_010' AND COM_CD = CROSS_CTG_CD) AS CROSS_S_CTG_NM
+             , MAIN_MBR_CNT
+             , MAIN_MBR_CNT_OF_CORSS
+             , CONFIDENCE
+             , LIFT
+          FROM (
+                SELECT MAIN_CTG_CD
+                     , CROSS_CTG_CD
+                     , MAIN_MBR_CNT
+                     , CROSS_MBR_CNT AS MAIN_MBR_CNT_OF_CORSS
+                     , CONFIDENCE
+                     , LIFT
+                     , DENSE_RANK() OVER (ORDER BY MAIN_MBR_CNT DESC) AS RN_1
+                     , ROW_NUMBER() OVER (PARTITION BY MAIN_CTG_CD ORDER BY CONFIDENCE DESC) AS RN_2
+                  FROM INTGT_POC_CTG_AR A
+                 WHERE MAIN_CTG_CD LIKE #{mainCtgCd} || '%'
+               ) P
+         WHERE RN_1 <= #{mainCateCnt}    /* MAIN  카테고리 갯수 조절 변수 */
+           AND RN_2 <= #{crossCateCnt}    /* CROSS 카테고리 갯수 조절 변수 */
+        )
+        SELECT /* selectCateNetworkLink */ MAIN_CTG_CD        AS SRC_CTG_CD
+             , MAIN_L_CTG_NM      AS SRC_L_CTG_NM
+             , MAIN_M_CTG_NM      AS SRC_M_CTG_NM
+             , MAIN_S_CTG_NM      AS SRC_S_CTG_NM
+             , CROSS_CTG_CD       AS TGT_CTG_CD
+             , CROSS_L_CTG_NM     AS TGT_L_CTG_NM
+             , CROSS_M_CTG_NM     AS TGT_M_CTG_NM
+             , CROSS_S_CTG_NM     AS TGT_S_CTG_NM
+             , CONFIDENCE
+             , ROUND(LIFT * 1000) AS WEIGHT
+          FROM V_AR
+        ]]>
+
+    </select>
 	
 	<!--  E-Chart 버블차트  X축 VIEW -->
 	<select id="selectBusyBubbleXLineView" resultType="String">
@@ -167,33 +286,9 @@
 	        AND M_CODE.LCL_CD IN ('POC_009', 'POC_008') 
 	   ORDER BY M_CODE.COM_CD
 	    -->	
-	<!--버블차트 X축 -->
-	<select id="selectBubbleXLine" parameterType="map" resultMap="dataList">
-	<![CDATA[
-    SELECT /* selectBubbleXLine */
-           COM_CD
-         , CD_NM
-      FROM INTGT_COM_CD
-     WHERE 1 = 1
-       AND LCL_CD = 'POC_008'
-       AND EXISTS (
-                    SELECT 'X'
-                      FROM INTGT_POC_SVC_CTG_MBR_CNT
-                     WHERE BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
-                       AND INT_KEY_CL_CD = '01'
-                       AND CMPLS_CROSS_AGR_CL_CD = '01'
-                       AND SVC_CD = #{svcCd}			/* TOT, SYR, OCB, TMA, EVS, TST */
-                       AND PERIOD_CL_CD = #{periodClCd}
-                       AND FUNC_AGR_CL_CD = '99'
-                       AND SUBSTR(CNCT_CTG_CD,1,5) = COM_CD
-                  )
-     ORDER BY COM_CD
-    ]]>
-	</select>
-
-	<!--버블차트 데이터 -->
-	<select id="selectBusyBubbleChartData" parameterType="map" resultMap="dataList">
-	<![CDATA[
+	    
+	    <!-- <select id="selectBusyBubbleChartData" parameterType="map" resultMap="dataList">
+    <![CDATA[
     SELECT /* selectBusyBubbleChartData */
            TO_CHAR(TO_DATE(SC.BASE_DT), 'YYYY.MM.DD') BASE_DT
          , SC.INT_KEY_CL_CD
@@ -228,21 +323,21 @@
        AND SC.FUNC_AGR_CL_CD = '99'
     ]]>
        <if test="svcCd != null and svcCd != '' and svcCd != 'TOT'">
-	   AND SC.SVC_CD = #{svcCd}
-	   </if>
+       AND SC.SVC_CD = #{svcCd}
+       </if>
        <choose>
        <when test = "cnctCtgCd == null or cnctCtgCd == '' or cnctCtgCd.equals('-')">
-	   AND CC.LCL_CD = 'POC_009'
+       AND CC.LCL_CD = 'POC_009'
        </when>
        <otherwise>
        <![CDATA[
- 	   AND CC.LCL_CD = 'POC_010'
+       AND CC.LCL_CD = 'POC_010'
        AND DECODE(LENGTH(#{cnctCtgCd}) , 7 , SUBSTR (CC.COM_CD, 1, 7), SUBSTR (CC.COM_CD, 1, 5)) = #{cnctCtgCd} 
        ]]>
        </otherwise>
-	   </choose> 
-	   
-	   AND BLE.FUNC_AGR_CL_CD = '01'
+       </choose> 
+       
+       AND BLE.FUNC_AGR_CL_CD = '01'
        AND SC.CNCT_CTG_CD = BLE.CNCT_CTG_CD
        AND SC.BASE_DT = BLE.BASE_DT
        AND SC.INT_KEY_CL_CD = BLE.INT_KEY_CL_CD
@@ -265,10 +360,129 @@
        AND SC.CMPLS_CROSS_AGR_CL_CD = PUSH.CMPLS_CROSS_AGR_CL_CD
        AND SC.PERIOD_CL_CD = PUSH.PERIOD_CL_CD
        AND SC.SVC_CD = PUSH.SVC_CD
-	   
-	   
-	ORDER BY SC.SVC_CD
+       
+       
+    ORDER BY SC.SVC_CD
+    </select> -->
+    
+    
+	<!--[업종별 현황] 버블차트 X축 -->
+	<select id="selectBubbleXLine" parameterType="map" resultMap="dataList">
+	<![CDATA[
+    SELECT /* selectBubbleXLine */
+           COM_CD
+         , CD_NM
+      FROM INTGT_COM_CD
+     WHERE 1 = 1
+       AND LCL_CD = 'POC_008'
+       AND EXISTS (
+                    SELECT 'X'
+                      FROM INTGT_POC_SVC_CTG_MBR_CNT
+                     WHERE BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+                       AND INT_KEY_CL_CD = '01'
+                       AND CMPLS_CROSS_AGR_CL_CD = '01'
+                       AND SVC_CD = #{svcCd}			/* TOT, SYR, OCB, TMA, EVS, TST */
+                       AND PERIOD_CL_CD = #{periodClCd}
+                       AND FUNC_AGR_CL_CD = '99'
+                       AND SUBSTR(CNCT_CTG_CD,1,5) = COM_CD
+                  )
+     ORDER BY COM_CD
+    ]]>
 	</select>
+
+	<!--[업종별 현황] 버블차트 데이터 -->
+	<select id="selectBusyBubbleChartData" parameterType="map" resultMap="dataList">
+	    <![CDATA[
+	    SELECT /* selectBusyBubbleChartData */
+	         MAX(TO_CHAR (TO_DATE (SC.BASE_DT), 'YYYY.MM.DD')) AS BASE_DT
+	       , SC.INT_KEY_CL_CD
+	       , SC.CMPLS_CROSS_AGR_CL_CD
+	       , SC.SVC_CD
+	       , SC.PERIOD_CL_CD
+	       , MAX(SUBSTR(SC.CNCT_CTG_CD, 1, 5)) AS L_CTG_CD
+	       , (SELECT CD_NM FROM INTGT_COM_CD WHERE COM_CD = SUBSTR(SC.CNCT_CTG_CD, 1, 5)) AS L_CTG_NM
+	       , SC.CNCT_CTG_CD
+	       , CC.CD_NM                 AS CNCT_CTG_NM
+	       , MAX(CASE WHEN SC.FUNC_AGR_CL_CD = '99' THEN SC.MBR_CNT END) AS MBR_CNT
+	       , MAX(CASE WHEN SC.FUNC_AGR_CL_CD = '01' THEN SC.MBR_CNT END) AS BLE_MBR_CNT
+	       , MAX(CASE WHEN SC.FUNC_AGR_CL_CD = '02' THEN SC.MBR_CNT END) AS LOC_MBR_CNT
+	       , MAX(CASE WHEN SC.FUNC_AGR_CL_CD = '03' THEN SC.MBR_CNT END) AS PUSH_MBR_CNT
+	    FROM INTGT_POC_SVC_CTG_MBR_CNT SC
+	       , INTGT_COM_CD                 CC
+	            
+	     WHERE 1 = 1
+	       AND CC.COM_CD = SC.CNCT_CTG_CD
+	       AND SC.BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+	       AND SC.INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN : 바꿔야 함*/ 
+	       AND SC.CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+	       AND SC.PERIOD_CL_CD = #{periodClCd}
+	    ]]>
+	       <if test="svcCd != null and svcCd != '' and svcCd != 'TOT'">
+	       AND SC.SVC_CD = #{svcCd}
+	       </if>
+	       
+	       <choose>
+	       <when test = "cnctCtgCd == null or cnctCtgCd == '' or cnctCtgCd.equals('-')">
+	       AND CC.LCL_CD = 'POC_009'
+	       </when>
+	       <otherwise>
+	       <![CDATA[
+	       AND CC.LCL_CD = 'POC_010'
+	       AND DECODE(LENGTH(#{cnctCtgCd}) , 7 , SUBSTR (CC.COM_CD, 1, 7), SUBSTR (CC.COM_CD, 1, 5)) = #{cnctCtgCd} 
+	       ]]>
+	       </otherwise>
+	       </choose> 
+	       
+	    GROUP BY SC.INT_KEY_CL_CD
+	       , SC.CMPLS_CROSS_AGR_CL_CD
+	       , SC.SVC_CD
+	       , SC.PERIOD_CL_CD
+	       , SC.CNCT_CTG_CD
+	       , CC.CD_NM    
+	    ORDER BY SC.SVC_CD, SC.CNCT_CTG_CD
+    </select>
+    
+    
+    
+    <!--[업종별 현황] Syrup / OCB Push 별 버블차트 데이터 -->
+    <select id="selectBusyBubbleChartDataByPush" parameterType="map" resultMap="dataList">
+        <![CDATA[
+		SELECT /* selectBusyBubbleChartDataByPush */
+		    TO_CHAR (TO_DATE (SC.BASE_DT), 'YYYY.MM.DD') AS BASE_DT
+		    , SC.STD_SVC_CD AS SRC_SVC_CD
+		    , SC.AGR_SVC_CD AS SVC_CD
+		    , (SELECT CD_NM FROM INTGT_COM_CD WHERE COM_CD = SUBSTR(SC.CTG_CD, 1, 5)) AS L_CTG_NM
+		    , SC.CTG_CD
+		    , CC.CD_NM                 AS CNCT_CTG_NM
+		    , SC.PUSH_CNT AS MBR_CNT
+		    , SC.BLE_CNT AS BLE_MBR_CNT
+		    , SC.GPS_CNT AS LOC_MBR_CNT
+		    , SC.PUSH_CNT AS PUSH_MBR_CNT
+		        
+		FROM INTGT_POC_CTG_CROSS_AGR_CNT SC
+		    , INTGT_COM_CD                 CC
+		WHERE 1=1
+		    AND CC.COM_CD = SC.CTG_CD
+		    AND SC.BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+            AND SC.PERIOD_CL_CD = #{periodClCd}
+        ]]>
+           <if test="svcCd != null and svcCd != '' and svcCd != 'TOT'">
+           AND SC.STD_SVC_CD = #{svcCd}
+           </if>
+           
+           <choose>
+           <when test = "cnctCtgCd == null or cnctCtgCd == '' or cnctCtgCd.equals('-')">
+           AND CC.LCL_CD = 'POC_009'
+           </when>
+           <otherwise>
+           <![CDATA[
+           AND CC.LCL_CD = 'POC_010'
+           AND DECODE(LENGTH(#{cnctCtgCd}) , 7 , SUBSTR (CC.COM_CD, 1, 7), SUBSTR (CC.COM_CD, 1, 5)) = #{cnctCtgCd} 
+           ]]>
+           </otherwise>
+           </choose> 
+        ORDER BY SC.STD_SVC_CD, SC.CTG_CD
+    </select>
 
 	<!--서비스별 모수 현황 및 report -->
 	<select id="selectCateServiceMosuReportList" parameterType="map" resultMap="dataList">
@@ -386,7 +600,7 @@
     ]]>
 	</select>
 	
-	<!--성연령대별 현황  : 연령대구성1 -->
+	<!--[서비스별 데모현황] 성연령대별 현황  : 연령대구성1 -->
 	<select id="selectCateSexAgeList1" parameterType="map" resultMap="dataList">
 	<![CDATA[
     SELECT /* selectCateSexAgeList1 */
@@ -466,11 +680,11 @@
 	]]>
 	</select>
 	
-	<!--성연령대별 현황 : 연령대 구성2 -->
+	<!--[서비스별 데모현황] 성연령대별 현황 : 연령대 구성2 -->
 	<select id="selectCateSexAgeList2" parameterType="map" resultMap="dataList">
 	<![CDATA[
     SELECT /* selectCateSexAgeList2 */
-           BASE_DT
+         TO_CHAR(TO_DATE(BASE_DT), 'YYYY.MM.DD') BASE_DT
          , INT_KEY_CL_CD
          , CMPLS_CROSS_AGR_CL_CD
          , SVC_UNION_CD
@@ -520,7 +734,7 @@
 	]]>
 	</select>
 	
-	<!--성연령대별 현황 : 성별구성 -->
+	<!--[서비스별 데모현황] 성연령대별 현황 : 성별구성 -->
 	<select id="selectCateSexList" parameterType="map" resultMap="dataList">
 	<![CDATA[
     SELECT /* selectCateSexList */
@@ -601,7 +815,7 @@
 	]]>
 	</select>
 	
-	<!--주활동지역현황 -->
+	<!--[서비스별 데모현황] 주활동지역현황 -->
 	<select id="selectCateMainActiveAreaList" parameterType="map" resultMap="dataList">
 	<![CDATA[
     SELECT /* selectCateMainActiveAreaList */

@@ -537,31 +537,40 @@ $('select.auto-focus').bind('change', function(){
 var resizeChartOnWinResizeHandler = {
 	
 	timer : null,
+	canceledTimers : [],
 	charts : null,
 	
 	resize : function(){
-		var handler = resizeChartOnWinResizeHandler;
 		
-		if(handler.timer == null)
-			for(var i = 0, end = handler.charts.length ; i < end ; i++)
-				$(handler.charts[i].dom).css('visibility', 'hidden');
+		var _handler = resizeChartOnWinResizeHandler;
+		
+		if(_handler.timer == null)
+			for(var i = 0, end = _handler.charts.length ; i < end ; i++)
+				$(_handler.charts[i].dom).css('visibility', 'hidden');
 		
 		try{
-			clearTimeout(handler.timer);
+			clearTimeout(_handler.timer);
+			canceledTimers.push(_handler.timer);
 		}catch(e){}
 		
-		handler.timer = setTimeout(function(){
+		_handler.timer = setTimeout(function(){
 			
-			for(var i = 0, end = handler.charts.length ; i < end ; i++){
+			for(var i = 0, end = _handler.charts.length ; i < end ; i++){
 				
-				var chart = handler.charts[i];
+				var chart = _handler.charts[i];
 				
 				chart.resize();
 				$(chart.dom).css('visibility', 'visible');
 				
 			}
 			
-			handler.timer = null;
+			_handler.timer = null;
+			
+			//메모리 누수 방지를 위해 명시적 객체 해제 수행
+			while(_handler.canceledTimers.length > 0){
+				var _timer = _handler.canceledTimers.shift();
+				_timer = null;
+			}
 			
 		}, 500);
 		

@@ -47,17 +47,153 @@ public class CateVO implements Serializable {
 	private String comCd;
 	private String cdNm;
 	private String svcCd;
+	private String srcSvcCd;
 	private String lCtgCd;
-	private String lCtgNm;
 	private String cnctCtgNm;
 	private String svcRank;
 	
 	private long pushMbrCnt;	/* push 동의 */
 	private long bleMbrCnt;		/* ble 동의 */
 	private long locMbrCnt;		/* 위치 동의 */
-	
-	
-	public String getlCtgCd() {
+
+    private String ctgCd;
+    private String lCtgNm;
+    private String mCtgNm;
+    private String sCtgNm;
+    private String ctgType;
+
+    private String srcCtgCd;
+    private String srcLCtgNm;
+    private String srcMCtgNm;
+    private String srcSCtgNm;
+    private String tgtCtgCd;
+    private String tgtLCtgNm;
+    private String tgtMCtgNm;
+    private String tgtSCtgNm;
+    private String confidence;
+    private String weight;
+
+    public String getSrcCtgCd() {
+        return srcCtgCd;
+    }
+
+    public void setSrcCtgCd(String srcCtgCd) {
+        this.srcCtgCd = srcCtgCd;
+    }
+
+    public String getSrcLCtgNm() {
+        return srcLCtgNm;
+    }
+
+    public void setSrcLCtgNm(String srcLCtgNm) {
+        this.srcLCtgNm = srcLCtgNm;
+    }
+
+    public String getSrcMCtgNm() {
+        return srcMCtgNm;
+    }
+
+    public void setSrcMCtgNm(String srcMCtgNm) {
+        this.srcMCtgNm = srcMCtgNm;
+    }
+
+    public String getSrcSCtgNm() {
+        return srcSCtgNm;
+    }
+
+    public void setSrcSCtgNm(String srcSCtgNm) {
+        this.srcSCtgNm = srcSCtgNm;
+    }
+
+    public String getTgtCtgCd() {
+        return tgtCtgCd;
+    }
+
+    public void setTgtCtgCd(String tgtCtgCd) {
+        this.tgtCtgCd = tgtCtgCd;
+    }
+
+    public String getTgtLCtgNm() {
+        return tgtLCtgNm;
+    }
+
+    public void setTgtLCtgNm(String tgtLCtgNm) {
+        this.tgtLCtgNm = tgtLCtgNm;
+    }
+
+    public String getTgtMCtgNm() {
+        return tgtMCtgNm;
+    }
+
+    public void setTgtMCtgNm(String tgtMCtgNm) {
+        this.tgtMCtgNm = tgtMCtgNm;
+    }
+
+    public String getTgtSCtgNm() {
+        return tgtSCtgNm;
+    }
+
+    public void setTgtSCtgNm(String tgtSCtgNm) {
+        this.tgtSCtgNm = tgtSCtgNm;
+    }
+
+    public String getConfidence() {
+        return confidence;
+    }
+
+    public void setConfidence(String confidence) {
+        this.confidence = confidence;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public String getlCdNm() {
+        return lCdNm;
+    }
+
+    public void setlCdNm(String lCdNm) {
+        this.lCdNm = lCdNm;
+    }
+
+    public String getCtgCd() {
+        return ctgCd;
+    }
+
+    public void setCtgCd(String ctgCd) {
+        this.ctgCd = ctgCd;
+    }
+
+    public String getmCtgNm() {
+        return mCtgNm;
+    }
+
+    public void setmCtgNm(String mCtgNm) {
+        this.mCtgNm = mCtgNm;
+    }
+
+    public String getsCtgNm() {
+        return sCtgNm;
+    }
+
+    public void setsCtgNm(String sCtgNm) {
+        this.sCtgNm = sCtgNm;
+    }
+
+    public String getCtgType() {
+        return ctgType;
+    }
+
+    public void setCtgType(String ctgType) {
+        this.ctgType = ctgType;
+    }
+
+    public String getlCtgCd() {
 		return lCtgCd;
 	}
 	public void setlCtgCd(String lCtgCd) {
@@ -299,6 +435,12 @@ public class CateVO implements Serializable {
 	}
 	public void setLocMbrCnt(long locMbrCnt) {
 		this.locMbrCnt = locMbrCnt;
+	}
+	public String getSrcSvcCd() {
+		return srcSvcCd;
+	}
+	public void setSrcSvcCd(String srcSvcCd) {
+		this.srcSvcCd = srcSvcCd;
 	}
 	
 	

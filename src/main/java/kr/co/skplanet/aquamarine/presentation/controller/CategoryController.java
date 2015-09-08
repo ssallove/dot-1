@@ -53,9 +53,11 @@ public class CategoryController {
     	
     	List<String> voListXLine = cateSvc.selectBusyBubbleXLine(paramMap);
     	List<CateVO> voBubbleList = cateSvc.selectBusyBubbleChartData(paramMap);
+    	List<CateVO> voBubbleListByPush = cateSvc.selectBusyBubbleChartDataByPush(paramMap);
     	JSONArray jsonArray = new JSONArray();
     	model.addAttribute("jsonCategorylist", jsonArray.fromObject(voListXLine));
     	model.addAttribute("jsonBubbleChartList", jsonArray.fromObject(voBubbleList));
+    	model.addAttribute("jsonBubbleChartListByPush", jsonArray.fromObject(voBubbleListByPush));
     	
     	//Root Category 조회(_selectBusyBubbleXLine) &&  voListXLineView로 조회된 Category만 조회 시
     	//List<String> voListXLineView = cateSvc.selectBusyBubbleXLineView(paramMap);
@@ -95,6 +97,7 @@ public class CategoryController {
     	
     	JSONArray jsonArray = new JSONArray();
     	model.addAttribute("jsonMosuList", jsonArray.fromObject(voList));
+    	
     	return "category/categoryMosu";
     	
     }
@@ -108,7 +111,7 @@ public class CategoryController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value={"/categoryDemo", "/categoryTest"})
+    @RequestMapping(value={"/categoryDemo"})
     public String categoryDemo(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
     	
     	Map<String, String> paramMap = getRequestMap(request, model, new String[]{"svcUnionCd", "svcUnionCdNm", "periodClCd", "cnctCtgCd"
@@ -120,9 +123,19 @@ public class CategoryController {
     		paramMap.put("cnctCtgCd", "GRP1001");
     		model.addAllAttributes(paramMap);
     	}
-    	
+
     	searchCategoryList(paramMap, model);
     	
+    	// 서비스별 모수 현황
+    	List<CateVO> voList = cateSvc.selectCateServiceMosuReportList(paramMap);
+        JSONArray jsonArray = new JSONArray();
+        if(voList.size() != 0) {
+            model.addAttribute("mosulist", voList);
+            model.addAttribute("jsonMosuList", jsonArray.fromObject(voList));
+        }
+
+
+    	// 서비스별 데모 현황
     	List<CateVO> voList2 = cateSvc.selectCateSexAgeList1(paramMap);
     	List<CateVO> voList3 = cateSvc.selectCateSexAgeList2(paramMap);
     	List<CateVO> voList4 = cateSvc.selectCateSexList(paramMap);
@@ -132,11 +145,30 @@ public class CategoryController {
     		paramMap.put("cnctCtgCd", "-");
     		voList6 = cateSvc.selectCateSexAgeList2(paramMap);
     	}
-    	
-    	String baseDt = "";
+
+        String mainCtgCd = "";
+        if(!"-".equals(paramMap.get("largeCd").toString())){
+            if(!"".equals(paramMap.get("midCd").toString())){
+                if(!"".equals(paramMap.get("smallCd").toString())){
+                    mainCtgCd = paramMap.get("smallCd").toString();
+                } else {
+                    mainCtgCd = paramMap.get("midCd").toString();
+                }
+            }else {
+                mainCtgCd = paramMap.get("largeCd").toString();
+            }
+        }
+
+        paramMap.put("mainCtgCd", mainCtgCd);
+        paramMap.put("mainCateCnt", 10+"");
+        paramMap.put("crossCateCnt", 10+"");
+        List<CateVO> voList7 = cateSvc.selectCateNetworkLink(paramMap);
+        List<CateVO> voList8 = cateSvc.selectCateNetworkNode(paramMap);
+
+        String baseDt = "";
     	try{    	baseDt = voList6.get(0).getBaseDt();	}catch(Exception e){}
     	model.addAttribute("baseDt", baseDt);
-    	
+
     	model.addAttribute("rankingList", voList5);	/* 순위 */
 
     	model.addAttribute("sexChartList", voList4);	/* 성별 현황 (전체, 카테고리별) */
@@ -144,12 +176,14 @@ public class CategoryController {
     	model.addAttribute("sexAgeChartList", voList3);	/* 성연령대별 현황 (카테고리별) */
     	model.addAttribute("sexAgeAllChartList", voList6); /* 성연령대별 현황 (전체) */
     	
-    	JSONArray jsonArray = new JSONArray();
     	model.addAttribute("jsonSexChartList", jsonArray.fromObject(voList4));
     	model.addAttribute("jsonAgeChartList", jsonArray.fromObject(voList2));
     	model.addAttribute("jsonSexAgeChartList", jsonArray.fromObject(voList3));
     	model.addAttribute("jsonSexAgeAllChartList", jsonArray.fromObject(voList6));
-    	
+
+        model.addAttribute("jsonNetworkLinkChartList", jsonArray.fromObject(voList7));
+        model.addAttribute("jsonNetworkNodeChartList", jsonArray.fromObject(voList8));
+
     	if(request.getRequestURI().indexOf("Test") > 0) return "test/categoryTest";
     	return "category/categoryDemo";
     }
@@ -265,7 +299,7 @@ public class CategoryController {
     	session.setAttribute("midTx", midTx);
     	session.setAttribute("smallTx", smallTx);
     	session.setAttribute("periodTx", periodTx);
-    	
+
     	Map<String, Object> pComboParam = new HashMap<String, Object>();
     	pComboParam.put("comCd", largeCd);
     	List<CommCodeVO> cateList1 = commCodeSvc.selectCategoryL(pComboParam);

@@ -1,13 +1,28 @@
-var cityCd = "";
 var idxDataArr = [];
 var subDataArr = [];
+var seoulShow = "seoul";
 
 function getGeoMapMaker() {
 
-    var subChartDataList = {};
     var mainPath = "/resources/geo/";
     var dataArr = [];
     var j = 0;
+
+    if (seoulShow === "seoul") {
+        seoulShow = "korea";
+        var param = {};
+        param.target = "서울특별시";
+        var cityArray = [{
+            name: "서울특별시",
+            path: mainPath + "Seoul.json"
+        }];
+        var cityCd = [];
+        cityCd["서울특별시"] = "11";
+        var myChart = echarts.init(document.getElementById('koreaMap'));
+        myChart.setTheme(GV_CHART_THEME);
+        getSubResultChart(param, cityArray, "", myChart, cityCd);
+        return;
+    }
 
     for (var i = 0; i < chartDataList.length; i++) {
 
@@ -153,7 +168,8 @@ function getGeoMapMaker() {
 
     // Load data into the ECharts instance
     myChart.setOption(option);
-    
+
+
 }
 
 
@@ -167,7 +183,7 @@ function getSubResultChart(param, cityArray, option, myChart, idxDataArr) {
 
         getCallBack(data, cityName, cityCd);
 
-        subChartDataList = data.mosuTableList;
+        var subChartDataList = data.mosuTableList;
 
         var j = 0;
 
@@ -178,7 +194,7 @@ function getSubResultChart(param, cityArray, option, myChart, idxDataArr) {
             subDataArr[j] = {
                 name: subChartDataList[i].mainAcvtDongNm,
                 value: parseInt(subChartDataList[i].mosu) + parseInt(subChartDataList[i].push),
-                cd: subChartDataList[i].mainAcvtDongCd,
+                cd: subChartDataList[i].mainAcvtDongCd
             };
 
             j++;

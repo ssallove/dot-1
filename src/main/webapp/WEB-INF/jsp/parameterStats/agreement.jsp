@@ -496,7 +496,11 @@
 		
 		intersectBySvcBarChartOption.title.text = serviceMap[serviceKey] +' > '+ agreementTypes[agreementTypeIndex];
 
-		intersectBySvcBarChartOption.series[0].data = intersectBySvcData[statsLevel][serviceKey][agreementTypeIndex];
+		try{
+			intersectBySvcBarChartOption.series[0].data = intersectBySvcData[statsLevel][serviceKey][agreementTypeIndex];
+		}catch(e){
+			intersectBySvcBarChartOption.series[0].data = ['-', '-', '-'];
+		}
 		
 		var countSpan = $('.intersectBySvcCount');
 		$.each(intersectBySvcBarChartOption.series[0].data, function(i, item){
@@ -531,27 +535,27 @@
 	var paramBySvcBarChartConfMap = {
 	
 		dataStyle : { 
-          	    normal: {
-          	        label : {
-          	            show: true,
-          	            position: 'insideLeft',
-          	            formatter: function(params, ticket, callback){
-          	            	return formatCurrency(params.data.actual);
-          	            },
-          	         	textStyle : {
-          	         		color:'#000'
-          	         	}
-          	        }
-          	    },
-          	 	emphasis: {
-          	        label : {
-          	            show: true,
-          	         	textStyle : {
-          	         		color:'#000'
-          	         	}
-          	        }
-          	    }
-          	},
+       	    normal: {
+       	        label : {
+       	            show: true,
+       	            position: 'insideLeft',
+       	            formatter: function(params, ticket, callback){
+       	            	return formatCurrency(params.data.actual);
+       	            },
+       	         	textStyle : {
+       	         		color:'#000'
+       	         	}
+       	        }
+       	    },
+       	 	emphasis: {
+       	        label : {
+       	            show: true,
+       	         	textStyle : {
+       	         		color:'#000'
+       	         	}
+       	        }
+       	    }
+       	},
 
 		placeHoledStyle : {
        	    normal:{

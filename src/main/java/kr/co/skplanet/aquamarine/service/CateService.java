@@ -45,6 +45,19 @@ public class CateService  {
     	return listCate;
     	
     }
+
+    public List<CateVO> selectCateNetworkLink(Map<String, String> p) throws Exception {
+        List<CateVO> voList = cateDao.selectCateNetworkLink(p);
+        LOG.debug("## CateVO Result : ", voList.size());
+        return voList;
+    }
+
+    public List<CateVO> selectCateNetworkNode(Map<String, String> p) throws Exception {
+        List<CateVO> voList = cateDao.selectCateNetworkNode(p);
+        LOG.debug("## CateVO Result : ", voList.size());
+        return voList;
+    }
+
     
     
 /*    
@@ -142,5 +155,15 @@ public class CateService  {
     	return voList;
     	
     }
+    
+    public List<CateVO> selectBusyBubbleChartDataByPush(Map<String, String> p) throws Exception {
+    	
+    	List<CateVO> voList = cateDao.selectBusyBubbleChartDataByPush(p);
+    	LOG.debug("## CateVO Result : ", voList.size());
+    	
+    	return voList;
+    	
+    }
+    
     
 }
