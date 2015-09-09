@@ -2,19 +2,19 @@ package kr.co.skplanet.aquamarine.presentation.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import kr.co.skplanet.aquamarine.common.util.AccountUtils;
 import kr.co.skplanet.aquamarine.model.AccountVO;
+import kr.co.skplanet.aquamarine.service.AccountService;
 
 /**
  * 로그인 인터셉터
@@ -46,15 +46,13 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 							 HttpServletResponse response,
 							 Object handler) throws Exception {
 
-		HttpSession session = request.getSession();
-
 		// LOG.info("request.getContextPath():" + request.getContextPath());
 		// LOG.info("request.getRequestURI():" + request.getRequestURI());
 		// LOG.info("request.getQueryString(): {}", StringUtils.defaultString(request.getQueryString()));
 
-		AccountVO user = (AccountVO) session.getAttribute("AccountVO");
+		AccountVO account = AccountUtils.getAccount(request);
 
-		if (user == null) {
+		if (account.isGuest()) {
 
 			String redirectURI = request.getContextPath() + "/login.do";
 
@@ -73,7 +71,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
 			}
 
-			session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, LocaleContextHolder.getLocale());
+			// session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, LocaleContextHolder.getLocale());
 
 			response.sendRedirect(redirectURI);
 

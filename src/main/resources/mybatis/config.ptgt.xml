@@ -24,7 +24,7 @@
 	</typeAliases>
 
 	<mappers>
-		<mapper resource="mybatis/sql/Login.xml" />
+		<mapper resource="mybatis/sql/Account.xml" />
 		<mapper resource="mybatis/sql/AgreementParameter.xml" />
 		<mapper resource="mybatis/sql/Area.xml" />
 		<mapper resource="mybatis/sql/Category.xml" />

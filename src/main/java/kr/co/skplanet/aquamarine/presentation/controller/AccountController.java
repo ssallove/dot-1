@@ -1,7 +1,7 @@
 package kr.co.skplanet.aquamarine.presentation.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import kr.co.skplanet.aquamarine.common.exception.LoginFailureException;
+import kr.co.skplanet.aquamarine.common.util.AccountUtils;
 import kr.co.skplanet.aquamarine.model.AccountVO;
-import kr.co.skplanet.aquamarine.service.LoginService;
+import kr.co.skplanet.aquamarine.service.AccountService;
 
 /**
  * 로그인 컨트롤러
@@ -24,55 +26,58 @@ import kr.co.skplanet.aquamarine.service.LoginService;
  *
  */
 @Controller
-public class LoginController {
+public class AccountController {
 
-	@SuppressWarnings("unused")
-	private static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
-
-	// @Autowired
-	// private LdapService ldapService;
+	private static final Logger LOG = LoggerFactory.getLogger(AccountController.class);
 
 	@Autowired
-	private LoginService loginService;
+	private AccountService accountService;
 
 	/*
 	 * 로그인 페이지 이동
 	 */
 	@RequestMapping("/login")
-	public String login() {
+	public String login(HttpServletRequest request) {
 
-		return "login";
+		if(AccountUtils.getAccount(request).isGuest())
+			return "login";
+		else
+			return "redirect:/home.do";
 
 	}
 
 	/*
-	 * 로그인 프로세스
+	 * 로그인
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String loginproc(@RequestParam String userId,
 							@RequestParam String password,
 							@RequestParam String returnURI,
-							HttpSession session,
+							HttpServletRequest request,
+							HttpServletResponse response,
 							Model model) {
 
-		if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(password)) {
+		try {
 
-			AccountVO vo = loginService.statusLogin(userId, password);
+			AccountVO account = AccountUtils.getAccount(request);
 
-			String status = vo.getStatus();
+			if(account.isGuest()){
 
-			if ("1".equals(status)) { // 로그인 성공
+    			accountService.login(account, userId, password);
 
-				// session.setMaxInactiveInterval(60 * 60); // 40분으로 늘림
-				session.setAttribute("AccountVO", vo);
-				
-				if(StringUtils.isBlank(returnURI))
-					return "redirect:/home.do";
-				else
-					return "redirect:"+ new String(Base64.decodeBase64(returnURI));
+    			AccountUtils.setAccount(request, response, account);
 
-			} else
-				model.addAttribute("status", status);
+			}
+
+			if (StringUtils.isBlank(returnURI))
+				return "redirect:/home.do";
+			else
+				return "redirect:" + new String(Base64.decodeBase64(returnURI));
+
+		} catch (LoginFailureException e) {
+
+			LOG.warn(e.getMessage(), e);
+			model.addAttribute("loginFailureException", e);
 
 		}
 
@@ -101,10 +106,11 @@ public class LoginController {
 	 */
 	@RequestMapping("/logout")
 	public String logout(HttpServletRequest request,
-						 Model model,
-						 HttpSession session) {
+	                     HttpServletResponse response) {
 
-		session.invalidate();
+		accountService.logout(AccountUtils.getAccount(request));
+		
+		AccountUtils.removeAccount(request, response);
 
 		return "redirect:/";
 

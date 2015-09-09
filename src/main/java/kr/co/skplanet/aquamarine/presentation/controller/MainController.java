@@ -93,6 +93,7 @@ public class MainController {
         p.put("mainAcvtAdmDongCd", cityCd);
         p.put("mainAdmDongCdCnt", mainAdmDongCdCnt);
         p.put("crossAdmDongCdCnt", crossAdmDongCdCnt);
+
         List<AreaVO> list1 = areaSvc.selectAreaMosuList(p); // 지역별 모수현황
         List<AreaVO> list2 = areaSvc.selectAreaBusiRankList(p); // 업종순위
         List<AreaVO> list3 = areaSvc.selectAreaTogatherVisitAreaList(p); // 함께 방문하는 지역
@@ -100,8 +101,12 @@ public class MainController {
         List<AreaVO> list5 = areaSvc.selectAreaSexAgeList2(p);
         List<AreaVO> list6 = areaSvc.selectAreaSexAgeList3(p);
         //List<AreaVO> list7 = areaSvc.selectAreaArPocList(p); // AR POC
+        long currTime = System.currentTimeMillis();
         List<AreaVO> list7 = areaSvc.selectAreaNodeList(p); // AR POC
+        System.out.println("Node List Query Time : "+(System.currentTimeMillis()-currTime));
+        currTime = System.currentTimeMillis();
         List<AreaVO> list8 = areaSvc.selectAreaLinkList(p); // AR POC
+        System.out.println("Link List Query Time : "+(currTime-System.currentTimeMillis()));
 
         //기준일자
         String baseDt = "";

@@ -41,7 +41,7 @@
 	{background:#fff; /*border:#678cc4 solid 1px;*/ border-radius:10px;   height:450px;   position: relative;}
 	
 	/* Navigation arrows */
-	/*.showcase-arrow-previous
+	.showcase-arrow-previous
 	{
 		position: absolute;
 		background-image:url(../images/btn_prev.png);
@@ -75,8 +75,8 @@
 	{ opacity:0.9;  filter: alpha(opacity:'90');
 
 	}
-	*/
-	.showcase-arrow-previous , .showcase-arrow-next{ width:0; height:0;}
+	
+	.showcase-arrow-previous , .showcase-arrow-next{ width:50px; height:80px;}
 	
 	/* Content */
 	.showcase-content

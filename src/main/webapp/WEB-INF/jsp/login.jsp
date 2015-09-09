@@ -51,7 +51,7 @@
 		<div class="page_login">
 	    	<div class="logBox">
 	        	<p class="logo"></p>
-	        	<strong>LOGIN TO YOUR ACCOUNT</strong>	
+	        	<strong>Pnet 계정으로 로그인하세요.</strong>	
 	            
 	            <form class="form_inline" action="<c:url value="/login.do"/>" method="POST">
 	            <input type="hidden" name="returnURI" value="<c:out value="${ param.returnURI }"/>"/>

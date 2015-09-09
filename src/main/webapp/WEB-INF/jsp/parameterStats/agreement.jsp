@@ -78,6 +78,9 @@
 						
                         	<!--버튼영역-->
                         	<p class=" floatR mb10">
+                        		<c:if test="${ type == 'essential' }">
+                        		<button type="button" class="chartBt" data-stats-level="0">가입</button>
+                        		</c:if>
                             	<button type="button" class="chartBt" data-stats-level="1">통합</button>
                                 <button type="button" class="chartBt" data-stats-level="2">Active</button>
                                 <button type="button" class="chartBt" data-stats-level="3">MAU</button>

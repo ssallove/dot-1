@@ -16,6 +16,8 @@ var syruppay = {
              option.series[1].markLine = dashMarkLine;
              option.series[2].markLine = dashMarkLine;
              option.tooltip.formatter = itemFormatter;
+             
+             
              myChart.setOption(option);
              
              return chartList;
@@ -54,6 +56,7 @@ var syruppay = {
                 
                 option.options.push(_option);
             });
+            console.log(JSON.stringify(option));
             myChart.setOption(option);
             return chartList;
          },
@@ -62,7 +65,7 @@ var syruppay = {
          importChart : function (myChart, opt){
              $.ajax({
                  type: "GET",
-                 url: '/resources/data/'+opt.importFile,
+                 url: '/resources/data/insights/'+opt.importFile,
                  dataType: "text",
                  success: function(data) {	dataProcess(data);	},
                  error: function(err){alert("err "+err); console.log(err)}

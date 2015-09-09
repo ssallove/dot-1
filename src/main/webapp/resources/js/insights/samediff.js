@@ -2,7 +2,7 @@ var samediff = {
          importChart : function (myChart, opt){
              $.ajax({
                  type: "GET",
-                 url: '/resources/data/'+opt.importFile,
+                 url: '/resources/data/insights/'+opt.importFile,
                  dataType: "text",
                  success: function(data) {	dataProcess(data);	},
                  error: function(err){alert("err "+err); console.log(err)}
@@ -61,7 +61,7 @@ var samediff = {
          importChart2 : function (myChart, opt){
              $.ajax({
                  type: "GET",
-                 url: '/resources/data/'+opt.importFile,
+                 url: '/resources/data/insights/'+opt.importFile,
                  dataType: "text",
                  success: function(data) {	dataProcess(data);	},
                  error: function(err){alert("err "+err); console.log(err)}

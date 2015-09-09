@@ -306,7 +306,7 @@
                     <ul class="chartLy_1p ">
                         <li>
                             <p class="chartTitle ">
-                                <i class="fa fa-bar-chart"></i>주 활동지역 현황
+                                <i class="fa fa-bar-chart"></i>연관업종
                             </p>
 
                             <div class="chartArea" style="height:500px;">
@@ -516,6 +516,12 @@
                                     if ( smallSelect !== "전체" ) {
                                         if(smallSelect === d.sCtgNm) {
                                             return "#ff4f84";
+                                        } else {
+                                            return '#49cdf4';
+                                        }
+                                    } else {
+                                        if (d.ctgType === '1') {
+                                            return '#ff4f84';
                                         } else {
                                             return '#49cdf4';
                                         }

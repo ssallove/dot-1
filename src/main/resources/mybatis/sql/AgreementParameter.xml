@@ -33,7 +33,7 @@
 	             , SUM(CASE WHEN SVC_CD = 'TMA' THEN SCB_MBR_CNT END) AS TMA
 	             , SUM(CASE WHEN SVC_CD = 'EVS' THEN SCB_MBR_CNT END) AS EVS
 	             , SUM(CASE WHEN SVC_CD = 'TST' THEN SCB_MBR_CNT END) AS TST
-	          FROM Z_JSD_INTGT_POC_SVC_MBR_SA_CNT
+	          FROM INTGT_POC_SVC_MBR_SA_CNT
 	         WHERE BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
 	           AND INT_KEY_CL_CD = '03'
 	           AND CMPLS_CROSS_AGR_CL_CD = #{agreementClassCode}
@@ -95,7 +95,7 @@
 	                     , SUM(CASE WHEN SVC_CD = 'TMA' THEN MAU_CNT END) AS MAU_TMA
 	                     , SUM(CASE WHEN SVC_CD = 'EVS' THEN MAU_CNT END) AS MAU_EVS
 	                     , SUM(CASE WHEN SVC_CD = 'TST' THEN MAU_CNT END) AS MAU_TST
-	                  FROM Z_JSD_INTGT_POC_SVC_MBR_SA_CNT
+	                  FROM INTGT_POC_SVC_MBR_SA_CNT
 	                     , (SELECT LEVEL AS LV FROM DUAL CONNECT BY LEVEL <= 3)
 	                 WHERE BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
 	                   AND INT_KEY_CL_CD = '01'

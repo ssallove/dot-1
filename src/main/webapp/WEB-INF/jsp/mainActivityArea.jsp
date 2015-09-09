@@ -186,7 +186,7 @@
 
 <!--Modal 동단위 현황지역 -->
 <div class="modal fade" id="myModa3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"  id="chartDongDiv">
-	<div class="modal-dialog ">
+	<div class="modal-dialog3 ">
         <div class="modal-content">
 			<div class="modal-header">
             	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -364,14 +364,14 @@
                     cd : "",
                     name : "",
                     data : {}
-                }
+                };
             })();
 
             var Network = (function(){
                 return {
                     option : {},
-                    mainAdmDongCdCnt : 10,
-                    crossAdmDongCdCnt : 5,
+                    mainAdmDongCdCnt : 5,
+                    crossAdmDongCdCnt : 10,
                     height : 0,
                     width : 0,
                     MAIN_CHART_ID_NM : "chart4", // 메인 차트
@@ -380,7 +380,7 @@
                     NODE_COLOR : "",
                     NODE_BORDER_COLOR : "",
                     LINE_COLOR : ""
-                }
+                };
             })();
 
             $(document).ready(function () {
@@ -395,7 +395,9 @@
                 $("#mainAdmDongCdCnt").selectBox("value", "10");
                 $("#crossAdmDongCdCnt").selectBox("value", "5");
 
-            	callAjaxMainActivityArea("", "11", "getCallBack");
+                var start = Date.now();
+                getGeoMapMaker(); // 지도 호출
+                console.log("Page load took $(document).ready(function () {" + (Date.now() - start) + " milliseconds");
 
                 $("#clickKoreaMap").click(function () {
                     callAjaxMainActivityArea("", "", "getCallBack");
@@ -407,7 +409,7 @@
 
                 Network.mainAdmDongCdCnt = 10; // main 행정동 갯수
                 Network.crossAdmDongCdCnt = 5;
-                var cityCd = "";
+                var cityCd = City.cd;
                 if(City.cd.length > 6) {
                     cityCd = City.cd.substring(0, 6);
                 }
@@ -531,7 +533,7 @@
                 Network.mainAdmDongCdCnt = $('#mainAdmDongCdCnt option:selected').val(); // main 행정동 갯수
                 Network.crossAdmDongCdCnt = $('#crossAdmDongCdCnt option:selected').val(); // cross 행정동 갯수
 
-                callAjaxMainActivityArea(City.name, City.cd, "getCallBack");
+                callAjaxMainActivityArea(City.name, City.cd, "getCallbackChart6");
 
             });
 
@@ -721,7 +723,6 @@
             }
 
             function getNetworkChart(chartName, dataNodeList, dataLinkList) {
-
                 var myChart = echarts.init(document.getElementById(chartName));
 
                 myChart.setTheme(GV_CHART_THEME);
@@ -766,12 +767,6 @@
                 City.name = cityName;
                 City.cd = cityCd;
 
-                // 동 선택시 기준행정동은 1개 연관 행정동은 10개 선택되어야 함
-                if(City.cd.length === 8) {
-                    Network.mainAdmDongCdCnt = 1;
-                    Network.crossAdmDongCdCnt = 10;
-                }
-
                 if ((cityName != null && cityName != '') && (cityCd == null || cityCd == 'undefined' || cityCd == '')) {
                     if (chartDataList != null && chartDataList.length != 0) {
                         var selectedData = chartDataList.getDataByKey("mainAcvtDongNm", cityName);
@@ -794,9 +789,10 @@
                     success: function (data) {
 
                         City.data = data;
-                      
+
                         // callback
                         if (callbackFun != null && callbackFun != 'undefined' && callbackFun != '') {
+
                             if ($.isFunction(callbackFun)) {
                                 callbackFun(data, cityName, cityCd);
                             } else if (typeof(callbackFun) == "string") {
@@ -810,30 +806,43 @@
             var chartDataList = [];
             var GV_CITY_CD, GV_CITY_NM, GV_PARENT_CITY_NM;
 
+            function getCallbackChart6(data, cityName, cityCd) {
+                getNetworkChart("chart6", data.arPocNetworkNodeList, data.arPocNetworkLinkList);
+            }
+
             function getCallBack(data, cityName, cityCd) {
+
+//                var start = Date.now();
+
                 GV_CITY_CD = cityCd;
                 GV_CITY_NM = cityName;
-                $('#chart2SubTitle').text(GV_CITY_NM);
 
+                $('#chart2SubTitle').text(GV_CITY_NM);
                 $("#baseDt").text("데이터 기준일 : "+data.baseDt);
+
                 getAreaMosuTable(data.mosuTableList);
                 getAreaMosuStackChart(data.mosuTableList); // 지역별 모수 현황 차트
+
                 chartDataList = data.mosuTableList;
+
                 if (cityCd == "" || cityCd == "00") {
                     $('#divSubData').hide();
-
                 } else {
                     $('#divSubData').show();
                     getSexAgePieChart('chart1', 'chart2', data.sexBarList, data.ageBarList);
                     getSexAgeBarChart('chart3', data.sexAgeBarList);
                     getRankTable(data.rankTableList);
+
+
                     getNetworkChart("chart4", data.arPocNetworkNodeList, data.arPocNetworkLinkList);
+
                 }
 
-                if (cityName == "") {
-                    getGeoMapMaker(); // 지도 호출
-                }
+//                if (cityName == "") {
+//                    getGeoMapMaker(); // 지도 호출
+//                }
 
+//                console.log("Page load took getCallBack " + (Date.now() - start)  + " milliseconds");
             }
 
             // 지역별 모수 현황
@@ -985,12 +994,12 @@
 
             // Chart Data로 parsing
             function _getAreaMosuStackChartData(dataList) {
-                var chartData = [],
-                        categoryData = [];
+                var chartData = [],   categoryData = [];
                 var data = [];
                 data['모수-PUSH'] = [];
                 data['PUSH'] = [];
                 for (var status = 1, dataSize = dataList.length; status < dataSize; status++) {
+
                     if (status < 6) {
                         data['모수-PUSH'][dataSize - status - 1] = {
                             value: dataList[status].mosu,
@@ -1043,6 +1052,7 @@
                     },
                     data: data['모수-PUSH']
                 });
+
                 chartData.push({
                     name: 'PUSH',
                     type: 'bar',
@@ -1060,8 +1070,15 @@
                                     color: GV_GENDER_COLOR.male(0.95),	fontStyle: 'italic', fontWeight : 'lighter'
                                 },
                                 formatter: function (params) {
+                                    var idx = 0;
                                     for (var i = 0, l = categoryData.length; i < l; i++) {
-                                        return String(parseInt(data['모수-PUSH'][i].value) + parseInt(params.value)).addComma();
+                                        if(categoryData[i] === params.name) {
+                                            idx = i;
+                                            break;
+                                        }
+                                    }
+                                    for (var i = 0, l = categoryData.length; i < l; i++) {
+                                        return String(parseInt(data['모수-PUSH'][idx].value) + parseInt(params.value)).addComma();
                                     }
                                 }
                             }

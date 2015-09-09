@@ -12,7 +12,8 @@
         <![CDATA[
         WITH V_AR AS
         (
-                SELECT A.MAIN_ADM_DONG_CD
+                SELECT /*+ USE_NL(A B C) */
+                       A.MAIN_ADM_DONG_CD
                      , B.SIDO              AS MAIN_SIDO
                      , B.SIGUNGU           AS MAIN_SIGUNGU
                      , B.ADM_DONG          AS MAIN_ADM_DONG
@@ -27,7 +28,7 @@
                      , A.RN_2
 
                   FROM (
-                         SELECT /*+ INDEX(A IX1_INTGT_POC_AR_ACVT_AREA) */
+                         SELECT /*+ PARALLEL(A 8) */
                                 MAIN_ADM_DONG_CD
                               , CROSS_ADM_DONG_CD
                               , MAIN_MBR_CNT
@@ -85,7 +86,9 @@
         <![CDATA[
         WITH V_AR AS
         (
-            SELECT A.MAIN_ADM_DONG_CD
+            SELECT
+                 /*+ USE_NL(A B C) */
+                 A.MAIN_ADM_DONG_CD
                  , B.SIDO              AS MAIN_SIDO
                  , B.SIGUNGU           AS MAIN_SIGUNGU
                  , B.ADM_DONG          AS MAIN_ADM_DONG
@@ -100,7 +103,7 @@
                  , A.RN_1
                  , A.RN_2
               FROM (
-                     SELECT /*+ INDEX(A IX1_INTGT_POC_AR_ACVT_AREA) */
+                     SELECT /*+ PARALLEL(A 8) */
                             MAIN_ADM_DONG_CD
                           , CROSS_ADM_DONG_CD
                           , MAIN_MBR_CNT

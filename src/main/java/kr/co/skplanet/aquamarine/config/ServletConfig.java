@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 
 import kr.co.skplanet.aquamarine.presentation.interceptor.AuthInterceptor;
+import kr.co.skplanet.aquamarine.presentation.interceptor.PreprocessInterceptor;
 
 /**
  * <p>Servlet 설정 (Java-based)
@@ -43,9 +45,19 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 	private Environment env;
 
 	/**
-	 * 로그인 인터셉터 등록
+	 * <p>공통 전처리 인터셉터
 	 * 
-	 * @return HandlerInterceptor(AuthInterceptor)
+	 * @return
+	 */
+	@Bean
+	public HandlerInterceptor preprocessInterceptor() {
+		return new PreprocessInterceptor();
+	}
+
+	/**
+	 * <p>로그인 인터셉터
+	 * 
+	 * @return 
 	 */
 	@Bean
 	public HandlerInterceptor authInterceptor() {
@@ -54,25 +66,27 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		
+
+		registry.addInterceptor(preprocessInterceptor());
+
 		registry.addInterceptor(authInterceptor())
 				.addPathPatterns("/**/*")
 				.excludePathPatterns("/login.do");
-		
+
 	}
-	
-//	@Bean
-//	public ViewResolver internalResourceViewResolver() {
-//
-//		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-//
-//		viewResolver.setPrefix("/WEB-INF/jsp/");
-//		viewResolver.setSuffix(".jsp");
-//		viewResolver.setOrder(0);
-//
-//		return viewResolver;
-//
-//	}
+
+	// @Bean
+	// public ViewResolver internalResourceViewResolver() {
+	//
+	// InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+	//
+	// viewResolver.setPrefix("/WEB-INF/jsp/");
+	// viewResolver.setSuffix(".jsp");
+	// viewResolver.setOrder(0);
+	//
+	// return viewResolver;
+	//
+	// }
 
 	@Override
 	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
@@ -101,15 +115,15 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 	}
 
 	private List<View> defaultView() {
-		
+
 		return Arrays.<View> asList(new MappingJackson2JsonView());
-		
+
 	}
 
 	private List<ViewResolver> viewResolvers() {
-		
+
 		InternalResourceViewResolver jspViewResolver = new InternalResourceViewResolver();
-		
+
 		jspViewResolver.setPrefix("/WEB-INF/jsp/");
 		jspViewResolver.setSuffix(".jsp");
 		jspViewResolver.setOrder(0);
@@ -122,22 +136,28 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public TilesConfigurer tilesConfigurer() {
-		
+
 		TilesConfigurer tilesConfigurer = new TilesConfigurer();
 		tilesConfigurer.setDefinitions(new String[] { "/WEB-INF/tiles.xml" });
-		
+
 		return tilesConfigurer;
-		
+
 	}
-	
+
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 
 		String[] staticPageUris = new String[] { "/home" };
 
 		for (String uri : staticPageUris)
-			registry.addViewController(uri + ".do").setViewName(StringUtils.removeStart(uri, "/"));
+			registry.addViewController(uri + ".do")
+					.setViewName(StringUtils.removeStart(uri, "/"));
 
 	}
 	
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+		return new PropertySourcesPlaceholderConfigurer();
+	}
+
 }

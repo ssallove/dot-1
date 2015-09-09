@@ -1,6 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
-%><%@ include file="/WEB-INF/jsp/common/directive.jsp"
-%><tiles:insertDefinition name="header.layout">
+%><%@ include file="/WEB-INF/jsp/common/directive.jsp"%>
+        
+   <% 
+      pageContext.setAttribute("show" , -1);
+      String show = request.getParameter("show");
+      try{
+          pageContext.setAttribute("show" , Integer.parseInt(show));
+      }catch(Exception e){}
+   %>
+<tiles:insertDefinition name="header.layout">
 
     <tiles:putAttribute name="stylesheet">
     
@@ -24,25 +32,65 @@
     <!-- main-container -->
         <section >
             <p class="Insights"><img src="<c:url value="/resources/images/Insights_img.jpg"/>"  title="Insights 상단 이미지"/></p>
-            <div class="container mb100">
+            <div class="container" id="insights">
                 <h1>Insights</h1>
-                
-                <ul class="InsightBox mt80" id="insights">
+                <ul class="InsightBox mt80">
+                    <li>
+                        <div class="Lybox">
+                            <p class="imgBox">
+                                <a href="javascript:drawChart(0);" class="overlay">
+                                    <i class="fa fa-link"></i>
+                                </a>
+                            </p>
+                            <p class="title ">Syrup pay 분석</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="Lybox">
+                            <p class="imgBox">
+                                <a href="javascript:drawChart(1);" class="overlay">
+                                    <i class="fa fa-link"></i>
+                                </a>
+                            </p>
+                            <p class="title ">동상이몽</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="Lybox">
+                            <p class="imgBox">
+                                <a href="javascript:drawChart(3);" class="overlay">
+                                    <i class="fa fa-link"></i>
+                                </a>
+                            </p>
+                            <p class="title ">검색어로 보는 남녀  탐구생활</p>
+                        </div>
+                    </li>
                 </ul>
-                
+                <ul class="InsightBox mt80">
+                    <li>
+                        <div class="Lybox">
+                            <p class="title ">간단한 통계로 본 Syrup<a href="javascript:drawChart(2);" class="overlay"></a></p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="Lybox">
+                            <p class="title ">11번가 vs. 경쟁사 app 현황 분석<a href="javascript:drawChart(4);" class="overlay"></a></p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="Lybox">
+                            <p class="title ">11번가 상품 Pareto<a href="javascript:drawChart(5);" class="overlay"></a></p>
+                        </div>
+                    </li>
+                </ul>
              </div>
              
-             
-             <div class="modal fade" id="myModal0" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"></div></div>
-             <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"></div></div>
-             <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"></div></div>
-             <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"></div></div>
-             <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"></div></div>
-             <div class="modal fade" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"></div></div>
-             <div class="modal fade" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"></div></div>
-             <div class="modal fade" id="myModal7" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"></div></div>
-             <div class="modal fade" id="myModal8" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"></div></div>
-               
+             <div class="modal fade" id="myModal0" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog2"></div></div>
+             <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog2"></div></div>
+             <%@ include file="/WEB-INF/jsp/insights/incInsights3.jsp" %>
+             <%@ include file="/WEB-INF/jsp/insights/incInsights2.jsp" %>
+             <%@ include file="/WEB-INF/jsp/insights/incInsights4.jsp" %>
+             <%@ include file="/WEB-INF/jsp/insights/incInsights5.jsp" %>
         </section>
         <!--// main-container-->
         
@@ -110,63 +158,73 @@
     $(document).ready(function () {
     	$.ajax({
             type: "GET",
-            url: '/resources/data/insights.json',
+            url: '/resources/data/insights/insights.json',
             dataType: 'json',
             success: function(jsonData) {
             	GV_JSON_DATA = jsonData;
-            	$.each(jsonData, function(modalIdx, data) {
-           
-            		
-            		$('#insights').append('<li>                                                                                  '
-							                +'    <div class="Lybox">                                                               '
-							                +'        <p class="imgBox">                                                            '
-							                +'            <a href="#" class="overlay" data-toggle="modal" data-target="#myModal'+modalIdx+'">  '
-							                +'                <i class="fa fa-link"></i>                                            '
-							                +'            </a>                                                                      '
-							                +'        </p>                                                                          '
-							                +'        <p class="title ">'+data.name+'</p>                                          '
-							                +'    </div>                                                                            '
-							                +'</li>                                                                                 ');
-            	});
+            	drawChart(${show});
             },
             error: function(err){alert("err "+err); console.log(err)}
         });
-
-    	$('#myModal0').on('shown.bs.modal', function () { drawChart(0); }) ;
-   	    $('#myModal1').on('shown.bs.modal', function () { drawChart(1); }) ;
-   	    $('#myModal2').on('shown.bs.modal', function () { drawChart(2); }) ;
      }); 
     
+    
     function drawChart(modalIdx){
+    	if(modalIdx  == -1) return;
+    	
+    	$('#myModal'+modalIdx).modal('show');
     	var body = $("#modalBody"+modalIdx).html();
-    	if(body == undefined || body == 'undefined' || body == ''){
+    	
+    	
+    	//if(body == undefined || body == 'undefined' || body == ''){
+    		
     	    var data = GV_JSON_DATA[modalIdx];
-    		if(data.iframeSrc == null || data.iframeSrc == 'undefined'){
+    	    if(data == null || data == undefined){
+    	    	setTimeout(function(){eval('incInsights'+modalIdx+'.showInsight();');}, 200);
+    	    	
+    	    }else if((data.iframeSrc == null || data.iframeSrc == 'undefined')
+    				&& (data.includeSrc == null || data.includeSrc == 'undefined')){
+    			
                 insights.drawModalDiv(modalIdx, data.title, data.subtitle);
-                
-                var charts=[];
-                if(data.iframeSrc == null || data.iframeSrc == 'undefined'){
-                   $.each(data.charts, function(_idx, chartData){
-                       $("#modalBody"+modalIdx).append(insights.getChartDiv(modalIdx, _idx, chartData));
-
-                       var option = chartData.option;
-                       var myChart = echarts.init($('#chart'+modalIdx+'_'+_idx)[0], GV_CHART_THEME);
-                       var chartList = eval(chartData.type+'(myChart, option)');
-                       if(chartData.showgrid == 'true'){
-                           // creat table
-                           insights.drawInsightTable("#grid"+modalIdx+'_'+_idx+" table", chartList, option.legend, option.category, option.timeline);
-                       }
-                       charts.push(myChart);
-                   });
-               }
+                 
+                 var charts=[];
+                 $.each(data.charts, function(_idx, chartData){
+                     $("#modalBody"+modalIdx).append(insights.getChartDiv(modalIdx, _idx, chartData));
+                     
+                     setTimeout(function(){
+                  	     var option = chartData.option;
+                         var myChart = echarts.init($('#chart'+modalIdx+'_'+_idx)[0], GV_CHART_THEME);
+                         var chartList = eval(chartData.type+'(myChart, option)');
+                         if(chartData.showgrid == 'true'){
+                             // creat table
+                             insights.drawInsightTable("#grid"+modalIdx+'_'+_idx+" table", chartList, option.legend, option.category, option.timeline);
+                         }
+                         charts.push(myChart);   
+                     }, 200);
+                     
+                 });
                resizeChartOnWinResizeHandler.on(charts);
-            }else{
-                insights.drawiFrame(modalIdx, data); 
-            }
-    	}
+               
+            }else if(data.iframeSrc == null || data.iframeSrc == 'undefined'){
+            	setTimeout(function(){eval(data.includeSrc+'.showInsight();');}, 200);
+            	
+            }else{    insights.drawiFrame(modalIdx, data);  }
+    		
+    		var contHeight = screen.availHeight - 100;        
+            $('#myModal'+modalIdx+' .modal_content2').height(contHeight+'px');
+            $('#myModal'+modalIdx+' .modal_body2').height((contHeight-130)+'px');
+    	//}
     }
     
    
+    
+    
+    
+    
+    
+    
+    
+    
          
     </script>
     </tiles:putAttribute>

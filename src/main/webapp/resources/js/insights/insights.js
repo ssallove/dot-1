@@ -255,40 +255,39 @@ var insights = {
 			mDiv+='	</div>';
 			//mDiv+='</div>';
 			  
-			$("#myModal"+mIdx).html(mDiv);
+			$("#myModal"+mIdx+" .modal-dialog2").html(mDiv);
 	    },
 	    
 	    drawModalDiv : function (mIdx, title, subtitle){
 	      var mDiv = '';
 	      //mDiv+='<div class="modal fade" id="myModal'+mIdx+'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">';
-	      //mDiv+='<div class="modal-dialog">';
+	      //mDiv+='<div class="modal-dialog2">';
 	      mDiv+='  <div class="modal_content2 ">';
 	      mDiv+='    <button type="button" class="close2" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">close</span></button>';
 	      mDiv+='    <p class="paper_lfBg "></p>';
 	      mDiv+='    <p class="paper_rgBg "></p>';
 	      mDiv+='    <div class="modal_header2">';
-	      mDiv+='    <h2 id="myModalLabel">'+title+'</h2>';
-	      mDiv+='    <span class="dottxt">'+subtitle+'</span>';
+	      mDiv+='    <h2 id="myModalLabel">'+title+'<span class="dottxt">'+subtitle+'</span></h2>';
 	      mDiv+='  </div>';
 	      mDiv+='  <div class="modal_body2" id="modalBody'+mIdx+'"></div>';
 	      //mDiv+='</div>';
           //mDiv+='</div>';
 	      
-	      $("#myModal"+mIdx+" .modal-dialog").html(mDiv);
+	      $("#myModal"+mIdx+" .modal-dialog2").html(mDiv);
 	    },
 
 	    getChartDiv : function (mIdx, idx, data){
 	    	var title = data.title, showgrid = data.showgrid == 'true', top = data.top, bottom = data.bottom;
 	        var chartDiv = '';
-	        chartDiv+= '<div class="news '+(idx == 0?"mt30" : "mt100")+' " style="background: url(/resources/images/dottedLine_blue.gif) 0 bottom repeat-x;">                     ';
+	        chartDiv+= '<div class="news '+(idx == 0?"mt30" : "mt50")+' " style="background: url(/resources/images/dottedLine_blue.gif) 0 bottom repeat-x;">                     ';
 	        chartDiv+= '    <h3>'+title+'</h3>                                                 ';
 	        
 	        if(top != null && top != 'undefined'){	chartDiv+='<p class="exp" style="font-size:15px">'+top+'</p>'; }
 	        
 	        chartDiv+= '    <div class="layoutLR mt30">                                             ';
 	        if(showgrid){
-	            chartDiv+= '        <li class=" floatL boxSty" style="width:68%"><p class="newsCbox chart" id="chart'+mIdx+'_'+idx+'"  '+(data.height != null && data.height != 'undefined' ? 'style="height:'+data.height+'"' : "")+'>Chart Area</p></li>  ';
-	            chartDiv+= '        <li class=" floatR boxTable" style="width:30%" id="grid'+mIdx+'_'+idx+'"> <table class="listTB2 tStriped2 mt10"  '+(data.height != null && data.height != 'undefined' ? 'style="height:'+data.height+'"' : "")+'><colgroup></colgroup><thead></thead><tbody></tbody></table></li> ';
+	            chartDiv+= '        <li class=" floatL boxSty" style="width:64%"><p class="newsCbox chart" id="chart'+mIdx+'_'+idx+'"  '+(data.height != null && data.height != 'undefined' ? 'style="height:'+data.height+'"' : "")+'>Chart Area</p></li>  ';
+	            chartDiv+= '        <li class=" floatR boxTable" style="width:32%" id="grid'+mIdx+'_'+idx+'"> <table class="listTB2 tStriped2 mt10"  '+(data.height != null && data.height != 'undefined' ? 'style="height:'+data.height+'"' : "")+'><colgroup></colgroup><thead></thead><tbody></tbody></table></li> ';
 	        }else{
 	            chartDiv+= '        <li class=" floatL boxSty " style="width:100%;"><p class="newsCbox chart" id="chart'+mIdx+'_'+idx+'"  '+(data.height != null && data.height != 'undefined' ? 'style="height:'+data.height+'"' : "")+'>Chart Area</p></li>  ';
 	        }
@@ -316,153 +315,5 @@ var insights = {
 	        return ul;
 	    }
 	    
-	    
-	    
-	    
-	    
-	    
-
-		
-		/*
-		getDefLineOpt : function(_title, _subtitle){
-			return option = {
-				    title	: { text:(_title == null || _title == 'undefined') ? '' : _title },
-				    tooltip	: { trigger: 'axis' },
-				    legend	: { data:[]	// KKKKKK  },
-				    calculable : true,
-				    xAxis	: [ { type : 'category', boundaryGap : false, data : []	// KKKKKK   } ],
-				    yAxis	: [ { type : 'value' } ],
-				    series : [
-				        {
-				            name:'最高气温',	// legend 명
-				            type:'line',
-				            data:[11, 11, 15, 13, 12, 13, 10],	// category 개수 만큼
-				            markPoint : { data : [ {type : 'max'}, {type : 'min'} ] }
-				        },
-				        {
-				            name:'最低气温',
-				            type:'line',
-				            data:[1, -2, 2, 5, 3, 2, 0]
-				        }
-				    ]
-				};            
-		},
-		
-		getDefScatterOpt : function(_title){
-			return {
-				title		: { text: (_title == null || _title == 'undefined') ? '' : _title }
-				, tooltip	: { trigger: 'item'
-						        , formatter		: function (params) {
-						            if (params.value.length > 1) {	return params.seriesName + ' <br/>' + params.value[0] + ' : ' + params.value[1] ;	}
-						            else {	return params.seriesName + ' <br/>' + params.name + ' : '+ params.value; }	}
-								, axisPointer	:{ show: false, type : 'cross', lineStyle: { type : 'dashed', width : 1 } } }
-				, legend	: { data:[] }
-				, xAxis		: [ { type : 'category', data : [] } ]
-			    , yAxis		: [ { type : 'value' } ]
-			    , series	: [ { name : '女性', type:'scatter', data: [['20대', 25.6], ['30대', 81.8], ['40대', 40.7]]
-			           , markPoint : {
-			                data : [
-			                    {type : 'max'}, {type : 'min'}
-			                ]
-			            },
-			            markLine : {
-			                data : [{type : 'average'}]
-			            }
-			        },
-			        {
-			            name:'男性',
-			            type:'scatter',
-			            data: [['20대', 65.6], ['30대', 71.8], ['40대', 80.7]]
-			        }
-			    ]
-			};
-		},
-			         */           
-		
-		/*
-		var firOpt =  {
-    title : {
-        text: '某站点用户访问来源',
-        subtext: '纯属虚构',
-        x:'center'
-    },
-    tooltip : {
-        trigger: 'item',
-        formatter: "{a} <br/>{b} : {c} ({d}%)"
-    },
-    legend: {
-        orient : 'vertical',
-        x : 'left',
-        data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
-    },
-    toolbox: {
-        show : true,
-        feature : {
-            mark : {show: true},
-            dataView : {show: true, readOnly: false},
-            magicType : {
-                show: true, 
-                type: ['pie', 'funnel'],
-                option: {
-                    funnel: {
-                        x: '25%',
-                        width: '50%',
-                        funnelAlign: 'left',
-                        max: 1548
-                    }
-                }
-            },
-            restore : {show: true},
-            saveAsImage : {show: true}
-        }
-    },
-    calculable : true,
-    series : [
-        {
-            name:'访问来源',
-            type:'pie',
-            radius : '55%',
-            center: ['50%', '60%'],
-            data:[
-                {value:335, name:'直接访问'},
-                {value:310, name:'邮件营销'},
-                {value:234, name:'联盟广告'},
-                {value:135, name:'视频广告'},
-                {value:1548, name:'搜索引擎'}
-            ]
-        }
-    ]
-};
-		option = {
-			    timeline : {
-			        data : [
-			            '2013-01-01', '2013-02-01', '2013-03-01', '2013-04-01', '2013-05-01',
-			            { name:'2013-06-01', symbol:'emptyStar6', symbolSize:8 },
-			            '2013-07-01', '2013-08-01', '2013-09-01', '2013-10-01', '2013-11-01',
-			            { name:'2013-12-01', symbol:'star6', symbolSize:8 }
-			        ],
-			        label : {
-			            formatter : function(s) {
-			                return s.slice(0, 7);
-			            }
-			        }
-			    },
-			    options : []
-			};
-			
-			
-var ecConfig = require('echarts/config');
-echarts.config
-function eConsole(param) {
-  console.log( '【' + param.type + '】');
-    console.log(param);
-    if(param.currentIndex%2 == 0){	// param.data
-    
-    }else{
-    }
-}
-myChart.on(ecConfig.EVENT.TIMELINE_CHANGED, eConsole);
-
-			   */           
 	    
 	}

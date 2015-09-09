@@ -282,7 +282,7 @@
 	//[삭제대상, 고객수]
 	var mbrStatBySvcData = {
 		'전국민'       : [0,       48357370],
-		'OCB'          : [5780762, 33092052],
+		'OCB'          : [5780762, 30943787],
 		'Syrup Wallet' : [1000000, 12724904],
 		'T-Map'        : [1000000, 10107949],
 		'11st'         : [7207999, 11168644],
@@ -435,7 +435,7 @@
 				formatter:function(p){ 
 				    if(p.length > 1){
 						return p[0][1] + "<br/>" +
-						       p[0][0] + " : " + p[0].value + "<br>" +
+						       p[0][0] + " : " + formatCurrency(p[0].value) + "<br>" +
 						       p[1][0] + " : " + getPercentile(p[1].value, mbrStatBySvc100P) +'% <br>';
 				    } else {
 						return p[0][1] + "<br/>";

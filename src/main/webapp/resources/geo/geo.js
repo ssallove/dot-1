@@ -1,18 +1,73 @@
 var idxDataArr = [];
 var subDataArr = [];
-var seoulShow = "seoul";
+var mainPath = "/resources/geo/";
+var isSeoulShow = "seoul";
+
+var cityArray = [{
+    name: "서울특별시",
+    path: mainPath + "Seoul.json"
+}, {
+    name: "경기도",
+    path: mainPath + "Gyeonggi.json"
+}, {
+    name: "강원도",
+    path: mainPath + "Gangwon.json"
+}, {
+    name: "인천광역시",
+    path: mainPath + "Incheon.json"
+}, {
+    name: "충청남도",
+    path: mainPath + "Chungcheongnam.json"
+}, {
+    name: "충청북도",
+    path: mainPath + "Chungcheongbuk.json"
+}, {
+    name: "대전광역시",
+    path: mainPath + "Daejeon.json"
+}, {
+    name: "경상남도",
+    path: mainPath + "Gyeongsangnam.json"
+}, {
+    name: "경상북도",
+    path: mainPath + "Gyeongsangbuk.json"
+}, {
+    name: "대구광역시",
+    path: mainPath + "Daegu.json"
+}, {
+    name: "울산광역시",
+    path: mainPath + "Ulsan.json"
+}, {
+    name: "부산광역시",
+    path: mainPath + "Busan.json"
+}, {
+    name: "전라북도",
+    path: mainPath + "Jeollabuk.json"
+}, {
+    name: "광주광역시",
+    path: mainPath + "Gwangju.json"
+}, {
+    name: "전라남도",
+    path: mainPath + "Jeollanam.json"
+}, {
+    name: "제주특별자치도",
+    path: mainPath + "Jejudo.json"
+}, {
+    name: "세종특별자치시",
+    path: mainPath + "Sejongsi.json"
+},
+
+];
 
 function getGeoMapMaker() {
 
-    var mainPath = "/resources/geo/";
     var dataArr = [];
     var j = 0;
 
-    if (seoulShow === "seoul") {
-        seoulShow = "korea";
+    if (isSeoulShow === "seoul") {
+        isSeoulShow = "korea";
         var param = {};
         param.target = "서울특별시";
-        var cityArray = [{
+        var cityArrayTemp = [{
             name: "서울특별시",
             path: mainPath + "Seoul.json"
         }];
@@ -20,7 +75,7 @@ function getGeoMapMaker() {
         cityCd["서울특별시"] = "11";
         var myChart = echarts.init(document.getElementById('koreaMap'));
         myChart.setTheme(GV_CHART_THEME);
-        getSubResultChart(param, cityArray, "", myChart, cityCd);
+        getSubResultChart(param, cityArrayTemp, "", myChart, cityCd);
         return;
     }
 
@@ -54,8 +109,9 @@ function getGeoMapMaker() {
     var myChart = echarts.init(document.getElementById('koreaMap'));
     
     myChart.setTheme(GV_CHART_THEME);
-    
+
     echarts.util.mapData.params.params.korea = {
+
         getGeoJson: function (callback) {
             $.getJSON(mainPath + 'korea.json', callback);
         }
@@ -106,61 +162,6 @@ function getGeoMapMaker() {
     //var ecConfig = require('echarts/config');
     var ecConfig = echarts.config;
 
-    var cityArray = [{
-        name: "서울특별시",
-        path: mainPath + "Seoul.json"
-    }, {
-        name: "경기도",
-        path: mainPath + "Gyeonggi.json"
-    }, {
-        name: "강원도",
-        path: mainPath + "Gangwon.json"
-    }, {
-        name: "인천광역시",
-        path: mainPath + "Incheon.json"
-    }, {
-        name: "충청남도",
-        path: mainPath + "Chungcheongnam.json"
-    }, {
-        name: "충청북도",
-        path: mainPath + "Chungcheongbuk.json"
-    }, {
-        name: "대전광역시",
-        path: mainPath + "Daejeon.json"
-    }, {
-        name: "경상남도",
-        path: mainPath + "Gyeongsangnam.json"
-    }, {
-        name: "경상북도",
-        path: mainPath + "Gyeongsangbuk.json"
-    }, {
-        name: "대구광역시",
-        path: mainPath + "Daegu.json"
-    }, {
-        name: "울산광역시",
-        path: mainPath + "Ulsan.json"
-    }, {
-        name: "부산광역시",
-        path: mainPath + "Busan.json"
-    }, {
-        name: "전라북도",
-        path: mainPath + "Jeollabuk.json"
-    }, {
-        name: "광주광역시",
-        path: mainPath + "Gwangju.json"
-    }, {
-        name: "전라남도",
-        path: mainPath + "Jeollanam.json"
-    }, {
-        name: "제주특별자치도",
-        path: mainPath + "Jejudo.json"
-    }, {
-        name: "세종특별자치시",
-        path: mainPath + "Sejongsi.json"
-    },
-
-    ];
-
     // 시도 클릭시
     myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param) {
         getSubResultChart(param, cityArray, option, myChart, idxDataArr);
@@ -172,9 +173,8 @@ function getGeoMapMaker() {
 
 }
 
-
-
 function getSubResultChart(param, cityArray, option, myChart, idxDataArr) {
+
     var ecConfig = echarts.config;
     var cityName = param.target;
     var cityCd = idxDataArr[param.target];
@@ -215,10 +215,8 @@ function getSubResultChart(param, cityArray, option, myChart, idxDataArr) {
         for (var i = 0; i < cityArray.length; i++) {
 
             if (param.target == cityArray[i].name) {
-
                 cityPath = cityArray[i].path;
                 break;
-
             }
 
         }
@@ -284,15 +282,10 @@ function getSubResultChart(param, cityArray, option, myChart, idxDataArr) {
             var isSelected = false;
 
             $.each(selected, function (data) {
-
                 if (eval("selected['" + data + "']")) {
-
                     console.log(data + " :: selected[] " + eval("selected['" + data + "']"));
-
                     isSelected = true;
-
                 }
-
             });
 
             if (isSelected) {
