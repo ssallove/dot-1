@@ -114,7 +114,7 @@
 							<div class="floatL" style="width:33%;">
 								<h3>캐쉬백 가입자 현황 </h3>
 								<p class="expTb">※ 전국민 : 통계청, 2010년 인구주택 총조사 기준</p>
-	                        	<table class="listTB tStriped" id="ocbCoverageTable">
+	                        	<table class="listTB tStriped tBorderBlue" id="ocbCoverageTable">
 	                            	<colgroup>
 	                                	<col width="*">
 	                                	<col width="40%">
@@ -130,7 +130,7 @@
 	                        	<div class="floatL" style="width:33%;">
 		                        	<h3>운전고객 대비 T-Map 이용자 현황</h3>
 		                        	<p class="expTb">※ 차량등록대수 : 국토교통부, '15년 6월 기준</p>
-		                        	<table class="listTB tStriped tmapCoverageTable">
+		                        	<table class="listTB tStriped tBorderBlue tmapCoverageTable">
 		                            	<colgroup>
 		                                	<col width="*">
 		                                	<col width="40%">
@@ -144,7 +144,7 @@
 								<div class="floatL" style="width:32%;margin-left:1%;">
 									<h3>운전면허 소지자 중 T-Map 이용자 현황</h3>
 		                        	<p class="expTb">※ 운전면허 소지자 : 경찰청, 2014년말 기준</p>
-		                        	<table class="listTB tStriped tmapCoverageTable">
+		                        	<table class="listTB tStriped tBorderBlue tmapCoverageTable">
 		                            	<colgroup>
 		                                	<col width="*">
 		                                	<col width="40%">
@@ -158,7 +158,7 @@
 								<div class="floatR" style="width:33%;">
 									<h3>택시 운전자 고객 중 T-Map 택시 운전기사 가입현황</h3>
 		                        	<p class="expTb">※ 택시 운전자수 : 전국택시운송사업조합연합회, '15년 6월기준</p>
-		                        	<table class="listTB tStriped tmapCoverageTable">
+		                        	<table class="listTB tStriped tBorderBlue tmapCoverageTable">
 		                            	<colgroup>
 		                                	<col width="*">
 		                                	<col width="40%">

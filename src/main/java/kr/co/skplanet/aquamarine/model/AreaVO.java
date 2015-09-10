@@ -65,6 +65,16 @@ public class AreaVO implements Serializable {
     private String dongNm;
     private String dongType;
 
+    private String mosuPush;
+
+    public String getMosuPush() {
+        return mosuPush;
+    }
+
+    public void setMosuPush(String mosuPush) {
+        this.mosuPush = mosuPush;
+    }
+
     public String getDongType() {
         return dongType;
     }

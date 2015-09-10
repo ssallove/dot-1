@@ -69,17 +69,29 @@
                 <ul class="InsightBox mt80">
                     <li>
                         <div class="Lybox">
-                            <p class="title ">간단한 통계로 본 Syrup<a href="javascript:drawChart(2);" class="overlay"></a></p>
+                            <p class="title " onclick="javascript:drawChart(2);">간단한 통계로 본 Syrup</p>
                         </div>
                     </li>
                     <li>
                         <div class="Lybox">
-                            <p class="title ">11번가 vs. 경쟁사 app 현황 분석<a href="javascript:drawChart(4);" class="overlay"></a></p>
+                            <p class="title " onclick="javascript:drawChart(4);">11번가 vs. 경쟁사 app 현황 분석</p>
                         </div>
                     </li>
                     <li>
                         <div class="Lybox">
-                            <p class="title ">11번가 상품 Pareto<a href="javascript:drawChart(5);" class="overlay"></a></p>
+                            <p class="title " onclick="javascript:drawChart(5);">11번가 상품 Pareto</p>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="InsightBox mt80">
+                    <li>
+                        <div class="Lybox">
+                            <p class="title " onclick="javascript:drawChart(6);">모바일 전단</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="Lybox">
+                            <p class="title " onclick="javascript:drawChart(7);">심정미</p>
                         </div>
                     </li>
                 </ul>
@@ -91,6 +103,8 @@
              <%@ include file="/WEB-INF/jsp/insights/incInsights2.jsp" %>
              <%@ include file="/WEB-INF/jsp/insights/incInsights4.jsp" %>
              <%@ include file="/WEB-INF/jsp/insights/incInsights5.jsp" %>
+             <%@ include file="/WEB-INF/jsp/insights/incInsights6.jsp" %>
+             <%@ include file="/WEB-INF/jsp/insights/incInsights7.jsp" %>
         </section>
         <!--// main-container-->
         
@@ -99,9 +113,9 @@
     
     
     <tiles:putAttribute name="javascript.footer">
-    <script type="text/javascript" src="<c:url value="/resources/js/insights/insights.js "/>"></script>
-    <script type="text/javascript" src="<c:url value="/resources/js/insights/syruppay.js "/>"></script>
-    <script type="text/javascript" src="<c:url value="/resources/js/insights/samediff.js "/>"></script>
+    <script type="text/javascript" src="<c:url value="/resources/js/insights/insights.js?${ BROWSER_CACHE_TIME_FLAG }"/>"></script>
+    <script type="text/javascript" src="<c:url value="/resources/js/insights/syruppay.js?${ BROWSER_CACHE_TIME_FLAG }"/>"></script>
+    <script type="text/javascript" src="<c:url value="/resources/js/insights/samediff.js?${ BROWSER_CACHE_TIME_FLAG }"/>"></script>
     <script type="text/javascript">
 
     

@@ -218,7 +218,7 @@
             		<!--//현황지역 설명 박스-->
 
 			</div>
-            <div class="modal-body">
+            <div class="modal_body3" style="max-height: auto !important;">
             	<!--성연령대별 현황-->
                 <div class="chartLy mt10">
                 	<ul class="chartLy_3p ">
@@ -395,14 +395,19 @@
                 $("#mainAdmDongCdCnt").selectBox("value", "10");
                 $("#crossAdmDongCdCnt").selectBox("value", "5");
 
-                var start = Date.now();
+                /*var start = Date.now();*/
                 getGeoMapMaker(); // 지도 호출
-                console.log("Page load took $(document).ready(function () {" + (Date.now() - start) + " milliseconds");
+                /*console.log("Page load took $(document).ready(function () {" + (Date.now() - start) + " milliseconds");*/
 
                 $("#clickKoreaMap").click(function () {
-                    callAjaxMainActivityArea("", "", "getCallBack");
+                    callAjaxMainActivityArea("korea", "", "getCallBack");
                 });
 
+                var contHeight = screen.availHeight - 100;
+                if(contHeight > 870) contHeight = 870;
+                $('#myModa3'+  ' .modal-content').height(contHeight+'px');
+                $('#myModa3' + ' .modal_body3').height((contHeight-120)+'px');
+                console.log($('#myModa3'+  ' .modal_body3').height());
             });
 
             $('#chart6_popup').click(function(){
@@ -838,9 +843,9 @@
 
                 }
 
-//                if (cityName == "") {
-//                    getGeoMapMaker(); // 지도 호출
-//                }
+                if (cityName == "korea") {
+                    getGeoMapMaker(); // 지도 호출
+                }
 
 //                console.log("Page load took getCallBack " + (Date.now() - start)  + " milliseconds");
             }
@@ -935,7 +940,7 @@
 
                 var option = {
                     title : {
-                        text: $("#areaDong").text(),
+                        text: ($("#areaDong").text() === "null") ? "전국" : $("#areaDong").text(),
                         subtext: "모수 : " + $("#areaMosu").text() + ", PUSH 동의 : " + $("#areaPush").text()
                     },
                     grid: {
@@ -1002,7 +1007,7 @@
 
                     if (status < 6) {
                         data['모수-PUSH'][dataSize - status - 1] = {
-                            value: dataList[status].mosu,
+                            value: dataList[status].mosuPush,
                             itemStyle: {
                                 normal: {
                                     color: GV_GENDER_COLOR.female(0.65),
@@ -1024,7 +1029,7 @@
                             }
                         };
                     } else {
-                        data['모수-PUSH'][dataSize - status - 1] = {	value: dataList[status].mosu	};
+                        data['모수-PUSH'][dataSize - status - 1] = {	value: dataList[status].mosuPush	};
                         data['PUSH'][dataSize - status - 1] = {	value: dataList[status].push	};
                     }
                     categoryData[dataSize - status - 1] = dataList[status].mainAcvtDongNm;

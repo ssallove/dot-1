@@ -12,9 +12,9 @@
 		var contextPath = "${ pageContext.request.contextPath }/";
 		</script>
 	
-		<link href="<c:url value="/resources/jquery-ui-themes-1.11.1/themes/smoothness/jquery-ui.css"/>" rel="stylesheet">
-		<link href="<c:url value="/resources/bootstrap/css/bootstrap.css"/>" rel="stylesheet">
-		<link href="<c:url value="/resources/css/dotStyle.css"/>" rel="stylesheet">
+		<link href="<c:url value="/resources/jquery-ui-themes-1.11.1/themes/smoothness/jquery-ui.css?${ BROWSER_CACHE_TIME_FLAG }"/>" rel="stylesheet">
+		<link href="<c:url value="/resources/bootstrap/css/bootstrap.css?${ BROWSER_CACHE_TIME_FLAG }"/>" rel="stylesheet">
+		<link href="<c:url value="/resources/css/dotStyle.css?${ BROWSER_CACHE_TIME_FLAG }"/>" rel="stylesheet">
 		
 		<script type="text/javascript" src="<c:url value="/resources/js/jquery-1.11.1.min.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/resources/jquery-ui-1.11.1/jquery-ui.js"/>"></script> 
@@ -22,7 +22,7 @@
 		<script type="text/javascript" src="<c:url value="/resources/bootstrap/js/bootstrap.min.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/resources/bootstrap/js/holder.js"/>"></script>
 		
-		<script type="text/javascript" src="<c:url value="/resources/js/application.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/resources/js/application.js?${ BROWSER_CACHE_TIME_FLAG }"/>"></script>
 		
 		<script type="text/javascript" src="<c:url value="/resources/js/plugins/modernizr.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/resources/js/plugins/template.js"/>"></script>

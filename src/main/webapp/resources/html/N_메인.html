@@ -8,7 +8,6 @@
     
     <!-- Jquery and Bootstap core js files -->
 	<script type="text/javascript" src="../js/plugins/jquery.js"></script>
-	<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
 
 	<!-- Modernizr javascript -->
 	<script type="text/javascript" src="../js/plugins/modernizr.js"></script>
@@ -24,12 +23,15 @@
 
 	<!-- Bootstrap -->
 	<script src="../bootstrap/js/holder.js"></script>
-
+	<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/unitip.js"></script>
     
 
      <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     
     <link href="../css/dotStyle.css" rel="stylesheet">
+    
+   
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
@@ -125,7 +127,7 @@
                                 	<i class="fa fa-link"></i>
                                 </a>
                             </div>
-                            <div class="showcase-thumbnail"><p class="main_insight_sm1">Syrup pay 분석</p></div>
+                            <div class="showcase-thumbnail" ><a class="right tip" href="#" title="<ul><li>Syrup pay 분석</li></ul>"><p class="main_insight_sm1" >Syrup pay 분석</p></a></div>
                         </div>
                         <!--2 동상이몽--> 
                         <div class="showcase-slide">
@@ -135,7 +137,7 @@
                                 	<i class="fa fa-link"></i>
                                 </a>
                             </div>
-                             <div class="showcase-thumbnail"><p class="main_insight_sm3">동상이몽</p></div>
+                             <div class="showcase-thumbnail"><a class="right tip" href="#" title="<ul><li>남과 여.. 同床異夢</li></ul>"><p class="main_insight_sm3">동상이몽</p></a></div>
                         </div>
                        <!--3 서비스별 인기 검색어 top 10--> 
                         <div class="showcase-slide">
@@ -145,7 +147,7 @@
                                 	<i class="fa fa-link"></i>
                                 </a>
                             </div>
-                             <div class="showcase-thumbnail"><p class="main_insight_sm4">서비스별 인기 검색어 top 10</p></div>
+                             <div class="showcase-thumbnail"><a class="right tip" href="#" title="<ul><li>서비스별 인기 검색어 top 10</li></ul>"><p class="main_insight_sm4">서비스별 인기 검색어 top 10</p></a></div>
                         </div>
                       
                     </div>
@@ -300,7 +302,9 @@
 	</div>
 	<!-- //page-wrapper-->
 <script type="text/javascript" src="../js/jquery.aw-showcase.js"></script>
-
+<script>
+   		$(function () { $("[data-toggle='tooltip']").tooltip(); });
+	</script>
 
 </body>
 </html>

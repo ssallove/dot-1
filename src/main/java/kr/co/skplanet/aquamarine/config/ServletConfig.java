@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
+import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
@@ -26,6 +29,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 
 import kr.co.skplanet.aquamarine.presentation.interceptor.AuthInterceptor;
+import kr.co.skplanet.aquamarine.presentation.interceptor.ClientCacheInterceptor;
 import kr.co.skplanet.aquamarine.presentation.interceptor.PreprocessInterceptor;
 
 /**
@@ -38,11 +42,32 @@ import kr.co.skplanet.aquamarine.presentation.interceptor.PreprocessInterceptor;
 @EnableWebMvc
 // @EnableAsync
 @ComponentScan(basePackages = "kr.co.skplanet.aquamarine.presentation.controller")
-public class ServletConfig extends WebMvcConfigurerAdapter {
+public class ServletConfig extends WebMvcConfigurerAdapter implements ServletContextAware {
 
-	@SuppressWarnings("unused")
 	@Autowired
 	private Environment env;
+	
+	@Override
+	public void setServletContext(ServletContext servletContext) {
+		
+		//servletContext.setAttribute("BROWSER_CACHE_ID", DateTime.now().getMillis());
+		servletContext.setAttribute("BROWSER_CACHE_TIME_FLAG", env.getProperty("browser.cache.time.flag"));
+		
+	}
+
+	/**
+	 * <p>클라이언트 캐시 인터셉터 등록
+	 * @return HandlerInterceptor(ClientCacheInterceptor)
+	 */
+	@Bean
+	public HandlerInterceptor nocacheInterceptor() {
+
+		ClientCacheInterceptor nocacheInterceptor = new ClientCacheInterceptor();
+		nocacheInterceptor.setSecond(0);
+
+		return nocacheInterceptor;
+
+	}
 
 	/**
 	 * <p>공통 전처리 인터셉터
@@ -66,6 +91,8 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
+		
+		registry.addInterceptor(nocacheInterceptor());
 
 		registry.addInterceptor(preprocessInterceptor());
 

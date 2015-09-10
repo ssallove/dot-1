@@ -25,11 +25,11 @@
         <!-- main-container -->
         <section >
             <p class="Insights2"><img src="<c:url value="/resources/images/Insights2_img.jpg"/>"  title="상단 이미지"/></p>
-            <div class="container mb100">
+            <div class="container mb100"  style="padding:0 30px !important; max-width: auto !important">
                 <h1>그날에 우리</h1>
                 <div class="theDay mt30">
                     <p class="iframeLy">
-                        <iframe id='' name='' src='http://cdn.knightlab.com/libs/timeline3/latest/embed/index.html?source=1LhJyYLwoLeRpUhSVZQnEc1mt0c07jxnBv_mDUI2-2Hw&font=Default&lang=en&start_at_end=true&initial_zoom=3&height=450'scrolling='auto' frameborder='0' allowtransparency='true' style="width:100%;height:450px"></iframe>
+                        <iframe id='' name='' src='http://cdn.knightlab.com/libs/timeline3/latest/embed/index.html?source=1LhJyYLwoLeRpUhSVZQnEc1mt0c07jxnBv_mDUI2-2Hw&font=Default&lang=en&start_at_end=true&initial_zoom=3&height=580'scrolling='auto' frameborder='0' allowtransparency='true' style="width:100%;height:580px"></iframe>
                     </p>
                     <div class="headLy">
                         <h3 class="title">우리 회사 서비스는 그날이 되면 어떻게 이용될까요? (T map 이동, 11번가 구매, OCB 적립)</h3>

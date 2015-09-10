@@ -151,7 +151,7 @@ body.bg, body {background:url(../images/bg_gray_new.jpg) center top repeat;}
 .page-wrapper { /*background-color: #ffffff;*/ min-width:1200px;}
 
 .header {padding:10px 0; min-width:1000px; border-top:#1aadd2 solid 3px; border-bottom:#d1dfed solid 1px;  background:#fff; position:relative;  /*-webkit-box-shadow:0 3px 5px #e9eff4;  box-shadow: 0 3px 5px #e9eff4;*/ display:block; }
-section { position:relative; min-height:800px; min-width:1000px;}
+section { position:relative; min-height:900px; min-width:1000px;}
 
 .container { margin-right:auto; margin-left: auto; padding:0 100px 0 100px; max-width:1800px;}
 .container:after { content:''; clear:both;}
@@ -534,6 +534,8 @@ table.listTB  tr.thDepth th {border-radius:0 !important; border:0; background:ur
 /*table.listTB  tr.thDepth th:first-child { border-left:#b4d5de solid 1px;}*/
 table.listTB  tr.thDepth th:last-child { border-right:#b4d5de solid 1px;}
 
+.tBorderBlue { border-top:#b4d5de solid 1px;}	
+
 /*-------------*/
 /*table*/
 table.listTB2 {width:100%; border-radius:radius; -moz-border-radius:radius; -webkit-border-radius:radius;  border-collapse: separate;  border-bottom:#bad6b4 solid 1px; background-color:transparent;}
@@ -545,13 +547,22 @@ table.listTB2 tr.last td {border-bottom:#bad6b4 solid 1px;}
 table.listTB2 td.last {border-bottom:#bad6b4 solid 1px;}
 table.listTB2 td.first {background:#faf7eb url(../images/td_line.gif) right center no-repeat !important;  color:#ff8a00; padding:12px 8px; font-weight:bold;}
 table.listTB2 td.first:last-child {background-image:none !important;}
-	
+
+.tBorderT { border-top:#bad6b4 solid 1px;}	
 table.listTB2 td {/*border-bottom:#c6dadf solid 1px;*/ color:#666; padding:10px 8px; text-align:right; word-break:break-all; white-space:nowrap; /*font-size:13px;*/ background:#fff url(../images/td_line.gif) right center no-repeat;}
 table.listTB2 td:last-child {background-image:none; }
 table.listTB2 td.depth1 {background:#daf0f6 !important; color:#458137; font-weight:bold;}
 table.listTB2 td.depth2 {background:#ebf4e9; !important; color:#458137; }
 table.listTB2 td.total {color:#ff8a00; font-weight:bold;}
 table.listTB2 td.noData { text-align:center; font-weight:bold; color:#8dacbc; padding:15px 0;}
+ 
+ 
+tr.total td , .tStriped3 > tbody > tr.total:nth-child(odd) > td, .tStriped3 > tbody > tr.total:nth-child(odd) > td.depth2  { background:#ffebae !important; color:#FF5700 !important;} 
+table.listTB2 td.th {border-bottom:#fff solid 1px !important; text-align:left;}
+table.listTB2 td.th, .tStriped3 > tbody > tr:nth-child(odd) > td.th  { color:#5ba049;  background:#dbf0d6;}
+.tStriped3 > tbody > tr:nth-child(odd) > td {background-color: #ebf4e9;}
+.tStriped3 > tbody > tr:nth-child(odd) > td.depth2 {background-color: #e3f0e0 !important;}
+
 
 .modal-body table.listTB2 td {color:#666; padding:10px 8px; text-align:right; word-break:break-all; background:url(../images/td_line.gif) right center no-repeat;white-space:normal }
 .modal-body table.listTB2 td.total {color:#ff8a00; font-weight:bold;}
@@ -832,22 +843,23 @@ p.expTb, span.expTb { text-align:right; color:#666; padding-bottom:7px; font-wei
 .insightImg4 { background:#92f4f4 url(../images/Insights_p4.png) center center no-repeat; width:316px; height:302px;}
 
 /* Insights 목록*/
-.InsightTxt { padding-top:50px; clear:both;}
-.InsightTxt ul {}
-.InsightTxt li {  line-height:180%;}
-.InsightTxt li span.title {font-weight:bold; color:#2EA4B3; padding-right:50px; font-size:15px; padding-left:10px }
-/* i.fa-comments-o { font-size:17px !important; color:#2EA4B3;}
-.fa-4 {font-size:30px !important;}*/
-
+.InsightTxt {padding-top:70px; clear:both;}
+.InsightTxt ul { padding:0; margin:0; }
+.InsightTxt li:first-child {border-top:#a7c5eb solid 2px;}
+.InsightTxt li {  font-size:13px; background:#fff url(../images/dottedLine_blue.gif) 0 bottom repeat-x; }
+.InsightTxt li:last-child {border-bottom:#a7c5eb solid 2px; background:#fff; background-image:none !important}
+.InsightTxt li span.title {font-weight:bold; color:#355ebb; padding-right:20px; font-size:15px !important; line-height:42px; height:42px;}
+.fa-paste:before, .fa-clipboard:before {content:"\f0ea"; padding:0 5px 0 20px; color:#709ed7;}
+.InsightTxt li a:hover { color:#2e3578; background-color:#e1ecfa;  display:block; line-height:42px; height:42px;}
 
 /*그날에 우리*/
-.theDay {background:#cbeff7 url(../images/dayimg2.png) 20px bottom no-repeat ;  width:100%; border-radius:10px; padding:20px 20px 0 20px; border:#9acfdb solid 1px;}
+.theDay {background:#cbeff7 url(../images/dayimg2.png) 20px bottom no-repeat ;  width:100%; border-radius:10px; padding:10px 10px 0 10px; border:#9acfdb solid 1px;}
 .theDay .headLy {height:120px !important; position:relative; width:100%;}
 .theDay .headLy h3.title {font-size:19px !important; color:#32a600 !important; font-weight:bold; background:none !important; margin:30px 0 0 160px;}
 .theDay .headLy h4.exp {font-size:15px; color:#888888; font-weight:bold; background:none !important; margin:20px 0 0 180px; line-height:160%}
 .theDay .headLy p.img { background:url(../images/dayimg1.png) 0 0  no-repeat; width:98px; height:65px; position:absolute; right:20px; top:55px;}
 
-.iframeLy { background:#fff; width:100%; /*border:#b0c7e8 solid 2px;*/ border-radius:10px; padding:15px 15px 20px 15px;}
+.iframeLy { background:#fff; width:100%; /*border:#b0c7e8 solid 2px;*/ border-radius:10px; padding:6px 6px 20px 6px;}
 
 /* modal 웹진 Insights*/
 .modal_content2 { position: relative;  background:#fff url(../images/paper_top.png) 0 top  repeat-x; border:#a8a5a1 solid 1px; min-width:800px; border-radius:5px; width:100%;}
@@ -860,7 +872,8 @@ p.expTb, span.expTb { text-align:right; color:#666; padding-bottom:7px; font-wei
 .modal_content2 .close2 { position:absolute; right:20px; top:-5px; background:url(../images/closeBg.png) 0 0 no-repeat; width:70px; height:48px; color:#fff; font-size:14px; font-weight:bold; padding-bottom:14px; cursor: pointer;}
 .modal_content2 .close2:hover, .modal_content2 .close2:focus { color:#d2ffb1;}
 
-.modal_body2 {position: relative; margin:0 20px 20px 35px; overflow-y:auto; height:auto; padding-right:15px;  max-height:600px; min-height:200px;} 
+.modal_body2 {position: relative; margin:0 20px 20px 35px; overflow-y:auto; height:auto; padding-right:15px;  /*max-height:600px;*/ min-height:200px;} 
+.modal_body3 {position: relative; margin:0 20px 20px 35px; overflow-y:auto; height:auto; padding-right:15px;  max-height:750px; min-height:200px;} 
 @media screen and (max-height: 768px) {/*.modal_body2 { max-height:350px;}*/ }
 
 .modal_body2 .news { position:relative;}
@@ -873,7 +886,7 @@ p.expTb, span.expTb { text-align:right; color:#666; padding-bottom:7px; font-wei
 .modal_body2 .news .intxt { background:#f2efdd; border:#d9d5bd solid 1px; border-radius:8px; padding:10px; margin:10px 0;}
 .modal_body2 .news .intxt li { padding:2px;/* background:url(../images/bullet_dott.gif) 8px 50% no-repeat;*/ padding-left:20px;}
 
-.newsCbox { /*background:#e1f0f3;*/ border:#c6dee3 solid 1px;border-radius:10px; height:auto; /*padding:15px; background:url(../images/dottedLine_blue.gif) 0 bottom repeat-x; */}
+.newsCbox { /*background:#e1f0f3;*/ border:#c6dee3 solid 1px;border-radius:8px; height:auto; /*padding:15px; background:url(../images/dottedLine_blue.gif) 0 bottom repeat-x; */ padding:4px;}
 .newsCbox .exp {font-size:15px; color:#5f8da3; font-weight:bold; line-height:200%; margin:10px 20px 30px 0; /*background:url(../images/dottedLine_blue.gif) 0 bottom repeat-x;*/ padding:0 0 20px 10px;}
 .newsPaper .noLine { background-image:none !important}
 
@@ -910,3 +923,20 @@ table.color { border-collapse:collapse; margin-left:75px}
 table.color th {display:block}
 table.color th strong { width:16px; height:16px; display:block; border:#7f7f7f solid 1px;}
 table.color td {padding:0 10px 3px 10px; border:#fff; color:#7f7f7f; font-size:12px;}
+
+/*튤팁*/
+
+a.tip:link, a.tip:visited { text-align: center;border-bottom: none;}
+a.tip:hover { background: #a7e22b;}
+.right { float:right; }
+	
+
+/* unitip css */
+
+#unitip {position: absolute; z-index: 1000; top: -1000px; color: #fff; display: none;}
+#unitippoint, #unitipmid, #unitipcap {position: relative;	top: 0px; left: 0px;	width:auto; display: block;}	
+#unitippoint { background: url(../images/TipPoint.png) no-repeat; 	height: 12px; overflow: hidden; }
+
+#unitipmid { background:url(../images/TipMid.png) repeat; width:auto;height: auto; padding: 10px 15px;border-radius:8px;}
+
+#unitipcap { /*background:#000;// url(../images/TipCap.png) no-repeat;*/ height: 7px; overflow: hidden; border-radius:8px;}

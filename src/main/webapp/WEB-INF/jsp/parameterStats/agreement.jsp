@@ -902,11 +902,11 @@
 		
 		charts.push(paramBySvcBarChart = echarts.init($('#paramBySvcBarChart')[0], GV_CHART_THEME));
            
-		$('button[data-stats-level=1]').click();
+		$('button[data-stats-level]:eq(0)').click();
 		//툴팁의 enterable 옵션 적용이 제대로 되지 않는 버그에 대한 임시 해결 방안
 		statsLevel = null;
 		paramBySvcBarChartConfMap.option.tooltip.enterable = true;
-		$('button[data-stats-level=1]').click();
+		$('button[data-stats-level]:eq(0)').click();
 
 		paramBySvcBarChart.on(echarts.config.EVENT.CLICK, function(param){
 			

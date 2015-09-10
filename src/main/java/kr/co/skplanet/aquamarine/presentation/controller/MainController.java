@@ -100,13 +100,8 @@ public class MainController {
         List<AreaVO> list4 = areaSvc.selectAreaSexAgeList1(p); // 성연령대별 현황1
         List<AreaVO> list5 = areaSvc.selectAreaSexAgeList2(p);
         List<AreaVO> list6 = areaSvc.selectAreaSexAgeList3(p);
-        //List<AreaVO> list7 = areaSvc.selectAreaArPocList(p); // AR POC
-        long currTime = System.currentTimeMillis();
         List<AreaVO> list7 = areaSvc.selectAreaNodeList(p); // AR POC
-        System.out.println("Node List Query Time : "+(System.currentTimeMillis()-currTime));
-        currTime = System.currentTimeMillis();
         List<AreaVO> list8 = areaSvc.selectAreaLinkList(p); // AR POC
-        System.out.println("Link List Query Time : "+(currTime-System.currentTimeMillis()));
 
         //기준일자
         String baseDt = "";

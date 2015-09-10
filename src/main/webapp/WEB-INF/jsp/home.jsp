@@ -21,7 +21,7 @@
                                     <i class="fa fa-link"></i>
                                 </a>
                             </div>
-                            <div class="showcase-thumbnail"><p class="main_insight_sm1">Syrup pay 분석</p></div>
+                            <div class="showcase-thumbnail" ><a class="right tip" href="#" title="<ul><li>Syrup pay 분석</li></ul>"><p class="main_insight_sm1" >Syrup pay 분석</p></a></div>
                         </div>
                         <!--2 동상이몽--> 
                         <div class="showcase-slide">
@@ -31,7 +31,7 @@
                                     <i class="fa fa-link"></i>
                                 </a>
                             </div>
-                             <div class="showcase-thumbnail"><p class="main_insight_sm3">동상이몽</p></div>
+                             <div class="showcase-thumbnail"><a class="right tip" href="#" title="<ul><li>남과 여.. 同床異夢</li></ul>"><p class="main_insight_sm3">동상이몽</p></a></div>
                         </div>
                        <!--3 서비스별 인기 검색어 top 10--> 
                         <div class="showcase-slide">
@@ -41,9 +41,8 @@
                                     <i class="fa fa-link"></i>
                                 </a>
                             </div>
-                             <div class="showcase-thumbnail"><p class="main_insight_sm4">검색어로 보는 남녀 탐구생활</p></div>
+                            <div class="showcase-thumbnail"><a class="right tip" href="#" title="<ul><li>검색어로 보는 남녀 탐구생활</li></ul>"><p class="main_insight_sm4">검색어로 보는 남녀 탐구생활</p></a></div>
                         </div>
-                      
                     </div>
                     
                 </div>
@@ -183,6 +182,7 @@
 	</tiles:putAttribute>
 	<tiles:putAttribute name="javascript.footer">
 	   <script type="text/javascript" src="<c:url value="/resources/js/jquery.aw-showcase.js"/>"></script>
+	   <script type="text/javascript" src="<c:url value="/resources/js/unitip.js"/>"></script>
 		<script type="text/javascript">
 			$(document).ready(function() {
 			});

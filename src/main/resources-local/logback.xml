@@ -13,7 +13,7 @@
 	</appender>
 
 	<!-- Query Loggers -->
-	<logger name="jdbc.sqlonly" level="info" />
+	<!--<logger name="jdbc.sqlonly" level="info" />-->
 
 	<!--<logger name="jdbc.connection" level="warn"  />
 

@@ -1,4 +1,5 @@
-[{"name":"Syrup pay 분석", "title":"Syrup pay, 11번가 상반기 결산!"
+[
+{"name":"Syrup pay 분석", "title":"Syrup pay, 11번가 상반기 결산!"
     , "subtitle":"11번가로 돌아보는 Syrup pay의 현황"
     , "charts":[
      {"type":"syruppay.barLineChart", "showgrid":"true", "height":"300px", "title":"11번가 내 Syrup pay 구매 비율은 증가 추세!"
@@ -47,7 +48,7 @@
 ,{"name":"동상이몽", "title":"남과 여.. 同床異夢 "
     , "subtitle":"11번가 구매패턴으로 본 그들.. 그들은 달랐다.."
     , "charts":[
-        {"type":"samediff.importChart", "showgrid":"false", "height":"560px", "title":"상품군별 男과 女 누구를 Target으로 하였나?"
+        {"type":"samediff.importChart", "showgrid":"false", "height":"410px", "title":"상품군별 男과 女 누구를 Target으로 하였나?"
             ,"top":"각 카테고리별 구매자 = 100명일 때,<br/>자동차용품, 취미용품(자전거/골프/낚시/등산), 가전용품류은 남성이,<br/>여성의류, 출산 및 아동용품, 애완용품, 생필품, 건강용품은 여성이 주로 구매했다."
             , "option":{"title":"상품군별 男과 女 "
                                             , "importFile":"samediff.csv"
@@ -59,7 +60,7 @@
                                                     , {"name":"여성", "value":"", "type" : "bar"}
                                                     ] }    }
                                                     
-        , {"type":"samediff.importChart", "showgrid":"false", "height":"560px",  "title":"男과 女, 11번가에서 무얼 사나?"
+        , {"type":"samediff.importChart", "showgrid":"false", "height":"410px",  "title":"男과 女, 11번가에서 무얼 사나?"
             , "top":"남성 중 14명은 휴대폰액세서리를 사러, 8명은 자동차용품을 사러<br/>여성 중 14명은 화장품을 사러, 9명은 세제/화장지를 사러, <br/>11번가를 찾았다!"
             , "option":{"title":"11번가와 男과 女 ", "subtitle":"남/녀 가 11번가에서 구매한 상품 카테고리", "yCategory":"true"
                                             , "importFile":"samediff3.csv"
@@ -68,7 +69,7 @@
                                             , "data":[{"name":"남성", "value":"entry_[2]", "type" : "bar"}
                                                     , {"name":"여성", "value":"entry_[1]", "type" : "bar"}] }    }   
                                                                                                         
-        , {"type":"samediff.importChart2", "showgrid":"false", "height":"560px",  "title":"男과 女, 구매패턴으로 본 그들의 Life Style"
+        , {"type":"samediff.importChart2", "showgrid":"false", "height":"410px",  "title":"男과 女, 구매패턴으로 본 그들의 Life Style"
             , "top":"<strong>남성</strong><br/>&nbsp;&nbsp;&nbsp;남성 부동의 1위, 휴대폰/악세서리류<br/>&nbsp;&nbsp;&nbsp;몸짱 - 20대 : 운동으로 가꾼 몸에 멋지게 차려입고, PC에도 관심있다..<br/>&nbsp;&nbsp;&nbsp;My Car - 30대 : 관심은 PC관련 제품에서 자동차 용품으로, 운동용품 대신, 생필품으로..<br/>&nbsp;&nbsp;&nbsp;My Home - 40대 :  공구관련 제품과 소형가전, 골프도 처음 top20에 진입한다.<br/><br/><strong>여성</strong><br/>&nbsp;&nbsp;&nbsp;여성하면 피부, 전 연령층의 여성들은 피부만큼은 포기할 수 없다. <br/>&nbsp;&nbsp;&nbsp;Beauty - 20대 : 옷, 신발, 가방, 헤어제품 등 온통 나를 위한 소비로, 머리부터 발끝까지 나를 위해 아낌없이 투자.. <br/>&nbsp;&nbsp;&nbsp;Baby - 30대 : 삶의 중심이 내가 아닌 아기에게로 이동하여,<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;유아용품/기저귀/물티슈/장난감과 세제/생수/생활용품 위주로 대변신..<br/>&nbsp;&nbsp;&nbsp;Recovery and Health - 40대 :  잃어버린 나를 찾는 시간으로, 다시 나를 가꾸고 건강에 관심이 높아진다.."            
             , "option":{"title":"男과 女, 연령대별 Shopping Style", "subtitle":"남/여 가 11번가에서 구매한 상품 카테고리"
                                             , "importFile":"samediff2.csv"
@@ -167,5 +168,5 @@
                                                         
                
     
-    ]}  
+    ]} 
 ]

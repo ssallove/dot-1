@@ -38,7 +38,6 @@
                               , ROW_NUMBER() OVER (PARTITION BY MAIN_ADM_DONG_CD ORDER BY CONFIDENCE DESC) AS RN_2
                            FROM INTGT_POC_AR_ACVT_AREA A
                            WHERE MAIN_ADM_DONG_CD LIKE #{mainAcvtAdmDongCd} || '%'
-                                /* MAIN_ADM_DONG_CD LIKE '41%' -- 경기도 샘플 */
                        ) A
                        LEFT OUTER JOIN INTGT_ADM_DONG_META B
                             ON A.MAIN_ADM_DONG_CD  = B.ADM_DONG_CD
@@ -114,7 +113,6 @@
                           , ROW_NUMBER() OVER (PARTITION BY MAIN_ADM_DONG_CD ORDER BY CONFIDENCE DESC) AS RN_2
                        FROM INTGT_POC_AR_ACVT_AREA A
                        WHERE MAIN_ADM_DONG_CD LIKE #{mainAcvtAdmDongCd} || '%'
-                            -- MAIN_ADM_DONG_CD LIKE '41%' -- 경기도 샘플
                    ) A
                    LEFT OUTER JOIN INTGT_ADM_DONG_META B
                         ON A.MAIN_ADM_DONG_CD  = B.ADM_DONG_CD
@@ -183,94 +181,67 @@
     <select id="selectAreaMosuList" parameterType="map" resultMap="dataList">
 	<![CDATA[
 
-    SELECT /* selectAreaMosuList */
-    	SEQ
-    	, BASE_DT
-    	, INT_KEY_CL_CD
-        , CMPLS_CROSS_AGR_CL_CD
-        , PERIOD_CL_CD
-        , MAIN_ACVT_ADM_DONG_CD
-        , MAIN_ACVT_DONG_NM
-        , MOSU
-        , PUSH
-    	FROM (SELECT
-	           SEQ
-	         , TO_CHAR(TO_DATE(BASE_DT), 'YYYY.MM.DD') BASE_DT
-	         , INT_KEY_CL_CD
-	         , CMPLS_CROSS_AGR_CL_CD
-	         , PERIOD_CL_CD
-	         , MAIN_ACVT_ADM_DONG_CD
-	         , CASE WHEN MAIN_ACVT_ADM_DONG_CD = '00' THEN '전국'
-	                ELSE (
-	                        SELECT CASE WHEN LENGTH(ADM_DONG_CD) = 2 THEN SIDO
-	                                    WHEN LENGTH(ADM_DONG_CD) = 5 THEN SIGUNGU
-	                                    ELSE ADM_DONG  
-	                               END
-	                          FROM INTGT_ADM_DONG_META
-	                         WHERE ADM_DONG_CD = MAIN_ACVT_ADM_DONG_CD
-	                     )
-	           END    AS MAIN_ACVT_DONG_NM
-	         , SUM(MOSU)	AS MOSU
-	         , SUM(PUSH)	AS PUSH
-	      FROM (
-	            SELECT 
-	                   SEQ
-	                 , BASE_DT
-	                 , INT_KEY_CL_CD
-	                 , CMPLS_CROSS_AGR_CL_CD
-	                 , FUNC_AGR_CL_CD
-	                 , PERIOD_CL_CD
-	                 , MAIN_ACVT_ADM_DONG_CD
-	                 , CASE WHEN FUNC_AGR_CL_CD = '99' THEN MBR_CNT END     AS MOSU
-	                 , CASE WHEN FUNC_AGR_CL_CD = '03' THEN MBR_CNT END     AS PUSH
-	              FROM (
-	                    SELECT 
-	                           1 SEQ
-	                         , BASE_DT
-	                         , INT_KEY_CL_CD
-	                         , CMPLS_CROSS_AGR_CL_CD
-	                         , FUNC_AGR_CL_CD
-	                         , PERIOD_CL_CD
-	                         , MAIN_ACVT_ADM_DONG_CD
-	                         , MBR_CNT
-	                      FROM INTGT_POC_MAIN_ACVT_MBR_CNT
-	                     WHERE 1 = 1
-	                       AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
-	                       AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN */
-	                       AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
-	                       AND FUNC_AGR_CL_CD IN ('03', '99')   /* 01:PUSH동의 02:위치동의 03:BLE동의 99:전체 */
-	                       AND PERIOD_CL_CD = '3M'              /* 1M:1개월 3M:3개월 6M:6개월 */
-	                       AND MAIN_ACVT_ADM_DONG_CD = CASE WHEN #{mainAcvtAdmDongCd} != '00' THEN #{mainAcvtAdmDongCd} END
-	                     UNION ALL
-	                    SELECT 
-	                           2 SEQ
-	                         , BASE_DT
-	                         , INT_KEY_CL_CD
-	                         , CMPLS_CROSS_AGR_CL_CD
-	                         , FUNC_AGR_CL_CD
-	                         , PERIOD_CL_CD
-	                         , MAIN_ACVT_ADM_DONG_CD
-	                         , MBR_CNT
-	                      FROM INTGT_POC_MAIN_ACVT_MBR_CNT
-	                     WHERE 1 = 1
-	                       AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
-	                       AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN */
-	                       AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
-	                       AND FUNC_AGR_CL_CD IN ('03', '99')   /* 01:PUSH동의 02:위치동의 03:BLE동의 99:전체 */
-	                       AND PERIOD_CL_CD = '3M'              /* 1M:1개월 3M:3개월 6M:6개월 */
-	                       AND (MAIN_ACVT_ADM_DONG_CD LIKE #{mainAcvtAdmDongCd} || '___' || CASE WHEN #{mainAcvtAdmDongCd} = '36' THEN '___' END OR LENGTH(MAIN_ACVT_ADM_DONG_CD) = CASE WHEN #{mainAcvtAdmDongCd} = '00' THEN 2 ELSE 100 END)
-	                   )
-	           )
-	     GROUP BY
-	           SEQ
-	         , BASE_DT
-	         , INT_KEY_CL_CD
-	         , CMPLS_CROSS_AGR_CL_CD
-	         , PERIOD_CL_CD
-	         , MAIN_ACVT_ADM_DONG_CD
-	         
-	     )
-	ORDER BY SEQ, MOSU DESC, PUSH DESC
+        SELECT /* selectAreaMosuList */
+                 TO_CHAR(TO_DATE(BASE_DT), 'YYYY.MM.DD') BASE_DT
+               , INT_KEY_CL_CD
+               , CMPLS_CROSS_AGR_CL_CD
+               , PERIOD_CL_CD
+               , MAIN_ACVT_ADM_DONG_CD
+               , (
+                   SELECT CASE WHEN LENGTH(ADM_DONG_CD) = 2 THEN SIDO
+                               WHEN LENGTH(ADM_DONG_CD) = 5 THEN SIGUNGU
+                               ELSE ADM_DONG
+                          END
+                     FROM INTGT_ADM_DONG_META
+                    WHERE ADM_DONG_CD = MAIN_ACVT_ADM_DONG_CD
+                 )  AS MAIN_ACVT_DONG_NM
+               , SUM(CASE WHEN FUNC_AGR_CL_CD = '99' THEN MBR_CNT END)   AS MOSU
+               , SUM(CASE WHEN FUNC_AGR_CL_CD = '03' THEN MBR_CNT END)   AS PUSH
+               , SUM(CASE WHEN FUNC_AGR_CL_CD = '99' THEN MBR_CNT END) - SUM(CASE WHEN FUNC_AGR_CL_CD = '03' THEN MBR_CNT END) AS MOSU_PUSH
+            FROM (
+                   SELECT 1 SEQ
+
+                        , BASE_DT
+                        , INT_KEY_CL_CD
+                        , CMPLS_CROSS_AGR_CL_CD
+                        , FUNC_AGR_CL_CD
+                        , PERIOD_CL_CD
+                        , MAIN_ACVT_ADM_DONG_CD
+                        , MBR_CNT
+                     FROM INTGT_POC_MAIN_ACVT_MBR_CNT
+                    WHERE 1 = 1
+                      AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+                      AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN */
+                      AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+                      AND FUNC_AGR_CL_CD IN ('03', '99')   /* 01:PUSH동의 02:위치동의 03:BLE동의 99:전체 */
+                      AND PERIOD_CL_CD = '3M'              /* 1M:1개월 3M:3개월 6M:6개월 */
+                      AND MAIN_ACVT_ADM_DONG_CD = CASE WHEN #{mainAcvtAdmDongCd} != '00' THEN #{mainAcvtAdmDongCd} END
+                    UNION ALL
+                   SELECT 2 SEQ
+                        , BASE_DT
+                        , INT_KEY_CL_CD
+                        , CMPLS_CROSS_AGR_CL_CD
+                        , FUNC_AGR_CL_CD
+                        , PERIOD_CL_CD
+                        , MAIN_ACVT_ADM_DONG_CD
+                        , MBR_CNT
+                     FROM INTGT_POC_MAIN_ACVT_MBR_CNT
+                    WHERE 1 = 1
+                      AND BASE_DT = (SELECT MAX(BASE_DT) FROM INTGT_POC_BASE_DT)
+                      AND INT_KEY_CL_CD = '01'             /* 01:통합회원 02:통합MDN */
+                      AND CMPLS_CROSS_AGR_CL_CD = '01'     /* 01:필수동의 02:교차동의 */
+                      AND FUNC_AGR_CL_CD IN ('03', '99')   /* 01:PUSH동의 02:위치동의 03:BLE동의 99:전체 */
+                      AND PERIOD_CL_CD = '3M'              /* 1M:1개월 3M:3개월 6M:6개월 */
+                      AND (MAIN_ACVT_ADM_DONG_CD LIKE #{mainAcvtAdmDongCd} || '___' || CASE WHEN #{mainAcvtAdmDongCd} = '36' THEN '___' END OR LENGTH(MAIN_ACVT_ADM_DONG_CD) = CASE WHEN #{mainAcvtAdmDongCd} = '00' THEN 2 ELSE 100 END)
+                   )
+             GROUP BY
+                   SEQ
+                 , BASE_DT
+                 , INT_KEY_CL_CD
+                 , CMPLS_CROSS_AGR_CL_CD
+                 , PERIOD_CL_CD
+                 , MAIN_ACVT_ADM_DONG_CD
+        ORDER BY SEQ, MOSU DESC, PUSH DESC
 
         ]]>
 	</select>
