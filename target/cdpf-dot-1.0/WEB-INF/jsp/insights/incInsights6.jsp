@@ -21,12 +21,40 @@
                     <!-- Prepare a Dom with size (width and height) for ECharts -->
                     <div id="wrapper_">
                         <div id="inner">
-                            <input class="ip" type="int" placeholder="지난 3개월간 이들 동종 모바일전단을 열람하셨나요?" id="a"/> <!-- 라디오 버튼 예 아니오 -->
-                            <input class="ip" type="text" placeholder="지난 3개월간 이들 업종 관련해 SK Planet 서비스를 사용하셨나요?"  id="b"/>
-                            <input class="ip" type="int" placeholder="성별이 무엇인가요?" id="c"/> <!-- 라디오 -->
-                            <input class="ip" type="int" placeholder="연령은 어떻게 되시나요?" id="d"/>
-                            <button id='sbm' onclick="javascript:getReact();">반응 확률 보기</button>
-
+                            <%--<input class="ip" type="int" placeholder="지난 3개월간 이들 동종 모바일전단을 열람하셨나요?" id="a"/> <!-- 라디오 버튼 예 아니오 -->--%>
+                            <center>
+                                <table class="listTB2 tStriped2" style="width:50%;">
+                                    <tr>
+                                        <th>지난 3개월간 이들 동종 모바일전단을 열람하셨나요?</th>
+                                        <td>
+                                            <input name="arr_a" id ="a1" type="radio" value="1"><label for="a1"><strong>예</strong></label>
+                                            <input name="arr_a" id ="a2" type="radio" value="0"><label for="a2">아니오</label> <br class="mt10">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>지난 3개월간 이들 업종 관련해 SK Planet 서비스를 사용하셨나요?</th>
+                                        <td>
+                                            <input name="arr_b" id ="b1" type="radio" value="1"><label for="b1"><strong>예</strong></label>
+                                            <input name="arr_b" id ="b2" type="radio" value="0"><label for="b2">아니오</label> <br class="mt10">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>성별이 무엇인가요?</th>
+                                        <td>
+                                            <input name="arr_c" id ="c1" type="radio" value="1"><label for="c1"><strong>남</strong></label>
+                                            <input name="arr_c" id ="c2" type="radio" value="0"><label for="c2">여</label> <br class="mt10">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><input class="ip" type="int" placeholder="연령은 어떻게 되시나요?" id="d"/> <br class="mt10"></th>
+                                        <td>
+                                            <button id='sbm' onclick="javascript:getReact();" class="mt10">반응 확률 보기</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </center>
+                            <%--<input class="ip" type="text" placeholder="지난 3개월간 이들 업종 관련해 SK Planet 서비스를 사용하셨나요?"  id="b"/>--%>
+                            <%--<input class="ip" type="int" placeholder="성별이 무엇인가요?" id="c"/> <!-- 라디오 -->--%>
                         </div>
                     </div>
                     <div id="wrapper">
@@ -315,10 +343,12 @@
     var genderAdd = [-0.20678608, 0, 0, 0.29157798, -2.03904761, 0, 0, 0, 0.30781029, 0, 0.20213605, -0.07034319, 0, 0];
 
     function cvt() {
-        return ( getReflectVal($('#a').val(),
-                $('#b').val(),
-                $('#c').val(),
-                $('#d').val()) );
+
+        var a = $("input[name='arr_a']:checked").val();
+        var b = $("input[name='arr_b']:checked").val();
+        var c = $("input[name='arr_c']:checked").val();
+        return ( getReflectVal(a, b, c, $('#d').val()) );
+
     }
 
     function getReflectVal(n1, n2, n3, n4) {

@@ -19,8 +19,10 @@
 		<link href="<c:url value="/resources/css/magic.min.css"/>" rel="stylesheet">
 		
 		<script type="text/javascript" src="<c:url value="/resources/js/jquery-1.11.1.min.js"/>"></script>
-		<script type="text/javascript" src="<c:url value="/resources/jquery-ui-1.11.1/jquery-ui.js"/>"></script> 
-		
+		<script type="text/javascript" src="<c:url value="/resources/jquery-ui-1.11.1/jquery-ui.js"/>"></script>
+
+        <script type="text/javascript" src="<c:url value="/resources/js/unitip.js"/>"></script>
+
 		<script type="text/javascript" src="<c:url value="/resources/bootstrap/js/bootstrap.min.js"/>"></script>
 		<script type="text/javascript" src="<c:url value="/resources/bootstrap/js/holder.js"/>"></script>
 		
@@ -32,117 +34,13 @@
 		<script type="text/javascript" src="<c:url value="/resources/js/parsley.min.js"/>"></script>
 		--%>
 		<script type="text/javascript" src="<c:url value="/resources/js/jquery.selectBox.js"/>"></script>
-		
-		<script type="text/javascript" src="<c:url value="/resources/d3/d3.min.js "/>"></script>
-		
-		<script type="text/javascript" src="<c:url value="/resources/dimple/lib/d3.v3.4.8.js "/>"></script>
-		<script type="text/javascript" src="<c:url value="/resources/dimple/dist/dimple.v2.1.2.min.js "/>"></script>
-		
-		<script type="text/javascript" src="<c:url value="/resources/d3/radarChart.js "/>"></script>
-		
+
 		<script type="text/javascript" src="<c:url value="/resources/js/underscore-min.js "/>"></script>
 		
 		<script src="<c:url value="/resources/geo/queue.v1.min.js "/>"></script>
 		<script src="<c:url value="/resources/geo/topojson.v1.min.js "/>"></script>
 		
 		<script type="text/javascript" src="<c:url value="/resources/echart/echarts-all.js"/>"></script>
-		
-		
-		<style>
-			/********************
-			 * SVG CSS
-			 */
-			
-			
-			svg {
-			  -webkit-touch-callout: none;
-			  -webkit-user-select: none;
-			  -khtml-user-select: none;
-			  -moz-user-select: none;
-			  -ms-user-select: none;
-			  user-select: none;
-			  /* Trying to get SVG to act like a greedy block in all browsers */
-			  display: block;
-			  width:100%;
-			  height:100%;
-			}
-			
-			
-			svg text {
-			  font-family: 'Nanum Gothic', sans-serif  !important;
-			  font-size: 11px  !important;
-			  color: #333  !important;
-			}
-			
-			svg .title {
-			  font-family: 'Nanum Gothic', sans-serif;
-			  font-size: 14px;
-			}
-			/*******************
-			 그래프 수정
-			*/
-			.line {
-			  fill: #7f6ec7;
-			}
-			
-			/* .box,.line {
-			  stroke: none !important;
-			  stroke-width: 2px;
-			  stroke-linecap: round;
-			  stroke-linejoin: round;
-			} */
-			
-			text {
-				font-weight: normal !important;
-				fill: #000;
-				/* opacity: 0.5 !important; */
-			}
-			
-			g text {
-				font-size: 11px !important;
-			}
-			
-			.domain {
-			  stroke: #b3b3b3 !important;
-			  stroke-width: 1px;
-			  /* opacity: 0.5;  */
-			}
-			
-			line {
-			  stroke: #b3b3b3 !important;
-			  stroke-width: 1px;
-			  /* opacity: 0.5 !important; */ 
-			}
-			
-			.writing {
-			  font-family: 'Nanum Gothic';
-			  font-size: 11px;
-			}
-			
-			.hatch-1 {
-			  fill: #7f6ec7;
-			  stroke: #7f6ec7;
-			}
-			
-			.hatch-2 {
-			  fill: #f3c536;
-			  stroke: #f3c536;
-			}
-			
-			.hatch-3 {
-			  fill: url(#cross-hatch);
-			} 
-			 /* 
- 			#chartContainer svg {
-				height: auto;
-			}
-			   */ 
-			.g_font {
-				font-family: 'Nanum Gothic', sans-serif; 
-				color:#333; 
-				font-size:13px;
-			}
-		</style>
 
 		<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>

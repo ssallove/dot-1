@@ -23,6 +23,7 @@ public class AccountVO implements Serializable {
 	private String userId;
 	private String roleId;
 	private String userName;
+	private String email;
 	private String department;
 	private String userAgent;
 	private String remoteIp;
@@ -50,6 +51,14 @@ public class AccountVO implements Serializable {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getDepartment() {

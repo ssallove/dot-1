@@ -32,12 +32,13 @@
     <!-- main-container -->
         <section >
             <p class="Insights"><img src="<c:url value="/resources/images/Insights_img.jpg"/>"  title="Insights 상단 이미지"/></p>
-            <div class="container" id="insights">
+            <div class="container mb100" id="insights">
                 <h1>Insights</h1>
-                <ul class="InsightBox mt80">
+                <div class="InsightBox mt30">
+                    <ul>
                     <li>
                         <div class="Lybox">
-                            <p class="imgBox">
+                            <p class="imgBox insightImg1">
                                 <a href="javascript:drawChart(0);" class="overlay">
                                     <i class="fa fa-link"></i>
                                 </a>
@@ -47,7 +48,7 @@
                     </li>
                     <li>
                         <div class="Lybox">
-                            <p class="imgBox">
+                            <p class="imgBox insightImg2">
                                 <a href="javascript:drawChart(1);" class="overlay">
                                     <i class="fa fa-link"></i>
                                 </a>
@@ -57,7 +58,7 @@
                     </li>
                     <li>
                         <div class="Lybox">
-                            <p class="imgBox">
+                            <p class="imgBox insightImg3">
                                 <a href="javascript:drawChart(3);" class="overlay">
                                     <i class="fa fa-link"></i>
                                 </a>
@@ -65,38 +66,26 @@
                             <p class="title ">검색어로 보는 남녀  탐구생활</p>
                         </div>
                     </li>
-                </ul>
-                <ul class="InsightBox mt80">
-                    <li>
-                        <div class="Lybox">
-                            <p class="title " onclick="javascript:drawChart(2);">간단한 통계로 본 Syrup</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="Lybox">
-                            <p class="title " onclick="javascript:drawChart(4);">11번가 vs. 경쟁사 app 현황 분석</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="Lybox">
-                            <p class="title " onclick="javascript:drawChart(5);">11번가 상품 Pareto</p>
-                        </div>
-                    </li>
-                </ul>
-                <ul class="InsightBox mt80">
-                    <li>
-                        <div class="Lybox">
-                            <p class="title " onclick="javascript:drawChart(6);">모바일 전단</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="Lybox">
-                            <p class="title " onclick="javascript:drawChart(7);">심정미</p>
-                        </div>
-                    </li>
-                </ul>
+                    </ul>
+                </div>
+             
+                <!--Insights 리스트-->
+                <div class="InsightTxt mt50">
+                    <ul>
+                        <li><a href="javascript:drawChart(2);"><span class="title"><i class="fa fa-clipboard" style="padding-right:5px"></i>간단한 통계로 본 Syrup</span>간단한 통계로 현재 Syrup의 고객현황과 Insight를 … </a></li>
+                        <li><a href="javascript:drawChart(4);"><span class="title"><i class="fa fa-clipboard" style="padding-right:5px"></i>11번가 vs. 경쟁사 app 현황 분석</span>주요 쇼핑 앱 이용 통계로 돌아보는 11번가의 경쟁력</a></li>
+                        <li><a href="javascript:drawChart(5);"><span class="title"><i class="fa fa-clipboard" style="padding-right:5px"></i>11번가 상품 Pareto</span>11번가 매출상품의 전체/카테고리별 Pareto분석</a></li>
+                        <li><a href="javascript:drawChart(6);"><span class="title"><i class="fa fa-clipboard" style="padding-right:5px"></i>모바일 전단</span>모바일전단, 얼마나 반응했나?</a></li>
+                        <li><a href="javascript:drawChart(7);"><span class="title"><i class="fa fa-clipboard" style="padding-right:5px"></i>Syrup/OCB segmentation</span>Segment별로 살펴보는 고객 특성</a></li>
+                    </ul>
+                    
+                </div>
+                <!--//Insights 리스트-->
+             
              </div>
              
+              
+                
              <div class="modal fade" id="myModal0" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog2"></div></div>
              <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog2"></div></div>
              <%@ include file="/WEB-INF/jsp/insights/incInsights3.jsp" %>
@@ -224,7 +213,7 @@
             	
             }else{    insights.drawiFrame(modalIdx, data);  }
     		
-    		var contHeight = screen.availHeight - 100;        
+    		var contHeight = screen.availHeight - 100; 
             $('#myModal'+modalIdx+' .modal_content2').height(contHeight+'px');
             $('#myModal'+modalIdx+' .modal_body2').height((contHeight-130)+'px');
     	//}

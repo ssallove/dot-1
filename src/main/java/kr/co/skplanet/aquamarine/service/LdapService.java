@@ -63,7 +63,7 @@ public class LdapService {
 
 	public boolean login(final AccountVO account,
 						 final String password) {
-		
+
 		String userId = account.getUserId();
 
 		if (authenticate(userId, password)) {
@@ -78,10 +78,10 @@ public class LdapService {
 
 					DirContext dirCtx = (DirContext) ctx;
 
-					Attributes attrs = dirCtx.getAttributes("", new String[] { "exADKoreanName", "department" });
+					Attributes attrs = dirCtx.getAttributes("", new String[] { "mail", "exADKoreanName", "exADExternalMailAddress", "department" });
 
-//					account.setUserId((String) attrs.get("cn")
-//													.get());
+					// account.setUserId((String) attrs.get("cn")
+					// .get());
 
 					Attribute attr = null;
 
@@ -91,6 +91,19 @@ public class LdapService {
 						account.setUserName((String) attr.get());
 					else
 						account.setUserName(account.getUserId());
+
+					attr = attrs.get("mail");
+
+					if (attr != null && StringUtils.isNotBlank(ObjectUtils.toString(attr.get())))
+						account.setEmail((String) attr.get());
+					else {
+
+						attr = attrs.get("exADExternalMailAddress");
+
+						if (attr != null && StringUtils.isNotBlank(ObjectUtils.toString(attr.get())))
+							account.setEmail((String) attr.get());
+
+					}
 
 					attr = attrs.get("department");
 

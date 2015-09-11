@@ -5,13 +5,18 @@
     <tiles:putAttribute name="content">
         <!-- main-container -->
         <section>
+
             <p class="activityA">
                 <img src="resources/images/activity_img.jpg" title="주활동지역 상단 이미지"/>
             </p>
 
             <div class="container mb100">
                 <h1>
-                    주 활동지역
+                    주 활동지역<a class=" tip" href="#" style="width:500px !important" title="<ul><li>위치 정보 또한 고객을 이해하기 위한 소중한 자산입니다. <br>
+“OCB 매장 위치”, “T map 목적지”, “11번가 배송지” 등의 정보를 활용하여 고객이 주로 활동하는 지역을 Mapping 하였습니다. <br>
+SK Planet 고객은 어디에서 활동을 많이 하고, 함께 방문하는 행정동은 어디인지 살펴보세요. <br>
+고객의 활동 지역을 알면, 마케팅은 더욱 풍요로워 집니다.</li></ul>">
+                    <span><img src="/resources/images/icon_tip.png" class="tipH"/></span></a>
                     <span class="date" id="baseDt"></span>
                 </h1>
                 <!---지역별 모수 현황-->
@@ -22,7 +27,7 @@
                         <button class="view" type="button" data-toggle="modal" data-target="#myModal">지역별 모수 현황 리스트
                         </button>
                     </p>
-                    <p class="txt">[지역별 모수 현황 리스트]를 클릭 하시면 자세한 내용을 볼 수 있습니다.</p>
+                    <p class="txt">※ OCB, Syrup, T map, 11번가의 Push 동의를 포함.</p>
                     <!-- 지도 영역-->
                     <div class="layoutLR ">
                         <li class="LF">
@@ -105,8 +110,10 @@
                         <div class="floatR mt80 regionLy2" style="width: 65% !important">
 
                             <p class="tit">함께 방문하는 지역</p>
+
                             <p class="btnSp">
-                                <button class="button" type="button" data-toggle="modal" id="chart6_popup" data-target="#myModa2">확대보기
+                                <button class="button" type="button" data-toggle="modal" id="chart6_popup"
+                                        data-target="#myModa2">확대보기
                                 </button>
                             </p>
 
@@ -121,7 +128,7 @@
         </section>
         <!--// main-container-->
 
-        <!-- Modal 지역별 모수 현황  GRID -->
+        <!-- Modal 지역별 모수 현황 GRID -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
              aria-hidden="true">
             <div class="modal-dialog modalWd">
@@ -180,175 +187,183 @@
         <!--//Modal 지역별 모수 현황-->
 
 
+        <!--Modal 동단위 현황지역 -->
+        <div class="modal fade" id="myModa3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true" id="chartDongDiv">
+            <div class="modal-dialog3 ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
 
-
-
-
-<!--Modal 동단위 현황지역 -->
-<div class="modal fade" id="myModa3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"  id="chartDongDiv">
-	<div class="modal-dialog3 ">
-        <div class="modal-content">
-			<div class="modal-header">
-            	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                
-                <!--현황지역 설명 박스-->
-            		<div class="dongBox">
-            			<li class="box ">
-                        	<!--현황 지역-->
-                        	<ul>
-                            	<li class="LF">현황 지역</li>
-                                <li class="RG fontBlue " id="dongNm">역삼동</li>
-                            </ul>
-                        </li>
-                		<li class="box">
-                        	<!--모수-->
-                        	<ul>
-                            	<li class="LF">모수</li>
-                                <li class="RG fontGreen " id="dongMosu">2,117,088</li>
-                            </ul>
-                        </li>
-                		<li class="box">
-                        	<!--PUSH 동의-->
-                        	<ul>
-                            	<li class="LF">PUSH 동의</li>
-                                <li class="RG fontYellow " id="dongPush">725,423</li>
-                            </ul>
-                        </li>
-            		</div>
-            		<!--//현황지역 설명 박스-->
-
-			</div>
-            <div class="modal_body3" style="max-height: auto !important;">
-            	<!--성연령대별 현황-->
-                <div class="chartLy mt10">
-                	<ul class="chartLy_3p ">
-                    	<li>
-                    		<p class="chartTitle "><i class="fa fa-bar-chart"></i>성별 현황</p>
-                        	<div class="chartArea2" id="chartDong1" style="width: 100%; height: 230px">챠트 영역</div>
-                    	</li>
-                        <li>
-                    		<p class="chartTitle "><i class="fa fa-bar-chart"></i>성별/연령대별 현황<span id="chartDong2SubTitle"></span></p>
-                        	<div class="chartArea2" id="chartDong2" style="width: 100%; height: 230px">챠트 영역</div>
-                    	</li>
-                        <li>
-                    		<p class="chartTitle "><i class="fa fa-bar-chart"></i>성별/연령대별 현황<span id="chartDong3SubTitle"></span></p>
-                        	<div class="chartArea2" id="chartDong3" style="width: 100%; height: 230px">챠트 영역</div>
-                    	</li>
-                    </ul>
-                </div>
-				<!--//성연령대별 현황-->
-                
-                <div class="layoutLR mt10">
-                	<!--업종 순위-->
-                	<div class="floatL" style="width:33% !important">
-                    	<div class="rankingLy">
-                        	<p class="icon"></p>
-                            <div class="inBox">
-                            	<h3>업종 순위 (소분류)</h3>
-                                <ul id="dongRankGrid"></ul>
-							</div>
-                    	</div>
-                     </div>
-                     <!--//업종 순위-->
-                     
-                     <!--함께 방문하는 지역 -->
-                     <div class="floatR regionLy" style="width:65% !important">
-                     	<p class="tit">함께 방문하는 지역</p>
-                        <div class="inBox">
-                            <div id="chart5"  style="width:760px !important; height:370px;"></div>
+                        <!--현황지역 설명 박스-->
+                        <div class="dongBox">
+                            <li class="box ">
+                                <!--현황 지역-->
+                                <ul>
+                                    <li class="LF">현황 지역</li>
+                                    <li class="RG fontBlue " id="dongNm">역삼동</li>
+                                </ul>
+                            </li>
+                            <li class="box">
+                                <!--모수-->
+                                <ul>
+                                    <li class="LF">모수</li>
+                                    <li class="RG fontGreen " id="dongMosu">2,117,088</li>
+                                </ul>
+                            </li>
+                            <li class="box">
+                                <!--PUSH 동의-->
+                                <ul>
+                                    <li class="LF">PUSH 동의</li>
+                                    <li class="RG fontYellow " id="dongPush">725,423</li>
+                                </ul>
+                            </li>
                         </div>
-                     </div>
-                     <!--//함께 방문하는 지역 -->
-                </div>
+                        <!--//현황지역 설명 박스-->
 
-			</div>
-        </div>
-    </div>
-</div>
-<!--//Modal 현황지역-->
-
-
-
-
-
-
-
-<!-- Modal 함께 방문하는 지역  네트웍차트 -->
-<div class="modal fade" id="myModa2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog ">
-
-        <div class="modal-content" style="width:100% !important;">
-			<div class="modal-header">
-            	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                 <h3 id="myModalLabel">함께 방문하는 지역</h3>
-			</div>
-
-            <div class="modal-body">
-            
-				<!--Search-->
-                <div class="searchConts mb10" style="min-width:auto !important">
-                	<table style="margin-top:-5px;">
-                    	<colgroup>
-                            <col width="50px">
-                            <col width="220px">
-                             <col width="50px">
-                            <col width="220px">
-                        </colgroup>
-    					<tbody>
-        					<tr>
-        					    <th>기준 행정동</th>
-        					    <td>
-                                	<select  name="size" id="mainAdmDongCdCnt" title="main 행정동 " style="width:160px">
-                                        <option value="5">5</option>
-                                        <option value="10">10</option>
-                                        <option value="15">15</option>
-                                        <option value="20">20</option>
-							    	</select>
-                                </td>
-                                <th>연관 행정동</th>
-        					    <td>
-                                    <select  style="width:150px"  name="size" id="crossAdmDongCdCnt" title="cross 행정동 ">
-                                        <option value="5">5</option>
-                                        <option value="10">10</option>
-                                        <option value="15">15</option>
-                                        <option value="20">20</option>
-							    	</select>
-                                </td>
-        					</tr>
-       					</tbody>
-					</table>
-                    <!--Btn_search-->
-
-                    <p class="btnSrc_sm_modal"><button  name="btnSearch" id="btnSearch" type="button">검색버튼</button></p>
-                     <!--//Btn_search-->
-				</div>
-                <!--//Search-->
-                <div class="layoutLR modalChartLy">
-
-                    <div class="floatL" style="width:80%">
-                        <div id="chart6"  style="width:100%; height:500px;"></div>
                     </div>
+                    <div class="modal_body3">
+                        <!--성연령대별 현황-->
+                        <div class="chartLy mt10" style="width:99%;">
+                            <ul class="chartLy_3p ">
+                                <li>
+                                    <p class="chartTitle "><i class="fa fa-bar-chart"></i>성별 현황</p>
 
-                    <div class="floatR" style="width:19%">
-                        <div class="chartIcon">
-                            <button class="plus" id="maxButton"><i class="fa fa-plus"></i></button>
-                            <button class="minus" id="minButton"><i class="fa fa-minus"></i></button>
-                            <p class="line">
-                                <button class="line1" id="thinethickLine"><i class="fa fa-plus"></i></button>
-                                <button class="line2" id="thineLine"><i class="fa fa-plus"></i></button>
-                                <button class="line3" id="thickLine"><i class="fa fa-plus"></i></button>
-                            </p>
+                                    <div class="chartArea2" id="chartDong1" style="width: 100%; height: 230px">챠트 영역
+                                    </div>
+                                </li>
+                                <li>
+                                    <p class="chartTitle "><i class="fa fa-bar-chart"></i>성별/연령대별 현황<span
+                                            id="chartDong2SubTitle"></span></p>
+
+                                    <div class="chartArea2" id="chartDong2" style="width: 100%; height: 230px">챠트 영역
+                                    </div>
+                                </li>
+                                <li>
+                                    <p class="chartTitle "><i class="fa fa-bar-chart"></i>성별/연령대별 현황<span
+                                            id="chartDong3SubTitle"></span></p>
+
+                                    <div class="chartArea2" id="chartDong3" style="width: 100%; height: 230px">챠트 영역
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
+                        <!--//성연령대별 현황-->
+
+                        <div class="layoutLR" style="width:99%;">
+                            <!--업종 순위-->
+                            <div class="floatL" style="width:33% !important">
+                                <div class="rankingLy">
+                                    <p class="icon"></p>
+
+                                    <div class="inBox">
+                                        <h3>업종 순위 (소분류)</h3>
+                                        <ul id="dongRankGrid"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--//업종 순위-->
+
+                            <!--함께 방문하는 지역 -->
+                            <div class="floatR regionLy" style="width:65% !important">
+                                <p class="tit">함께 방문하는 지역</p>
+
+                                <div class="inBox">
+                                    <div id="chart5" style="height:370px;"></div>
+                                    <!-- width:760px !important;  -->
+                                </div>
+                            </div>
+                            <!--//함께 방문하는 지역 -->
+                        </div>
+
                     </div>
-
                 </div>
-
             </div>
         </div>
-    </div>
-</div>
-<!-- //Modal 함께 방문하는 지역-->  
+        <!--//Modal 현황지역-->
 
+
+        <!-- Modal 함께 방문하는 지역 네트웍차트 -->
+        <div class="modal fade" id="myModa2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog ">
+
+                <div class="modal-content" style="width:100% !important;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h3 id="myModalLabel">함께 방문하는 지역</h3>
+                    </div>
+
+                    <div class="modal-body2">
+
+                        <!--Search-->
+                        <div class="searchConts mb10" style="min-width:auto !important">
+                            <table style="margin-top:-5px;">
+                                <colgroup>
+                                    <col width="50px">
+                                    <col width="220px">
+                                    <col width="50px">
+                                    <col width="220px">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th>기준 행정동</th>
+                                    <td>
+                                        <select name="size" id="mainAdmDongCdCnt" title="main 행정동 " style="width:160px">
+                                            <option value="5">5</option>
+                                            <option value="10">10</option>
+                                            <option value="15">15</option>
+                                            <option value="20">20</option>
+                                        </select>
+                                    </td>
+                                    <th>연관 행정동</th>
+                                    <td>
+                                        <select style="width:150px" name="size" id="crossAdmDongCdCnt"
+                                                title="cross 행정동 ">
+                                            <option value="5">5</option>
+                                            <option value="10">10</option>
+                                            <option value="15">15</option>
+                                            <option value="20">20</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!--Btn_search-->
+
+                            <p class="btnSrc_sm_modal">
+                                <button name="btnSearch" id="btnSearch" type="button">검색버튼</button>
+                            </p>
+                            <!--//Btn_search-->
+                        </div>
+                        <!--//Search-->
+                        <div class="layoutLR modalChartLy" style="overflow-y: auto;">
+
+                            <div class="floatL" style="width:80%">
+                                <div id="chart6" style="width:100%;"></div>
+                            </div>
+
+                            <div class="floatR" style="width:19%">
+                                <div class="chartIcon">
+                                    <button class="plus" id="maxButton"><i class="fa fa-plus"></i></button>
+                                    <button class="minus" id="minButton"><i class="fa fa-minus"></i></button>
+                                    <p class="line">
+                                        <button class="line1" id="thinethickLine"><i class="fa fa-plus"></i></button>
+                                        <button class="line2" id="thineLine"><i class="fa fa-plus"></i></button>
+                                        <button class="line3" id="thickLine"><i class="fa fa-plus"></i></button>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- //Modal 함께 방문하는 지역-->
 
     </tiles:putAttribute>
     <tiles:putAttribute name="javascript.footer">
@@ -359,75 +374,102 @@
 
         <script type="text/javascript">
 
-            var City = (function(){
+            var localCache = {
+                data: {},
+                remove: function (url) {
+                    delete localCache.data[url];
+                },
+                exist: function (url) {
+                    return localCache.data.hasOwnProperty(url) && localCache.data[url] !== null;
+                },
+                get: function (url) {
+                    console.log('Getting in cache for url' + url);
+                    return localCache.data[url];
+                },
+                set: function (url, cachedData, callback) {
+                    localCache.remove(url);
+                    localCache.data[url] = cachedData;
+                    if ($.isFunction(callback)) callback(cachedData);
+                }
+            };
+
+            var City = (function () {
                 return {
-                    cd : "",
-                    name : "",
-                    data : {}
+                    cd: "",
+                    name: "",
+                    data: {}
                 };
             })();
 
-            var Network = (function(){
+            var Network = (function () {
                 return {
-                    option : {},
-                    mainAdmDongCdCnt : 5,
-                    crossAdmDongCdCnt : 10,
-                    height : 0,
-                    width : 0,
-                    MAIN_CHART_ID_NM : "chart4", // 메인 차트
-                    DONG_CHART_ID_NM : "chart5", // 동 차트
-                    MAX_CHART_ID_NM : "chart6", // 확대 /축소 차트
-                    NODE_COLOR : "",
-                    NODE_BORDER_COLOR : "",
-                    LINE_COLOR : ""
+                    option: {},
+                    mainAdmDongCdCnt: 5,
+                    crossAdmDongCdCnt: 10,
+                    height: 0,
+                    width: 0,
+                    MAIN_CHART_ID_NM: "chart4", // 메인 차트
+                    DONG_CHART_ID_NM: "chart5", // 동 차트
+                    MAX_CHART_ID_NM: "chart6", // 확대 /축소 차트
+                    NODE_COLOR: "",
+                    NODE_BORDER_COLOR: "",
+                    LINE_COLOR: "",
+                    isBtnSearch : false
                 };
             })();
 
             $(document).ready(function () {
 
-                var chartWidth = (($(document).width() - 240)/100*98/3)-40;    // screen.availWidth
+                var chartWidth = (($(document).width() - 50) / 100 * 98 / 3) - 40;    // screen.availWidth
 
                 $('#chartDong1').width(chartWidth);
                 $('#chartDong2').width(chartWidth);
                 $('#chartDong3').width(chartWidth);
-                $('#chart6').width('1502');
+
+                // 확대/축소 팝업 네트워크 차트 넓이 디스플레이 화면에 따라서 다르게 보여주기 위해
+                if($(document).width() > 1000) {
+                    $('#chart6').width(1400);
+                } else {
+                    $('#chart6').width(500);
+                }
+
+                var contHeight = screen.availHeight - 140;
+                if (contHeight > 880) contHeight = 880;
+                // 행 팝업 높이 조절
+                $('#myModa3' + ' .modal-content').height(contHeight + 'px');
+                $('#myModa3' + ' .modal_body3').height((contHeight - 110) + 'px');
+                // 네트워크 팝업 높이 조절
+                $('#myModa2' + ' .modal-content').height(contHeight + 'px');
+                $('#myModa2' + ' .modal-body2').height((contHeight - 110) + 'px');
 
                 $("#mainAdmDongCdCnt").selectBox("value", "10");
                 $("#crossAdmDongCdCnt").selectBox("value", "5");
 
-                /*var start = Date.now();*/
                 getGeoMapMaker(); // 지도 호출
-                /*console.log("Page load took $(document).ready(function () {" + (Date.now() - start) + " milliseconds");*/
 
                 $("#clickKoreaMap").click(function () {
                     callAjaxMainActivityArea("korea", "", "getCallBack");
                 });
-
-                var contHeight = screen.availHeight - 100;
-                if(contHeight > 870) contHeight = 870;
-                $('#myModa3'+  ' .modal-content').height(contHeight+'px');
-                $('#myModa3' + ' .modal_body3').height((contHeight-120)+'px');
-                console.log($('#myModa3'+  ' .modal_body3').height());
             });
 
-            $('#chart6_popup').click(function(){
+            $('#chart6_popup').click(function () {
 
-                Network.mainAdmDongCdCnt = 10; // main 행정동 갯수
+                Network.mainAdmDongCdCnt = 10;
                 Network.crossAdmDongCdCnt = 5;
                 var cityCd = City.cd;
-                if(City.cd.length > 6) {
+                if (City.cd.length > 6) {
                     cityCd = City.cd.substring(0, 6);
                 }
                 callAjaxMainActivityArea(City.name, cityCd, getNetworkChartPopup);
 
             });
 
-            $('#thineLine').click(function(){
+            $('#thineLine').click(function () {
 
                 var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
 
-                $.each(Network.option.series[0].links, function(idx, data) {
-                    if (data.itemStyle.normal.width === 3) {
+                $.each(Network.option.series[0].links, function (idx, data) {
+                    if (data.itemStyle.normal.width === 1) {
                         data.itemStyle.normal.color = '#f8f8f8';
                     } else {
                         data.itemStyle.normal.color = Network.LINE_COLOR;
@@ -441,12 +483,12 @@
 
             });
 
-            $('#thickLine').click(function(){
+            $('#thickLine').click(function () {
 
                 var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
 
-                $.each(Network.option.series[0].links, function(idx, data) {
-                    if (data.itemStyle.normal.width === 1.5) {
+                $.each(Network.option.series[0].links, function (idx, data) {
+                    if (data.itemStyle.normal.width === 0.2) {
                         data.itemStyle.normal.color = '#f8f8f8';
                     } else {
                         data.itemStyle.normal.color = Network.LINE_COLOR;
@@ -460,11 +502,11 @@
 
             });
 
-            $('#thinethickLine').click(function(){
+            $('#thinethickLine').click(function () {
 
                 var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
 
-                $.each(Network.option.series[0].links, function(idx, data){
+                $.each(Network.option.series[0].links, function (idx, data) {
                     data.itemStyle.normal.color = Network.LINE_COLOR;
                 });
 
@@ -475,16 +517,16 @@
 
             });
 
-            $('#minButton').click(function(){
+            $('#minButton').click(function () {
 
                 Network.option.series[0].scaling = Number(Network.option.series[0].scaling) - 0.3;
                 Network.option.series[0].gravity = Number(Network.option.series[0].gravity) - 1;
 
-                if(Network.option.series[0].scaling < 3) {
+                if (Network.option.series[0].scaling < 3) {
                     Network.option.series[0].scaling = 3.1;
                 }
 
-                if(Network.option.series[0].gravity < 4){
+                if (Network.option.series[0].gravity < 4) {
                     Network.option.series[0].gravity = 4.1;
                 }
 
@@ -494,8 +536,8 @@
 
                 var height = $('#' + Network.MAX_CHART_ID_NM).height();
                 height = height - 100;
-                if(height < 500) {
-                    height = 500;
+                if (height < 650) {
+                    height = 650;
                 }
 
                 $('#modalChartLy').height(height); //  차트 박스 테두리
@@ -510,7 +552,7 @@
 
             });
 
-            $('#maxButton').click(function(){
+            $('#maxButton').click(function () {
 
                 Network.option.series[0].scaling = Number(Network.option.series[0].scaling) + 0.3;
                 Network.option.series[0].gravity = Number(Network.option.series[0].gravity) + 1;
@@ -533,10 +575,12 @@
 
             });
 
-            $('#btnSearch').click(function(){
+            $('#btnSearch').click(function () {
 
                 Network.mainAdmDongCdCnt = $('#mainAdmDongCdCnt option:selected').val(); // main 행정동 갯수
                 Network.crossAdmDongCdCnt = $('#crossAdmDongCdCnt option:selected').val(); // cross 행정동 갯수
+
+                Network.isBtnSearch = true;
 
                 callAjaxMainActivityArea(City.name, City.cd, "getCallbackChart6");
 
@@ -557,7 +601,7 @@
                 Network.NODE_BORDER_COLOR = '#2c9ae9';
                 Network.LINE_COLOR = '#2353a3';
 
-                if(City.cd.length === 8 ) {
+                if (City.cd.length === 8) {
                     var dongName = $('#dongNm').text().split(' ')[2];
                 }
 
@@ -565,15 +609,15 @@
                 categoriesList[1] = {name: ''};
 
                 var confidenceSum = 0.0;
-                for(var i=0; i<dataLinkList.length; i++){
+                for (var i = 0; i < dataLinkList.length; i++) {
                     confidenceSum += Number(dataLinkList[i].confidence);
                 }
 
                 var confidenceAve = confidenceSum / dataLinkList.length;
 
-                $.each(dataNodeList, function(idx, data){
+                $.each(dataNodeList, function (idx, data) {
 
-                    if(data.dongNm === categoriesList[0].name) {
+                    if (data.dongNm === categoriesList[0].name) {
                         categoryIdx = 0;
                     } else {
                         categoryIdx = 1;
@@ -594,8 +638,8 @@
                                         fontSize: 14
                                     }
                                 },
-                                color: (function(d){
-                                    if(City.cd.length === 8) {
+                                color: (function (d) {
+                                    if (City.cd.length === 8) {
                                         var cityColor = "";
                                         (dongName === d.dongNm) ? cityColor = '#ff4f84' : cityColor = '#49cdf4'
                                         return cityColor;
@@ -613,7 +657,7 @@
 
                 });
 
-                $.each(dataLinkList, function(idx, data){
+                $.each(dataLinkList, function (idx, data) {
 
                     linkList[idx] = {
                         source: data.srcDongNm,
@@ -631,44 +675,44 @@
                 });
 
                 var option = {
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: '{b}'
-                        },
-                        series: [
-                            {
-                                type: 'force',
-                                categories: categoriesList,
-                                linkSymbol: 'arrow',
-                                itemStyle: {
-                                    normal: {
-                                        label: {
-                                            show: true,
-                                            textStyle: {
-                                                color: '#333',
-                                                fontSize: 14
-                                            },
-                                            position: 'right'
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{b}'
+                    },
+                    series: [
+                        {
+                            type: 'force',
+                            categories: categoriesList,
+                            linkSymbol: 'arrow',
+                            itemStyle: {
+                                normal: {
+                                    label: {
+                                        show: true,
+                                        textStyle: {
+                                            color: '#333',
+                                            fontSize: 14
                                         },
-                                        nodeStyle: {
-                                            brushType: 'both',
-                                            borderColor: '#cbeffa', // #2c9ae9, #db0948
-                                            borderWidth: 8
-                                        }
+                                        position: 'right'
+                                    },
+                                    nodeStyle: {
+                                        brushType: 'both',
+                                        borderColor: '#cbeffa', // #2c9ae9, #db0948
+                                        borderWidth: 8
                                     }
+                                }
 
-                                },
-                                minRadius: 10, // 노드 최소 크기
-                                maxRadius: 30, // 노드 최대 크기
-                                gravity: 3.0,
-                                scaling: 2.5,
+                            },
+                            minRadius: 10, // 노드 최소 크기
+                            maxRadius: 30, // 노드 최대 크기
+                            gravity: 3.0,
+                            scaling: 2.5,
 //                                large: true,
-                                roam: 'move', // scale, move
-                                nodes: nodeList,
-                                links: linkList
-                            }
-                        ]
-                    };
+                            roam: 'move', // scale, move
+                            nodes: nodeList,
+                            links: linkList
+                        }
+                    ]
+                };
 
                 Network.option = option;
 
@@ -682,16 +726,16 @@
 
                 function focus(param) {
 
-                    $.each(Network.option.series[0].nodes, function(idx, data){
+                    $.each(Network.option.series[0].nodes, function (idx, data) {
 
-                        if(data.name == param.name){
+                        if (data.name == param.name) {
 
                             data.itemStyle.normal.color = '#ff4f84';
                             data.itemStyle.normal.label.textStyle.color = '#db0948';
                             data.itemStyle.normal.label.textStyle.fontSize = 30;
                             data.itemStyle.normal.label.textStyle.fontWeight = 'bold';
 
-                        }else{
+                        } else {
 
                             data.itemStyle.normal.color = Network.NODE_COLOR;
                             data.itemStyle.normal.label.textStyle.color = 'black';
@@ -715,7 +759,7 @@
 
             function getNetworkChartPopup(data, cityName, cityCd) {
 
-                var height = 500;
+                var height = 650;
 
                 $('#modalChartLy').height(height); //  차트 박스 테두리
                 $('#' + Network.MAX_CHART_ID_NM).height(height);
@@ -740,32 +784,53 @@
 
             }
 
-            function openDongView(cityName, cityCd){
-				callAjaxMainActivityArea(cityName, cityCd, function(data, cityName, cityCd ){
-					// 타이틀
-					if(data.mosuTableList.length > 0){
-						var dongVO = data.mosuTableList[0];
-						$("#dongNm").text((GV_PARENT_CITY_NM == "전국" ? "" : GV_PARENT_CITY_NM)+" "+GV_CITY_NM+" "+dongVO.mainAcvtDongNm); // GV_CITY_NM
-						$("#dongMosu").text(String(dongVO.mosu).addComma());
-						$("#dongPush").text(String(dongVO.push).addComma());
-						$("#chartDong2SubTitle").text(GV_CITY_NM);
-						$("#chartDong3SubTitle").text(cityName);
-					}
-					// 업종순위
-					var rankTxt = "";
-					var rankList = data.rankTableList;
-					for(var i=0, len=rankList.length; i<len; i++){
-						if(i==0){	rankTxt = rankTxt + ' <li class="wdh100"><span class="high">'+(i+1)+'</span><span class="txtHigh">'+rankList[i].ctgNm+'</span></li>';	}
-						else{	rankTxt = rankTxt + ' <li class="wdh100"><span class="low">'+(i+1)+'</span>'+rankList[i].ctgNm+'</li>';	}
-					}
-					$("#dongRankGrid").empty();	$("#dongRankGrid").html(rankTxt);
-					// Chart 
-					GV_CITY_NM = cityName;
-					getSexAgePieChart('chartDong2', 'chartDong3', data.sexBarList, data.ageBarList);
-					getSexAgeBarChart('chartDong1', data.sexAgeBarList);
+            function openDongView(cityName, cityCd) {
+
+                Network.mainAdmDongCdCnt = 1;
+                Network.crossAdmDongCdCnt = 10;
+
+                callAjaxMainActivityArea(cityName, cityCd, function (data, cityName, cityCd) {
+
+                    // 타이틀
+                    if (data.mosuTableList.length > 0) {
+                        var dongVO = data.mosuTableList[0];
+                        $("#dongNm").text((GV_PARENT_CITY_NM == "전국" ? "" : GV_PARENT_CITY_NM) + " " + GV_CITY_NM + " " + dongVO.mainAcvtDongNm); // GV_CITY_NM
+                        $("#dongMosu").text(String(dongVO.mosu).addComma());
+                        $("#dongPush").text(String(dongVO.push).addComma());
+                        $("#chartDong2SubTitle").text(GV_CITY_NM);
+                        $("#chartDong3SubTitle").text(cityName);
+                    }
+                    // 업종순위
+                    var rankTxt = "";
+                    var rankList = data.rankTableList;
+                    for (var i = 0, len = rankList.length; i < len; i++) {
+                        if (i == 0) {
+                            rankTxt = rankTxt + ' <li class="wdh100"><span class="high">' + (i + 1) + '</span><span class="txtHigh">' + rankList[i].ctgNm + '</span></li>';
+                        }
+                        else {
+                            rankTxt = rankTxt + ' <li class="wdh100"><span class="low">' + (i + 1) + '</span>' + rankList[i].ctgNm + '</li>';
+                        }
+                    }
+                    $("#dongRankGrid").empty();
+                    $("#dongRankGrid").html(rankTxt);
+                    // Chart
+                    GV_CITY_NM = cityName;
+                    getSexAgePieChart('chartDong2', 'chartDong3', data.sexBarList, data.ageBarList);
+                    getSexAgeBarChart('chartDong1', data.sexAgeBarList);
                     getNetworkChart("chart5", data.arPocNetworkNodeList, data.arPocNetworkLinkList); // 동 팝업 네트워크 차트
-				});
-			}
+                });
+            }
+
+            Function.prototype.memoize = function () {
+                var self = this, cache = {};
+                return function (arg) {
+                    if (arg in cache) {
+                        return cache[arg];
+                    } else {
+                        return cache[arg] = self(arg);
+                    }
+                }
+            }
 
             function callAjaxMainActivityArea(cityName, cityCd, callbackFun) {
 
@@ -788,8 +853,46 @@
                     data: {
                         "cityName": cityName,
                         "cityCd": cityCd,
-                        "mainAdmDongCdCnt" : Network.mainAdmDongCdCnt,
-                        "crossAdmDongCdCnt" : Network.crossAdmDongCdCnt
+                        "mainAdmDongCdCnt": Network.mainAdmDongCdCnt,
+                        "crossAdmDongCdCnt": Network.crossAdmDongCdCnt
+                    },
+                    cache: true,
+                    beforeSend: function () {
+
+                        if(Network.isBtnSearch) {
+                            Network.isBtnSearch = false;
+                            return true;
+                        }
+
+                        if (localCache.exist(cityCd)) {
+
+                            var data = localCache.get(cityCd).responseText;
+
+                            if (typeof data !== 'object') {
+                                var fixedResponse = data.replace(/\\'/g, "'");
+                                data = JSON.parse(fixedResponse);
+                            }
+
+                            City.data = data;
+
+                            // callback
+                            if (callbackFun != null && callbackFun != 'undefined' && callbackFun != '') {
+
+                                if ($.isFunction(callbackFun)) {
+                                    console.time("nocache");
+                                    callbackFun(data, cityName, cityCd);
+                                    console.timeEnd("nocache");
+                                } else if (typeof(callbackFun) == "string") {
+                                    eval(callbackFun + "(data, cityName, cityCd);");
+                                }
+                            }
+
+                            return false;
+                        }
+                        return true;
+                    },
+                    complete: function (jqXHR, textStatus) {
+                        localCache.set(cityCd, jqXHR, City.data);
                     },
                     success: function (data) {
 
@@ -817,13 +920,11 @@
 
             function getCallBack(data, cityName, cityCd) {
 
-//                var start = Date.now();
-
                 GV_CITY_CD = cityCd;
                 GV_CITY_NM = cityName;
 
                 $('#chart2SubTitle').text(GV_CITY_NM);
-                $("#baseDt").text("데이터 기준일 : "+data.baseDt);
+                $("#baseDt").text("데이터 기준일 : " + data.baseDt);
 
                 getAreaMosuTable(data.mosuTableList);
                 getAreaMosuStackChart(data.mosuTableList); // 지역별 모수 현황 차트
@@ -862,10 +963,10 @@
                         } else {
                             contentTxt += '      <tr> ';
                             if (list[i].mainAcvtAdmDongCd.length > 5) {
-                                contentTxt += '        <td class="txtC"><a href="#" onclick="openDongView(\''+list[i].mainAcvtDongNm+'\', \''+list[i].mainAcvtAdmDongCd+'\'); return false;" data-target="#myModa3" data-toggle="modal" id="inputTest_'+list[i].mainAcvtAdmDongCd+'">' + list[i].mainAcvtDongNm + '<span class="floatR"><i class="fa fa-chevron-right"></i></span></a></td> ';
+                                contentTxt += '        <td class="txtC"><a href="#" onclick="openDongView(\'' + list[i].mainAcvtDongNm + '\', \'' + list[i].mainAcvtAdmDongCd + '\'); return false;" data-target="#myModa3" data-toggle="modal" id="inputTest_' + list[i].mainAcvtAdmDongCd + '">' + list[i].mainAcvtDongNm + '<span class="floatR"><i class="fa fa-chevron-right"></i></span></a></td> ';
                             } else {
                                 contentTxt += '        <td class="txtC">' + list[i].mainAcvtDongNm + '</td> ';
-                            }    
+                            }
                             contentTxt += '        <td>' + String(list[i].mosu).addComma() + '</td> ';
                             contentTxt += '        <td>' + String(list[i].push).addComma() + '</td> ';
                             contentTxt += '      </tr> ';
@@ -901,19 +1002,17 @@
 
             function getAreaMosuStackChart(dataList) {
                 var dataSize = dataList.length;
-                if (dataSize > 30) {
+                if (dataSize > 40) {
+                    $('#chartContainer').height('1000px');
+                } else if (dataSize > 30) {
                     $('#chartContainer').height('800px');
                 } else if (dataSize > 25) {
                     $('#chartContainer').height('700px');
                 } else if (dataSize > 15) {
                     $('#chartContainer').height('600px');
-                } else if  (dataSize > 40) {
-                    $('#chartContainer').height('900px');
-                }
-                else {
+                } else {
                     $('#chartContainer').height('500px');
                 }
-
                 var myChart = echarts.init(document.getElementById('chartContainer'));
                 myChart.setTheme(GV_CHART_THEME);
                 myChart.setOption(_getAreaMosuStackOption(dataList));
@@ -923,11 +1022,11 @@
                     if (selectedData != null) {
                         var cityCd = selectedData.mainAcvtAdmDongCd;
                         if (cityCd.length > 5) {
-                            $("#inputTest_"+cityCd).trigger("click");
+                            $("#inputTest_" + cityCd).trigger("click");
                         } else {
                             var cityName = param.name;
-                            if(cityName == "세종특별자치시") {
-                                $("#inputTest_"+cityCd).trigger("click");
+                            if (cityName == "세종특별자치시") {
+                                $("#inputTest_" + cityCd).trigger("click");
                             }
                         }
                     }
@@ -939,7 +1038,7 @@
                 var chartDatas = _getAreaMosuStackChartData(dataList);
 
                 var option = {
-                    title : {
+                    title: {
                         text: ($("#areaDong").text() === "null") ? "전국" : $("#areaDong").text(),
                         subtext: "모수 : " + $("#areaMosu").text() + ", PUSH 동의 : " + $("#areaPush").text()
                     },
@@ -972,9 +1071,8 @@
                                 width: 1
                             }
                         },
-                        axisLabel: 
-                        {
-                            clickable: (GV_CITY_NM != "세종특별자치시") ? (GV_CITY_CD.length >= 5) : (GV_CITY_CD.length >= 1), 
+                        axisLabel: {
+                            clickable: (GV_CITY_NM != "세종특별자치시") ? (GV_CITY_CD.length >= 5) : (GV_CITY_CD.length >= 1),
                             textStyle: {
                                 color: ((GV_CITY_NM != "세종특별자치시") ? (GV_CITY_CD.length >= 5) : (GV_CITY_CD.length >= 1)) ? 'rgba(0, 0, 255, 1)' : 'rgba(0, 0, 0, 1)'
                             }
@@ -999,7 +1097,7 @@
 
             // Chart Data로 parsing
             function _getAreaMosuStackChartData(dataList) {
-                var chartData = [],   categoryData = [];
+                var chartData = [], categoryData = [];
                 var data = [];
                 data['모수-PUSH'] = [];
                 data['PUSH'] = [];
@@ -1029,15 +1127,13 @@
                             }
                         };
                     } else {
-                        data['모수-PUSH'][dataSize - status - 1] = {	value: dataList[status].mosuPush	};
-                        data['PUSH'][dataSize - status - 1] = {	value: dataList[status].push	};
+                        data['모수-PUSH'][dataSize - status - 1] = {value: dataList[status].mosuPush};
+                        data['PUSH'][dataSize - status - 1] = {value: dataList[status].push};
                     }
                     categoryData[dataSize - status - 1] = dataList[status].mainAcvtDongNm;
                 }
-                
-                
-                
-                
+
+
                 chartData.push({
                     name: '모수-PUSH',
                     type: 'bar',
@@ -1072,12 +1168,12 @@
                                 show: true,
                                 position: 'right',
                                 textStyle: {
-                                    color: GV_GENDER_COLOR.male(0.95),	fontStyle: 'italic', fontWeight : 'lighter'
+                                    color: GV_GENDER_COLOR.male(0.95), fontStyle: 'italic', fontWeight: 'lighter'
                                 },
                                 formatter: function (params) {
                                     var idx = 0;
                                     for (var i = 0, l = categoryData.length; i < l; i++) {
-                                        if(categoryData[i] === params.name) {
+                                        if (categoryData[i] === params.name) {
                                             idx = i;
                                             break;
                                         }
@@ -1101,22 +1197,22 @@
             /**
              * ##############  성별/연령대별 차트 START  ##############
              */
-             var sexMap = {
-            	        'F' : '여성',
-            	        'M' : '남성'
-            	    }
-             var ageRangeMap = {
-                     '0009' : '10세 미만',
-                     '1019' : '10대',
-                     '2029' : '20대',
-                     '3039' : '30대',
-                     '4049' : '40대',
-                     '5099' : '50세 이상',
-                     'ZZZZ' : '기타(연령)'
-                 }
+            var sexMap = {
+                'F': '여성',
+                'M': '남성'
+            }
+            var ageRangeMap = {
+                '0009': '10세 미만',
+                '1019': '10대',
+                '2029': '20대',
+                '3039': '30대',
+                '4049': '40대',
+                '5099': '50세 이상',
+                'ZZZZ': '기타(연령)'
+            }
 
             function getSexAgePieChart(allChartId, chartId, sexList, ageList) {
-            	var isMain = allChartId.indexOf('Dong') < 0;
+                var isMain = allChartId.indexOf('Dong') < 0;
                 var datas = _getSexAgePieChartData(isMain, sexList, ageList);
                 var myChart = echarts.init(document.getElementById(allChartId));
                 myChart.setTheme(GV_CHART_THEME);
@@ -1138,8 +1234,10 @@
                     },
                     legend: {
                         orient: 'vertical', x: 'right', // x: 'center',  y : 'bottom',
-                        data: $.map(ageRangeMap, function(val, i){ return val; }) 
-                        , show:isMain
+                        data: $.map(ageRangeMap, function (val, i) {
+                            return val;
+                        })
+                        , show: isMain
                     },
                     calculable: false,
                     series: [{
@@ -1182,9 +1280,9 @@
                         ageData = [];
                 for (var status = 0, dataSize = sexList.length; status < dataSize; status++) {
                     if (sexList[status].admDongNm != GV_CITY_NM) {
-                        if(isMain){
-                        	GV_PARENT_CITY_NM = sexList[status].admDongNm;
-                            $('#chart2ParentTitle').text(GV_PARENT_CITY_NM);	
+                        if (isMain) {
+                            GV_PARENT_CITY_NM = sexList[status].admDongNm;
+                            $('#chart2ParentTitle').text(GV_PARENT_CITY_NM);
                         }
                         sexAllData.push({
                             name: sexMap[sexList[status].sexCd],
@@ -1208,7 +1306,7 @@
                     }
                 }
                 for (var status = 0, dataSize = ageList.length; status < dataSize; status++) {
-                	ageList[status].ageRngNm =ageRangeMap[ageList[status].ageRngCd]; 
+                    ageList[status].ageRngNm = ageRangeMap[ageList[status].ageRngCd];
                     if (ageList[status].admDongNm != GV_CITY_NM) {
                         //GV_PARENT_CITY_NM = ageList[status].admDongNm;
                         ageAllData.push({
@@ -1244,17 +1342,17 @@
             function _getSexAgeBarOptions(isMain, dataList) {
                 var chartDatas = _getSexAgeBarChartData(dataList);
                 var chartDatas = _getSexAgeBarChartData(dataList);
-                
+
                 var option = {
-                	grid : {}, 
+                    grid: {},
                     tooltip: {
                         trigger: 'axis',
-                        axisPointer : { type : 'shadow' }
+                        axisPointer: {type: 'shadow'}
                     },
                     calculable: true,
                     legend: {
                         data: [GV_CITY_NM + '(남)', GV_CITY_NM + '(여)', GV_PARENT_CITY_NM + '(남)', GV_PARENT_CITY_NM + '(여)']
-                        , show:isMain
+                        , show: isMain
                     },
                     xAxis: [{
                         type: 'category',
@@ -1265,7 +1363,9 @@
                         min: 0,
                         max: chartDatas[0],
                         axisLabel: {
-                            formatter: function(value){	return isMain ? Math.round(value) +' %' : Math.round(value); }
+                            formatter: function (value) {
+                                return isMain ? Math.round(value) + ' %' : Math.round(value);
+                            }
                         }
                     }, {
                         type: 'value',
@@ -1281,7 +1381,9 @@
                     }],
                     series: chartDatas[1]
                 };
-                if(!isMain){option.grid = {x:30, y:20, width:'90%', height:'70%'}; }
+                if (!isMain) {
+                    option.grid = {x: 30, y: 20, width: '90%', height: '70%'};
+                }
                 return option;
             }
 

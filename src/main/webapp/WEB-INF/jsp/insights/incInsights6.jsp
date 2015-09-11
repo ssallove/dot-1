@@ -22,24 +22,39 @@
                     <div id="wrapper_">
                         <div id="inner">
                             <%--<input class="ip" type="int" placeholder="지난 3개월간 이들 동종 모바일전단을 열람하셨나요?" id="a"/> <!-- 라디오 버튼 예 아니오 -->--%>
-                            <h1>
-                            지난 3개월간 이들 동종 모바일전단을 열람하셨나요?
-                            <input name="arr_a" id ="a1" type="radio" value="1"><label for="a1"><strong>예</strong></label>
-                            <input name="arr_a" id ="a2" type="radio" value="0"><label for="a2">아니오</label> <br class="mt10">
-
+                            <center>
+                                <table class="listTB2 tStriped2" style="width:50%;">
+                                    <tr>
+                                        <th>지난 3개월간 이들 동종 모바일전단을 열람하셨나요?</th>
+                                        <td>
+                                            <input name="arr_a" id ="a1" type="radio" value="1"><label for="a1"><strong>예</strong></label>
+                                            <input name="arr_a" id ="a2" type="radio" value="0"><label for="a2">아니오</label> <br class="mt10">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>지난 3개월간 이들 업종 관련해 SK Planet 서비스를 사용하셨나요?</th>
+                                        <td>
+                                            <input name="arr_b" id ="b1" type="radio" value="1"><label for="b1"><strong>예</strong></label>
+                                            <input name="arr_b" id ="b2" type="radio" value="0"><label for="b2">아니오</label> <br class="mt10">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>성별이 무엇인가요?</th>
+                                        <td>
+                                            <input name="arr_c" id ="c1" type="radio" value="1"><label for="c1"><strong>남</strong></label>
+                                            <input name="arr_c" id ="c2" type="radio" value="0"><label for="c2">여</label> <br class="mt10">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><input class="ip" type="int" placeholder="연령은 어떻게 되시나요?" id="d"/> <br class="mt10"></th>
+                                        <td>
+                                            <button id='sbm' onclick="javascript:getReact();" class="mt10">반응 확률 보기</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </center>
                             <%--<input class="ip" type="text" placeholder="지난 3개월간 이들 업종 관련해 SK Planet 서비스를 사용하셨나요?"  id="b"/>--%>
-                            지난 3개월간 이들 업종 관련해 SK Planet 서비스를 사용하셨나요?
-                            <input name="arr_b" id ="b1" type="radio" value="1"><label for="b1"><strong>예</strong></label>
-                            <input name="arr_b" id ="b2" type="radio" value="0"><label for="b2">아니오</label> <br class="mt10">
-
                             <%--<input class="ip" type="int" placeholder="성별이 무엇인가요?" id="c"/> <!-- 라디오 -->--%>
-                            성별이 무엇인가요?
-                            <input name="arr_c" id ="c1" type="radio" value="1"><label for="c1"><strong>예</strong></label>
-                            <input name="arr_c" id ="c2" type="radio" value="0"><label for="c2">아니오</label> <br class="mt10">
-
-                            <input class="ip" type="int" placeholder="연령은 어떻게 되시나요?" id="d"/> <br class="mt10">
-                            <button id='sbm' onclick="javascript:getReact();" class="mt10">반응 확률 보기</button>
-                            </h1>
                         </div>
                     </div>
                     <div id="wrapper">

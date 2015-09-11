@@ -10,7 +10,13 @@
         <section>
             <p class="category"><img src="<c:url value="/resources/images/category_img.jpg"/>"  title="업종 상단 이미지"/></p>
             <div class="container mb100">
-                <h1>업종별 현황<span class="date">데이터 기준일 : ${baseDt}</span></h1>
+                <h1>업종별 현황 <a class=" tip" href="#" style="width:500px !important" title="<ul><li>다양한 서비스에서 발생하는 TR을 한눈에 보고 싶으신가요?<br />
+                   서비스를 교차하여 우리 사업 마케팅에 활용하고 싶으신가요?<br />
+               SK Planet이 보유한 Big data가 어떻게 마케팅에 활용될 수 있을까요?<br />
+               이런 고민을 해결해 드리고자 5개 서비스를 하나로 통합하여 업종 관심사 DB를 구축했습니다. <br />
+               “OCB 포인트 적립/사용 TR”, “Syrup의 제휴 카드 이용 실적”, “T map의 목적지 조회 이력”, “11번가 구매 이력” ,<br /> “T store 구매 이력” 정보를 활용하여 산업분류 기준의 업종 관심으로 표준화하였습니다.<br />
+               각 업종별 고객의 관심사는 무엇인지, 고객의 규모는 얼마나 되는지 살펴보시고 좋은 마케팅 idea를 발굴하시기 바랍니다.</li></ul>">
+                    <span><img src="/resources/images/icon_tip.png"   class="tipH"/></span></a><span class="date">데이터 기준일 : ${baseDt}</span></h1>
                 <!--Search-->
                 <div class="searchConts mt50">
                     <table >

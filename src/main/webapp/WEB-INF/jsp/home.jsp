@@ -43,6 +43,16 @@
                             </div>
                             <div class="showcase-thumbnail"><a class="right tip" href="#" title="<ul><li>검색어로 보는 남녀 탐구생활</li></ul>"><p class="main_insight_sm4">검색어로 보는 남녀 탐구생활</p></a></div>
                         </div>
+
+
+                       <!--4 Dig Out Treasure-->
+                       <div class="showcase-slide">
+                           <div class="showcase-content">
+                               <p class="main_insight_bg5">Dig Out Treasure</p>
+                           </div>
+                           <div class="showcase-thumbnail"><a class="right tip" href="#" title="<ul><li>Dig Out Treasure</li></ul>"><p class="main_insight_sm5">Dig Out Treasure</p></a></div>
+                       </div>
+
                     </div>
                     
                 </div>
@@ -87,7 +97,7 @@
                                 <div class="mgBox">
                                     <p class="triangle"></p>
                                     <strong>"Beautiful things don't ask for attention" <span class="writer">- The Secret Life of Walter Mitty (Movie, 2013)</span></strong>
-                                    <p class="name">김미경 (Manager)<span>Data Scientist</span></p>
+                                    <p class="name">김미경 (Manager)<span>Data Analyst</span></p>
                                 </div>
                             </div>
                             <!--//Manager2-->
@@ -137,7 +147,7 @@
                                 <div class="mgBox">
                                     <p class="triangle"></p>
                                     <strong>“For every two degrees the temperature goes up, check-ins at ice cream shops go up by 2%.” <span class="writer">- Andrew Hogue, Foursquare</span> </strong>
-                                    <p class="name">이봉기 (Manager)<span>Data Scientist</span></p>
+                                    <p class="name">이봉기 (Manager)<span>Data Analyst</span></p>
                                 </div>
                             </div>
                             <!--//Manager7-->

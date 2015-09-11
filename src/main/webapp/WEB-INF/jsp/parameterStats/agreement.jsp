@@ -8,8 +8,8 @@
 	Map<String, String> statsLevelMap = new LinkedHashMap<String, String>();
 	statsLevelMap.put("0", "가입고객수");
 	statsLevelMap.put("1", "통합고객수");
-	statsLevelMap.put("2", "Active 고객수");
-	statsLevelMap.put("3", "MAU 고객수");
+	statsLevelMap.put("2", "3개월 Active 고객수");
+	statsLevelMap.put("3", "1개월 Active 고객수");
 	pageContext.setAttribute("statsLevelMap" , statsLevelMap);
 	
 	Map<String, String> agreementTypeMap = new LinkedHashMap<String, String>();
@@ -82,8 +82,8 @@
                         		<button type="button" class="chartBt" data-stats-level="0">가입</button>
                         		</c:if>
                             	<button type="button" class="chartBt" data-stats-level="1">통합</button>
-                                <button type="button" class="chartBt" data-stats-level="2">Active</button>
-                                <button type="button" class="chartBt" data-stats-level="3">MAU</button>
+                                <button type="button" class="chartBt" data-stats-level="2">3개월</button>
+                                <button type="button" class="chartBt" data-stats-level="3">1개월</button>
                             </p>
                             <!--//버튼영역-->
 
@@ -132,7 +132,7 @@
                         <!--TAB Table-->
                         <div  class="tab_pane2" id="tab1Table" >
                         	<!--필수 동의 Table-->
-                        	<p class="expTb mt20">※ Active 고객수 -> 앱활동성 3개월, MAU -> 앱활동성 1개월, Active 고객은 OCB, Syrup, T-Map </p>
+                        	<p class="expTb mt20">※ <!-- Active 고객수 -> 앱활동성 3개월, MAU -> 앱활동성 1개월, -->Active 고객은 OCB, Syrup, T-Map </p>
                         	<table class="listTB tStriped ">
                             	<colgroup>
                                 	<col width="*">
@@ -248,8 +248,8 @@
 				        					<tr class="longH">
 				            					<th rowspan="2">서비스조합</th>
 				            					<th colspan="4">가입 고객수</th>
-				            					<th colspan="4">Active 고객수</th>
-				            					<th colspan="4">MAU</th>
+				            					<th colspan="4">3개월 Active 고객수</th>
+				            					<th colspan="4">1개월 Active 고객수</th>
 				           					</tr>
 				        					<tr class="thDepth">
 				        					    <th>전체</th>
@@ -317,8 +317,8 @@
 				        					<tr class="longH">
 				            					<th rowspan="2">서비스조합</th>
 				            					<th colspan="4">가입 고객수</th>
-				            					<th colspan="4">Active 고객수</th>
-				            					<th colspan="4">MAU</th>
+				            					<th colspan="4">3개월 Active 고객수</th>
+				            					<th colspan="4">1개월 Active 고객수</th>
 				           					</tr>
 				        					<tr class="thDepth">
 				        					    <th>전체</th>

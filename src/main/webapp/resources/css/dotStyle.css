@@ -112,6 +112,7 @@ label{ vertical-align:middle !important;}
 
 /*H*/
 section h1 {font-size:25px; font-weight:700; color:#535354; margin-top:60px;}
+/*tip*/.tipH { height:35px; width:41px; margin:-5px 0 3px 15px;}
 section h1 span.date {float:right; background:url(../images/icon_date.gif) left 50% no-repeat; padding:7px 0 0 45px; color:#ff8400; font-weight:bold; font-size:14px !important; height:29px; margin-right:4px;}
 h2 {background:url(../images/icon_h2.png) no-repeat; font-size:16px; color:#707576; font-weight:700; padding-left:28px; margin:40px 0 30px 0;}
 .modal-header h3 {background:url(../images/icon_h2.png) no-repeat; font-size:16px; color:#707576; font-weight:700; padding-left:28px;margin:0 0 20px 0;}
@@ -235,9 +236,11 @@ p.btn_goPg button, .btn_goPg button {border-radius:4px; color:#fff; font-weight:
 
 
 /* Fixed navigation */
-.fixed-header-on .header.fixed { position: fixed; width: 100%; top: 0; left: 0; z-index: 1006; opacity: 0; filter: alpha(opacity=0); padding:5px 0;/* background:#4f7dbc;*/ background:url(../images/headerFixBg.gif) left top repeat-x; border-top:#2a5b9e solid 3px}
+.fixed-header-on .header.fixed { position:fixed; width: 100%; top:0; left:0; z-index: 1006; opacity: 0; filter: alpha(opacity=0); padding:5px 0; background:url(../images/headerFixBg.gif) left top repeat-x; border-top:#2a5b9e solid 3px;}
 .fixed-header-on.boxed .header.fixed {left: auto;}
-
+/*.fixed-header-on .header.fixed { position: fixed; width: 100%; top: 0; left: 0; z-index: 1006; opacity: 0; filter: alpha(opacity=0); padding:5px 0; background:url(../images/headerFixBg.gif) left top repeat-x; border-top:#2a5b9e solid 3px;}
+.fixed-header-on.boxed .header.fixed {left: auto;}
+*/
 .fixed-header-on .header .navbar.navbar-default { margin: 0;}
 .fixed-header-on .header.fixed.animated { -webkit-animation-duration: 0.5s; animation-duration: 0.5s;}
 
@@ -673,14 +676,14 @@ p.expTb, span.expTb { text-align:right; color:#666; padding-bottom:7px; font-wei
 
 /* 함께 방문하는 지역*/
 .regionLy {border-radius:8px; position:relative; width:100%; padding:8px 8px 8px 170px; background:#86eec8 url(../images/regionBg.png) 46px 270px no-repeat;}
-.regionLy p.tit { clear:#389875; font-size:15px; font-weight:700; position:absolute; left:24px; top:24px;}
+.regionLy p.tit { color:#389875; font-size:15px; font-weight:700; position:absolute; left:24px; top:24px;}
 .regionLy p.btnSp { position:absolute; right:12px; top:12px; z-index:2;}
 .regionLy .inBox { background:#fff; max-height:395px; height:395px; width:100%; padding:10px; text-align:center; }
 .regionLy .inBox_md { background:#fff; min-height:395px; height:395px; width:100%; padding:10px; text-align:center; }
 .inBoxBg { height:500px !important;max-height:500px !important; background:#fff url(../images/rankingBizBg2.png) left bottom no-repeat !important;}
 
 .regionLy2 {border-radius:8px; position:relative; width:100%; padding:8px 8px 8px 170px; background:#86eec8 url(../images/regionBg.png) 46px 380px no-repeat;}
-.regionLy2 p.tit { clear:#389875; font-size:15px; font-weight:700; position:absolute; left:24px; top:24px;}
+.regionLy2 p.tit { color:#389875; font-size:15px; font-weight:700; position:absolute; left:24px; top:24px;}
 .regionLy2 p.btnSp { position:absolute; right:12px; top:12px; z-index:2;}
 .regionLy2 .inBox2 { background:#fff; max-height:500px; height:500px; width:100%; padding:10px; text-align:center; }
 
@@ -708,7 +711,7 @@ p.expTb, span.expTb { text-align:right; color:#666; padding-bottom:7px; font-wei
 
 /*업종순위 modal*/
 .rankingBizMd { border-radius:8px; position:relative; width:100%; padding:8px 8px 8px 450px; background:#ceedf2 url(../images/rankingBizBg2.png) 60px bottom no-repeat; }
-.rankingBizMd p.tit { clear:#3295da; font-size:15px; font-weight:700; position:absolute; left:24px; top:24px;}
+.rankingBizMd p.tit { color:#3295da; font-size:15px; font-weight:700; position:absolute; left:24px; top:24px;}
 .rankingBizMd .inBox { background:#fff;  height:240px; width:100%; padding:10px;  }
 .rankingBizMd .inBox ul {margin:30px 0 0 40px;}
 .rankingBizMd .inBox li { color: #666; float: left; list-style: none; width: 50%; display:block;  font-size:12px;}
@@ -779,7 +782,7 @@ p.expTb, span.expTb { text-align:right; color:#666; padding-bottom:7px; font-wei
 .flexL {background:#fff; border:#678cc4 solid 3px; border-radius:10px;   height:450px;   position: relative;; padding:15px; }
 .flexL .slides li {width:100%; height:415px;}
 
-.flexR { background:#658fc9/* url(../images/sliderBG.png) repeat*/; float:right; width:20%; min-width:220px; opacity:0.8;  filter: alpha(opacity:'80'); border-radius:10px;  height:450px;  position: relative; zoom: 1; border:none !important;}
+.flexR { background:#658fc9; float:right; width:20%; min-width:220px; opacity:0.8;  filter: alpha(opacity:'80'); border-radius:10px;  height:450px;  position: relative; zoom: 1; border:none !important;}
 .flexR .slides  {width:170px !important}
 
 .smChart {width:170px !important; height:100px; background:#fff; float:left !important; }
@@ -801,9 +804,10 @@ p.expTb, span.expTb { text-align:right; color:#666; padding-bottom:7px; font-wei
 .main_insight_sm5 { background:url(../images/main_insight_sm5.gif) no-repeat;text-indent:-5000px; width:141px; height:120px;}
 
 
+
 /*Contacts*/
 .widthPers {min-width:1200px;}
-.mainPers_bg { background:url(../images/persBg.png) repeat; width:100%; height:400px;text-align:center; margin-top:1px; position:relative; }
+.mainPers_bg { background:url(../images/persBg.png) repeat; width:100%; height:420px;text-align:center; margin-top:1px; position:relative; }
 .personBox {width:1000px;  margin:30px auto 20px auto; text-align:left; position: relative;  height:350px;}
 .personBox p.title { font-weight:bold; font-size:20px; color:#fff; text-align:center;}
 .personBox .photo {border-radius:50%; width:150px; height:150px;  position:absolute; left:10px; top:50px; opacity:70px; box-shadow:inset 0 0 0 0 rgba(200,95,66, 0.4), inset 0 0 0 12px rgba(109, 222, 175,0.6), 0 1px 2px rgba(0,0,0,0.1); transition:all 0.4s ease-in-out}
@@ -927,16 +931,16 @@ table.color td {padding:0 10px 3px 10px; border:#fff; color:#7f7f7f; font-size:1
 /*튤팁*/
 
 a.tip:link, a.tip:visited { text-align: center;border-bottom: none;}
-a.tip:hover { background: #a7e22b;}
+a.tip:hover {}
 .right { float:right; }
+.left {float:left; }
 	
 
 /* unitip css */
-
 #unitip {position: absolute; z-index: 1000; top: -1000px; color: #fff; display: none;}
 #unitippoint, #unitipmid, #unitipcap {position: relative;	top: 0px; left: 0px;	width:auto; display: block;}	
-#unitippoint { background: url(../images/TipPoint.png) no-repeat; 	height: 12px; overflow: hidden; }
+#unitippoint { background: url(../images/TipPoint2.png) no-repeat; 	height: 12px; overflow: hidden; }
 
 #unitipmid { background:url(../images/TipMid.png) repeat; width:auto;height: auto; padding: 10px 15px;border-radius:8px;}
 
-#unitipcap { /*background:#000;// url(../images/TipCap.png) no-repeat;*/ height: 7px; overflow: hidden; border-radius:8px;}
+#unitipcap {height: 7px; overflow: hidden; border-radius:8px;}
