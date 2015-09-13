@@ -488,13 +488,9 @@ SK Planet 고객은 어디에서 활동을 많이 하고, 함께 방문하는 �
 
             $('#thineLine').click(function () {
 
-                var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
-
                 setLinkColor({width:1});
 
-                myChart.setOption(Network.option);
-
-                myChart.refresh();
+                setmyChartRefresh();
 
                 getNetworkChartClickEvent(myChart);
 
@@ -502,13 +498,10 @@ SK Planet 고객은 어디에서 활동을 많이 하고, 함께 방문하는 �
 
             $('#thickLine').click(function () {
 
-                var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
 
                 setLinkColor({width:0.2});
 
-                myChart.setOption(Network.option);
-
-                myChart.refresh();
+                setmyChartRefresh();
 
                 getNetworkChartClickEvent(myChart);
 
@@ -516,13 +509,10 @@ SK Planet 고객은 어디에서 활동을 많이 하고, 함께 방문하는 �
 
             $('#thinethickLine').click(function () {
 
-                var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
 
                 setLinkColor({width:0});
 
-                myChart.setOption(Network.option);
-
-                myChart.refresh();
+                setmyChartRefresh();
 
                 getNetworkChartClickEvent(myChart);
 
