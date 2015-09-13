@@ -113,7 +113,7 @@ SK Planet 고객은 어디에서 활동을 많이 하고, 함께 방문하는 �
 
                             <p class="btnSp">
                                 <button class="button" type="button" data-toggle="modal" id="chart6_popup"
-                                        data-target="#myModa2">확대보기
+                                        data-target="#myModal2">확대보기
                                 </button>
                             </p>
 
@@ -188,7 +188,7 @@ SK Planet 고객은 어디에서 활동을 많이 하고, 함께 방문하는 �
 
 
         <!--Modal 동단위 현황지역 -->
-        <div class="modal fade" id="myModa3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
              aria-hidden="true" id="chartDongDiv">
             <div class="modal-dialog3 ">
                 <div class="modal-content">
@@ -285,7 +285,7 @@ SK Planet 고객은 어디에서 활동을 많이 하고, 함께 방문하는 �
 
 
         <!-- Modal 함께 방문하는 지역 네트웍차트 -->
-        <div class="modal fade" id="myModa2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
              aria-hidden="true">
             <div class="modal-dialog ">
 
@@ -418,7 +418,7 @@ SK Planet 고객은 어디에서 활동을 많이 하고, 함께 방문하는 �
                 };
             })();
 
-            $(document).ready(function () {
+            function setChartResize() {
 
                 var chartWidth = (($(document).width() - 50) / 100 * 98 / 3) - 40;    // screen.availWidth
 
@@ -436,14 +436,26 @@ SK Planet 고객은 어디에서 활동을 많이 하고, 함께 방문하는 �
                 var contHeight = screen.availHeight - 140;
                 if (contHeight > 880) contHeight = 880;
                 // 행 팝업 높이 조절
-                $('#myModa3' + ' .modal-content').height(contHeight + 'px');
-                $('#myModa3' + ' .modal_body3').height((contHeight - 110) + 'px');
+                $('#myModal3' + ' .modal-content').height(contHeight + 'px');
+                $('#myModal3' + ' .modal_body3').height((contHeight - 110) + 'px');
                 // 네트워크 팝업 높이 조절
-                $('#myModa2' + ' .modal-content').height(contHeight + 'px');
-                $('#myModa2' + ' .modal-body2').height((contHeight - 110) + 'px');
+                $('#myModal2' + ' .modal-content').height(contHeight + 'px');
+                $('#myModal2' + ' .modal-body2').height((contHeight - 110) + 'px');
+
+            }
+
+            function setSelectbox() {
 
                 $("#mainAdmDongCdCnt").selectBox("value", "10");
                 $("#crossAdmDongCdCnt").selectBox("value", "5");
+
+            }
+
+            $(document).ready(function () {
+
+                setChartResize();
+
+                setSelectbox();
 
                 getGeoMapMaker(); // 지도 호출
 
@@ -464,19 +476,24 @@ SK Planet 고객은 어디에서 활동을 많이 하고, 함께 방문하는 �
 
             });
 
-            $('#thineLine').click(function () {
-
-                var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
-
+            function setLinkColor(option) {
                 $.each(Network.option.series[0].links, function (idx, data) {
-                    if (data.itemStyle.normal.width === 1) {
+                    if (data.itemStyle.normal.width === option.width) {
                         data.itemStyle.normal.color = '#f8f8f8';
                     } else {
                         data.itemStyle.normal.color = Network.LINE_COLOR;
                     }
                 });
+            }
+
+            $('#thineLine').click(function () {
+
+                var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
+
+                setLinkColor({width:1});
 
                 myChart.setOption(Network.option);
+
                 myChart.refresh();
 
                 getNetworkChartClickEvent(myChart);
@@ -487,15 +504,10 @@ SK Planet 고객은 어디에서 활동을 많이 하고, 함께 방문하는 �
 
                 var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
 
-                $.each(Network.option.series[0].links, function (idx, data) {
-                    if (data.itemStyle.normal.width === 0.2) {
-                        data.itemStyle.normal.color = '#f8f8f8';
-                    } else {
-                        data.itemStyle.normal.color = Network.LINE_COLOR;
-                    }
-                });
+                setLinkColor({width:0.2});
 
                 myChart.setOption(Network.option);
+
                 myChart.refresh();
 
                 getNetworkChartClickEvent(myChart);
@@ -506,70 +518,113 @@ SK Planet 고객은 어디에서 활동을 많이 하고, 함께 방문하는 �
 
                 var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
 
-                $.each(Network.option.series[0].links, function (idx, data) {
-                    data.itemStyle.normal.color = Network.LINE_COLOR;
-                });
+                setLinkColor({width:0});
 
                 myChart.setOption(Network.option);
+
                 myChart.refresh();
 
                 getNetworkChartClickEvent(myChart);
 
             });
+
+            function setNetworkOpt(option) {
+
+                var scaling = 0.3;
+                var gravity = 1;
+
+                if( option.gubun === "min" ) {
+
+                    Network.option.series[0].scaling = Number(Network.option.series[0].scaling) - scaling;
+                    Network.option.series[0].gravity = Number(Network.option.series[0].gravity) - gravity;
+
+                    if (Network.option.series[0].scaling < 3) {
+                        Network.option.series[0].scaling = 3.1;
+                    }
+
+                    if (Network.option.series[0].gravity < 4) {
+                        Network.option.series[0].gravity = 4.1;
+                    }
+
+                } else {
+
+                    Network.option.series[0].scaling = Number(Network.option.series[0].scaling) + scaling;
+                    Network.option.series[0].gravity = Number(Network.option.series[0].gravity) + gravity;
+
+                }
+
+            }
+
+            function setNetworkChartHeightResize(opt) {
+
+                var height = 0;
+
+                if (opt.gubun === "min") {
+
+                    height = $('#' + Network.MAX_CHART_ID_NM).height();
+                    height = height - 100;
+
+                    if (height < 650) {
+                        height = 650;
+                    }
+
+                } else if (opt.gubun === "max") {
+
+                    height = $('#' + Network.MAX_CHART_ID_NM).height();
+                    height = height + 100;
+
+                } else {
+
+                    height = 650;
+
+                }
+
+                $('#modalChartLy').height(height); //  차트 박스 테두리
+                $('#' + Network.MAX_CHART_ID_NM).height(height);
+
+            }
+
+            function setCanvasAttr() {
+
+                var canvas = $('canvas');
+                canvas.attr('z-index', 100);
+                canvas.attr('margin', 0);
+                canvas.attr('padding', 0);
+
+            }
+
+            function setmyChartRefresh() {
+
+                var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
+                myChart.setOption(Network.option);
+                myChart.refresh();
+
+            }
 
             $('#minButton').click(function () {
 
-                Network.option.series[0].scaling = Number(Network.option.series[0].scaling) - 0.3;
-                Network.option.series[0].gravity = Number(Network.option.series[0].gravity) - 1;
+                setNetworkOpt({gubun:"min"});
 
-                if (Network.option.series[0].scaling < 3) {
-                    Network.option.series[0].scaling = 3.1;
-                }
+                setmyChartRefresh();
 
-                if (Network.option.series[0].gravity < 4) {
-                    Network.option.series[0].gravity = 4.1;
-                }
+                setNetworkChartHeightResize({gubun:"min"});
 
-                var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
-                myChart.setOption(Network.option);
-                myChart.refresh();
-
-                var height = $('#' + Network.MAX_CHART_ID_NM).height();
-                height = height - 100;
-                if (height < 650) {
-                    height = 650;
-                }
-
-                $('#modalChartLy').height(height); //  차트 박스 테두리
-                $('#' + Network.MAX_CHART_ID_NM).height(height);
-
-                var canvas = $('canvas');
-                canvas.attr('z-index', 100);
-                canvas.attr('margin', 0);
-                canvas.attr('padding', 0);
+                setCanvasAttr();
 
                 getNetworkChartClickEvent(myChart);
 
             });
 
+
             $('#maxButton').click(function () {
 
-                Network.option.series[0].scaling = Number(Network.option.series[0].scaling) + 0.3;
-                Network.option.series[0].gravity = Number(Network.option.series[0].gravity) + 1;
+                setNetworkOpt({gubun:"max"});
 
-                var myChart = echarts.init(document.getElementById(Network.MAX_CHART_ID_NM));
-                myChart.setOption(Network.option);
-                myChart.refresh();
+                setmyChartRefresh();
 
-                var height = $('#' + Network.MAX_CHART_ID_NM).height();
-                height = height + 100;
-                $('#modalChartLy').height(height); //  차트 박스 테두리
-                $('#' + Network.MAX_CHART_ID_NM).height(height);
+                setNetworkChartHeightResize({gubun:"max"});
 
-                var canvas = $('canvas');
-                canvas.attr('z-index', 100);
-                canvas.attr('margin', 0);
-                canvas.attr('padding', 0);
+                setCanvasAttr();
 
                 getNetworkChartClickEvent(myChart);
 
@@ -759,10 +814,7 @@ SK Planet 고객은 어디에서 활동을 많이 하고, 함께 방문하는 �
 
             function getNetworkChartPopup(data, cityName, cityCd) {
 
-                var height = 650;
-
-                $('#modalChartLy').height(height); //  차트 박스 테두리
-                $('#' + Network.MAX_CHART_ID_NM).height(height);
+                setNetworkChartHeightResize({gubun:"650"});
 
                 $("#mainAdmDongCdCnt").selectBox("value", "10");
                 $("#crossAdmDongCdCnt").selectBox("value", "5");
@@ -772,6 +824,7 @@ SK Planet 고객은 어디에서 활동을 많이 하고, 함께 방문하는 �
             }
 
             function getNetworkChart(chartName, dataNodeList, dataLinkList) {
+
                 var myChart = echarts.init(document.getElementById(chartName));
 
                 myChart.setTheme(GV_CHART_THEME);
@@ -819,17 +872,6 @@ SK Planet 고객은 어디에서 활동을 많이 하고, 함께 방문하는 �
                     getSexAgeBarChart('chartDong1', data.sexAgeBarList);
                     getNetworkChart("chart5", data.arPocNetworkNodeList, data.arPocNetworkLinkList); // 동 팝업 네트워크 차트
                 });
-            }
-
-            Function.prototype.memoize = function () {
-                var self = this, cache = {};
-                return function (arg) {
-                    if (arg in cache) {
-                        return cache[arg];
-                    } else {
-                        return cache[arg] = self(arg);
-                    }
-                }
             }
 
             function callAjaxMainActivityArea(cityName, cityCd, callbackFun) {
@@ -963,7 +1005,7 @@ SK Planet 고객은 어디에서 활동을 많이 하고, 함께 방문하는 �
                         } else {
                             contentTxt += '      <tr> ';
                             if (list[i].mainAcvtAdmDongCd.length > 5) {
-                                contentTxt += '        <td class="txtC"><a href="#" onclick="openDongView(\'' + list[i].mainAcvtDongNm + '\', \'' + list[i].mainAcvtAdmDongCd + '\'); return false;" data-target="#myModa3" data-toggle="modal" id="inputTest_' + list[i].mainAcvtAdmDongCd + '">' + list[i].mainAcvtDongNm + '<span class="floatR"><i class="fa fa-chevron-right"></i></span></a></td> ';
+                                contentTxt += '        <td class="txtC"><a href="#" onclick="openDongView(\'' + list[i].mainAcvtDongNm + '\', \'' + list[i].mainAcvtAdmDongCd + '\'); return false;" data-target="#myModal3" data-toggle="modal" id="inputTest_' + list[i].mainAcvtAdmDongCd + '">' + list[i].mainAcvtDongNm + '<span class="floatR"><i class="fa fa-chevron-right"></i></span></a></td> ';
                             } else {
                                 contentTxt += '        <td class="txtC">' + list[i].mainAcvtDongNm + '</td> ';
                             }
