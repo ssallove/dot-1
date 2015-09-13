@@ -1,5 +1,35 @@
 //if(!navigator.cookieEnabled)alert(LANG.disabledCookies);
 
+var debug = {};
+debug.log = function() {
+    var arr = _.toArray(arguments);
+    console.log("debug:::",arr);
+}
+
+debug.info = function() {
+    var arr = _.toArray(arguments);
+    console.log("%c info:::",'background: blue; color: white', arr);
+}
+
+debug.error = function() {
+    var arr = _.toArray(arguments);
+    console.log("%c error:::",'background: red; color: white', arr);
+}
+
+// 뭔가 존재하는지 여부를 알려주는 함수 null 또는 undefined 여부를 검사한다.
+// null, undefined 일때, false를 준다.
+function existy(x) { return x != null };
+// 어떤 것이 참인지 여부를 결정하는 함수
+// null, undefined 일때, false를 준다.
+function truthy(x) { return (x !== false) && existy(x) };
+
+function always(VALUE) {
+    return function() {
+        return VALUE;
+    };
+};
+
+
 function openWin(url, w, h, name, bScrollbar, t, l, bResizable) {
 
     if(bScrollbar == null)
@@ -213,6 +243,14 @@ Array.prototype.sum = function() {
 	}
 	return sum;
 };
+
+Array.prototype.ave = function() {
+
+    if(this.length > 0)
+        return this.sum() / this.length;
+    else
+        return 0;
+}
 
 Array.prototype.getDataByKey = function(key, value) {
 	for (var i = 0; i < this.length; i++) {
