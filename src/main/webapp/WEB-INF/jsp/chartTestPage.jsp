@@ -110,7 +110,7 @@
                 var nodes = new vis.DataSet([{
                     id: 1,
                     value: 1,
-                    label: '강남',
+                    label: '강남 ',
                     color: '#97C2FC',
                     x: 0,
                     y: 0,
