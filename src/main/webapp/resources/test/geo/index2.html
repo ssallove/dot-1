@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>벡터맵이용</title>
+    <meta name="description" content="D3.js로 만든 우리나라 지도">
+  <meta name="author" content="링크잇, http://linkit.kr">
+ 
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="js/script.js"></script>
+    <script src="/resources/js/plugins/jquery.js"></script>
+
+  <link rel="stylesheet" href="css/slider.css">
+  
+  <meta charset="utf-8"> 
+  <style> 
+      svg circle { 
+        fill: orange; 
+        opacity: .5; 
+        stroke: white; 
+       } 
+       svg circle:hover { 
+         fill: red; 
+         stroke: #333; 
+       } 
+       svg text { 
+         pointer-events: none; 
+       } 
+       svg .municipality { 
+         fill: #efefef; 
+         stroke: #fff; 
+       } 
+       svg .municipality-label { 
+         fill: #bbb; 
+         font-size: 12px; 
+         font-weight: 300; 
+         text-anchor: middle; 
+       } 
+       svg #map text { 
+         color: #333; 
+         font-size: 10px; 
+         text-anchor: middle; 
+       } 
+       svg #places text { 
+         color: #777; 
+         font: 10px sans-serif; 
+         text-anchor: start; 
+       } 
+       #title { 
+           font-family: sans-serif; 
+       } 
+       #title p { 
+           font-size: 10pt; 
+       } 
+   </style> 
+   
+</head>
+<body>
+    
+    <div id="container" class="container">
+    
+      <div class="subcontainer">
+        <h1>대한민국 지도 맵핑</h1>
+        <p style="font-size:13px;">마우스 드래그 하시면 줌인 줌아웃 됩니다. svg1</p>
+      
+      </div>
+
+    </div>
+  
+  <div id="chart" class="container">
+          <div class="subcontainer2">
+        <h1>대한민국 지도 맵핑</h1>
+        <p style="font-size:13px;">마우스 드래그 하시면 줌인 줌아웃 됩니다. svg2</p>
+      
+      </div>
+
+    </div>
+    
+    <script src="js/script2.js"></script>
+</body>
+</html>

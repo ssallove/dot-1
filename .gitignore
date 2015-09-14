@@ -1802,3 +1802,10 @@
 /target/classes/mybatis/sql/Login.xml
 /target/classes/rebel.xml
 /target/classes/server-side-dependencies.properties
+/src/main/webapp/WEB-INF/jsp/*.bak
+/.svn
+/.settings
+/bin
+/target/cdpf-dot-1.0/WEB-INF/jsp
+/target/cdpf-dot-1.0/WEB-INF/jsp_back/*.jsp_bak
+/target

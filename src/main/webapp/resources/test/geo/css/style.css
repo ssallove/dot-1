@@ -1,0 +1,141 @@
+@import url('normalize.css');
+
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    position: relative;
+    margin: 50px auto 30px;
+    width: 1000px;
+    min-height: 700px;
+}
+
+.subcontainer {
+    width: 800px;
+    margin: auto;
+}
+
+svg {
+    display: block;
+    margin: auto;
+}
+
+.slider {
+    margin-top: 15px;
+}
+
+path.prov {
+    stroke: #778899 ! important;
+    stroke-width: 2px ! important;
+}
+
+path.muni {
+    /* visibility: hidden;  */
+    stroke: #bebebe ! important;
+    stroke-opacity: 0.3;
+    stroke-dasharray: 3 3;
+}
+
+.footer {
+    margin: 0 auto 50px;
+    width: 700px;
+}
+
+.footer p {
+    text-align: center;
+    font-size: 12px;
+}
+
+.footer p a {
+    color: #2fa4e7;
+    text-decoration: none;
+}
+
+.footer p a:hover {
+    text-decoration: underline;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+#radio {
+    height: 36px;
+    text-align: right;
+}
+
+#radio span.title {
+    margin-right: 5px;
+    font-size: 13px;
+}
+
+#control {
+    position: absolute;
+    top: 125px;
+    left: 160px;
+    width: 24px;
+    padding: 4px;
+}
+
+#control button:first-child {
+    margin-bottom: 4px;
+}
+
+#map {
+    border: 1px solid #ddd;
+}
+
+.background {
+/*  fill: #f7fcfd; 
+  file: rgb(27,27,27);
+  pointer-events: all;*/
+}
+
+.ui-button-text-only .ui-button-text {
+    padding: .2em .8em;
+    font-size: 12px;
+}
+
+button.ui-button-icon-only {
+    width: 24px;
+}
+
+.ui-button-icon-only .ui-button-text,
+.ui-button-icons-only .ui-button-text {
+    padding: 0;
+}
+
+#states path {
+  /* fill: #ccece6;
+  stroke: #fff;
+  fill: rgb(25,25,25); */
+  fill: #000;
+  stroke: #4169e1;
+  stroke-width: 1.5px;
+}
+
+#states path:hover {
+  /* stroke: white; 
+  fill: rgb(35,35,35); */
+}
+
+/*
+#states .active {
+  fill: orange;
+}
+*/
+
+#states path {
+    /*cursor: pointer;*/
+}
+
+#states text {
+    /*cursor: pointer;*/
+    font-size: 12px;
+    font-family: 'Nanum Gothic';
+}
+
